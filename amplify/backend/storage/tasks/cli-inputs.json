@@ -1,0 +1,10 @@
+{
+  "resourceName": "tasks",
+  "tableName": "tasks",
+  "partitionKey": {
+    "fieldName": "title",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

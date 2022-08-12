@@ -1,0 +1,61 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-maxlascombe-staging-203306-authRole",
+      "UnauthRoleArn": "arn:aws:iam::635678236360:role/amplify-maxlascombe-staging-203306-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::635678236360:role/amplify-maxlascombe-staging-203306-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-maxlascombe-staging-203306-deployment",
+      "UnauthRoleName": "amplify-maxlascombe-staging-203306-unauthRole",
+      "StackName": "amplify-maxlascombe-staging-203306",
+      "StackId": "arn:aws:cloudformation:us-east-1:635678236360:stack/amplify-maxlascombe-staging-203306/4f92c3a0-1759-11ed-9438-12cbb9c98fc1",
+      "AmplifyAppId": "d147xqrc1y8ag6"
+    }
+  },
+  "prod": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-maxlascombe-prod-125438-authRole",
+      "UnauthRoleArn": "arn:aws:iam::635678236360:role/amplify-maxlascombe-prod-125438-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::635678236360:role/amplify-maxlascombe-prod-125438-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
+      "UnauthRoleName": "amplify-maxlascombe-prod-125438-unauthRole",
+      "StackName": "amplify-maxlascombe-prod-125438",
+      "StackId": "arn:aws:cloudformation:us-east-1:635678236360:stack/amplify-maxlascombe-prod-125438/4b063440-1996-11ed-b528-0adba0752289",
+      "AmplifyAppId": "d147xqrc1y8ag6",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-maxlascombe-prod-125438-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "undefined": {},
+        "maxlascombe": {}
+      },
+      "function": {
+        "APItasksNew": {
+          "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
+          "s3Key": "amplify-builds/APItasksNew-78472b444d77386d4c4d-build.zip"
+        },
+        "APItasksTop": {
+          "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
+          "s3Key": "amplify-builds/APItasksTop-2f30314667504c56414f-build.zip"
+        },
+        "APItasksDelete": {
+          "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
+          "s3Key": "amplify-builds/APItasksDelete-6c6a664b6651774a7934-build.zip"
+        },
+        "APItasks": {
+          "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
+          "s3Key": "amplify-builds/APItasks-666c31555270462b3777-build.zip"
+        },
+        "APItasksUpdate": {
+          "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
+          "s3Key": "amplify-builds/APItasksUpdate-5a795567356b32496179-build.zip"
+        },
+        "APItasksDone": {
+          "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
+          "s3Key": "amplify-builds/APItasksDone-33576978582b32613252-build.zip"
+        }
+      }
+    }
+  }
+}

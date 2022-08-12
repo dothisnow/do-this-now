@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "paths": {
+    "/tasks": {
+      "name": "/tasks",
+      "lambdaFunction": "APItasks",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/tasks/top": {
+      "name": "/tasks/top",
+      "lambdaFunction": "APItasksTop",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/tasks/new": {
+      "name": "/tasks/new",
+      "lambdaFunction": "APItasksNew",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/tasks/update": {
+      "name": "/tasks/update",
+      "lambdaFunction": "APItasksUpdate",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/tasks/delete": {
+      "name": "/tasks/delete",
+      "lambdaFunction": "APItasksDelete",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    },
+    "/tasks/done": {
+      "name": "/tasks/done",
+      "lambdaFunction": "APItasksDone",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
+    }
+  }
+}

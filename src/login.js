@@ -16,45 +16,37 @@ const Login = () => {
 
     const navigate = useNavigate()
 
-    useKeyAction(
-        (event) => {
-            switch (event.key) {
-                case 'Enter':
-                    if (showNewPassword) {
-                        loginManager
-                            .newPassword(user, newPassword)
-                            .then((r) => {
-                                navigate('/')
-                            })
-                            .catch((e) => {
-                                alert('e')
-                                console.log(e)
-                            })
+    const login = () => {
+        if (showNewPassword) {
+            loginManager
+                .newPassword(user, newPassword)
+                .then((r) => {
+                    navigate('/')
+                })
+                .catch((e) => {
+                    alert('e')
+                    console.log(e)
+                })
+        } else {
+            loginManager
+                .signIn(password)
+                .then((r) => {
+                    if (
+                        r.challengeName &&
+                        r.challengeName === 'NEW_PASSWORD_REQUIRED'
+                    ) {
+                        setShowNewPassword(true)
+                        setUser(r)
+                        console.log(r)
                     } else {
-                        loginManager
-                            .signIn(password)
-                            .then((r) => {
-                                if (
-                                    r.challengeName &&
-                                    r.challengeName === 'NEW_PASSWORD_REQUIRED'
-                                ) {
-                                    setShowNewPassword(true)
-                                    setUser(r)
-                                    console.log(r)
-                                } else {
-                                    navigate('/')
-                                }
-                            })
-                            .catch((e) => alert('e' + e))
+                        navigate('/')
                     }
-                    break
-                default:
-                    break
-            }
-        },
-        [password, newPassword, showNewPassword, user],
-        'keydown'
-    )
+                })
+                .catch((e) => alert('e' + e))
+        }
+    }
+
+    useKeyAction([['Enter', 'Submit login form', login]])
 
     if (authState === 'signedIn') return <Navigate to='/' />
 

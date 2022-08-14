@@ -53,11 +53,20 @@ const sortFlags = [
     (t) =>
         t.hasOwnProperty('due') &&
         t.hasOwnProperty('strictDeadline') &&
-        new Date(t.due) < new Date() &&
+        new Date(t.due) <
+            new Date(
+                new Date().getFullYear(),
+                new Date().getMonth(),
+                new Date().getDate(),
+                0,
+                0,
+                0
+            ) &&
         t.strictDeadline,
     (t) =>
         !t.hasOwnProperty('history') ||
         t.history.filter((d) => d === dateString(new Date())).length === 0,
+    (t) => t.repeat !== 'Daily',
 ]
 
 const sortProperties = [

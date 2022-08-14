@@ -5,6 +5,7 @@ import { format } from 'date-fns'
 import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
+import TimeFrame from './components/timeframe'
 
 import { useQueryTasks } from './hooks/useQueryTasks'
 import useKeyAction from './hooks/useKeyAction'
@@ -69,12 +70,19 @@ const Tasks = () => {
                             <div
                                 className={
                                     (new Date(task.due) <
-                                    new Date().setDate(new Date().getDate() - 1)
+                                    new Date(
+                                        new Date().getFullYear(),
+                                        new Date().getMonth(),
+                                        new Date().getDate(),
+                                        0,
+                                        0,
+                                        0
+                                    )
                                         ? 'text-orange-300'
                                         : 'text-white') +
                                     ' w-96 mx-auto text-center text-sm'
                                 }>
-                                {formatDate(new Date(task.due))}
+                                {new Date(task.due).toDateString()}
                             </div>
                         )}
                         <Task isSelected={i === selectedTask} {...task} />
@@ -99,20 +107,5 @@ const Task = ({ isSelected, timeFrame, title }) => (
         <TimeFrame timeFrame={timeFrame} />
     </div>
 )
-
-const TimeFrame = ({ timeFrame }) => {
-    if (!timeFrame) return <></>
-    const text =
-        timeFrame < 60
-            ? `${timeFrame} mins`
-            : timeFrame / 60 === 1
-            ? '1 hr'
-            : `${timeFrame / 60} hrs`
-    return (
-        <span className='text-white inline-block text-xs bg-white bg-opacity-20 rounded p-1 px-1.5 ml-2'>
-            {text}
-        </span>
-    )
-}
 
 export default Tasks

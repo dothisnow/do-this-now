@@ -11,6 +11,7 @@ import loginManager from './helpers/LoginManager'
 import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
+import TimeFrame from './components/timeframe'
 
 const Home = () => {
     const [mainTask, setMainTask] = useState(0) // 0 - Math.min(2, tasks.length-1)
@@ -117,21 +118,6 @@ const Home = () => {
                 <Hints keyActions={keyActions} />
             </div>
         </RequireAuth>
-    )
-}
-
-const TimeFrame = ({ timeFrame }) => {
-    if (!timeFrame) return <></>
-    const text =
-        timeFrame < 60
-            ? `${timeFrame} mins`
-            : timeFrame / 60 === 1
-            ? '1 hr'
-            : `${timeFrame / 60} hrs`
-    return (
-        <span className='text-white inline-block text-xs bg-white bg-opacity-20 rounded p-1 ml-2'>
-            {text}
-        </span>
     )
 }
 

@@ -54,10 +54,7 @@ const NewTask = () => {
         setLoading(true)
         const task = {
             title,
-            due: format(
-                new Date(`${dueMonth}/${dueDay}/${dueYear}`),
-                'yyyy-MM-dd'
-            ),
+            due: `${dueYear}-${dueMonth}-${dueDay}`,
             strictDeadline,
             repeat,
             repeatInterval,

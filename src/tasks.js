@@ -113,7 +113,15 @@ const Tasks = () => {
     )
 }
 
-const Task = ({ isSelected, repeat, strictDeadline, timeFrame, title }) => (
+const Task = ({
+    isSelected,
+    repeat,
+    repeatInterval,
+    repeatUnit,
+    strictDeadline,
+    timeFrame,
+    title,
+}) => (
     <div
         className={
             (isSelected
@@ -123,7 +131,7 @@ const Task = ({ isSelected, repeat, strictDeadline, timeFrame, title }) => (
         }>
         <span>{title}</span>
         <TimeFrame timeFrame={timeFrame} />
-        <Repeat repeat={repeat} />
+        <Repeat {...{ repeat, repeatInterval, repeatUnit }} />
         <Strict strictDeadline={strictDeadline} />
     </div>
 )

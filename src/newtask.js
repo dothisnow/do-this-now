@@ -30,16 +30,16 @@ const NewTask = () => {
     const [repeat, setRepeat] = useState('No Repeat')
     const [repeatInterval, setRepeatInterval] = useState(1)
     const [repeatUnit, setRepeatUnit] = useState('day')
-    // const days = 'MTWRFSU'
-    // const [daysOfWeek, setDaysOfWeek] = useState([
-    //     false,
-    //     false,
-    //     false,
-    //     false,
-    //     false,
-    //     false,
-    //     false,
-    // ])
+    const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+    const [selectedWeekDays, setSelectedWeekDays] = useState([
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+    ])
 
     const [timeFrame, setTimeFrame] = useState(15)
 
@@ -60,6 +60,7 @@ const NewTask = () => {
             repeat,
             repeatInterval,
             repeatUnit,
+            repeatWeekdays: selectedWeekDays,
             timeFrame,
         }
         mutate(task)
@@ -273,44 +274,82 @@ const NewTask = () => {
                                         </select>
                                     </div>
                                     {repeat === 'Custom' && (
-                                        <div className='max-w-lg flex mt-3'>
-                                            <div className='flex-1 text-sm py-2.5'>
-                                                Every:
+                                        <>
+                                            <div className='max-w-lg flex mt-3'>
+                                                <div className='flex-1 text-sm py-2.5'>
+                                                    Every:
+                                                </div>
+                                                <input
+                                                    type='number'
+                                                    step={1}
+                                                    min={1}
+                                                    value={repeatInterval}
+                                                    onChange={(e) =>
+                                                        setRepeatInterval(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className='flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded mr-3'
+                                                />
+                                                <select
+                                                    defaultValue={repeatUnit}
+                                                    onChange={(e) =>
+                                                        setRepeatUnit(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    className='flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded pr-10'>
+                                                    <option value='day'>
+                                                        Days
+                                                    </option>
+                                                    <option value='week'>
+                                                        Weeks
+                                                    </option>
+                                                    <option value='month'>
+                                                        Months
+                                                    </option>
+                                                    <option value='year'>
+                                                        Years
+                                                    </option>
+                                                </select>
                                             </div>
-                                            <input
-                                                type='number'
-                                                step={1}
-                                                min={1}
-                                                value={repeatInterval}
-                                                onChange={(e) =>
-                                                    setRepeatInterval(
-                                                        e.target.value
-                                                    )
-                                                }
-                                                className='flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded mr-3'
-                                            />
-                                            <select
-                                                defaultValue={repeatUnit}
-                                                onChange={(e) =>
-                                                    setRepeatUnit(
-                                                        e.target.value
-                                                    )
-                                                }
-                                                className='flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded pr-10'>
-                                                <option value='day'>
-                                                    Days
-                                                </option>
-                                                <option value='week'>
-                                                    Weeks
-                                                </option>
-                                                <option value='month'>
-                                                    Months
-                                                </option>
-                                                <option value='year'>
-                                                    Years
-                                                </option>
-                                            </select>
-                                        </div>
+                                            {repeatUnit === 'week' && (
+                                                <div className='max-w-lg flex mt-3'>
+                                                    {days.map((d, i) => (
+                                                        <div
+                                                            onClick={() =>
+                                                                setSelectedWeekDays(
+                                                                    [
+                                                                        ...selectedWeekDays.slice(
+                                                                            0,
+                                                                            i
+                                                                        ),
+                                                                        !selectedWeekDays[
+                                                                            i
+                                                                        ],
+                                                                        ...selectedWeekDays.slice(
+                                                                            i +
+                                                                                1
+                                                                        ),
+                                                                    ]
+                                                                )
+                                                            }
+                                                            className={
+                                                                (i > 0 &&
+                                                                    'ml-2') +
+                                                                (selectedWeekDays[
+                                                                    i
+                                                                ]
+                                                                    ? ' border-gray-600 bg-gray-700 hover:border-gray-500 hover:bg-gray-600'
+                                                                    : ' border-gray-700 bg-gray-800 hover:border-gray-600 hover:bg-gray-700') +
+                                                                ' cursor-pointer flex-1 text-center text-xs font-bold border rounded p-2'
+                                                            }>
+                                                            {d}
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </>
                                     )}
                                 </div>
                             </div>

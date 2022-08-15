@@ -25,8 +25,17 @@ export const TimeFrame = ({ timeFrame }) => {
     return <Tag icon={ClockIcon} text={text} />
 }
 
-export const Repeat = ({ repeat }) => {
+export const Repeat = ({ repeat, repeatInterval, repeatUnit }) => {
     if (repeat === 'No Repeat') return <></>
+    if (repeat === 'Custom')
+        return (
+            <Tag
+                icon={RefreshIcon}
+                text={`${repeatInterval} ${repeatUnit}${
+                    repeatInterval !== 0 && 's'
+                }`}
+            />
+        )
     return <Tag icon={RefreshIcon} text={repeat.toLowerCase()} />
 }
 

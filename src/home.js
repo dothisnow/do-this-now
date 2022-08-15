@@ -87,6 +87,13 @@ const Home = () => {
                                             repeat={
                                                 tasks[mainTaskToShow].repeat
                                             }
+                                            repeatInterval={
+                                                tasks[mainTaskToShow]
+                                                    .repeatInterval
+                                            }
+                                            repeatUnit={
+                                                tasks[mainTaskToShow].repeatUnit
+                                            }
                                         />
                                         <Strict
                                             strictDeadline={
@@ -149,6 +156,12 @@ const Home = () => {
                                         />
                                         <Repeat
                                             repeat={tasks[leftTask].repeat}
+                                            repeatInterval={
+                                                tasks[leftTask].repeatInterval
+                                            }
+                                            repeatUnit={
+                                                tasks[leftTask].repeatUnit
+                                            }
                                         />
                                         <Strict
                                             strictDeadline={
@@ -173,6 +186,13 @@ const Home = () => {
                                             />
                                             <Repeat
                                                 repeat={tasks[rightTask].repeat}
+                                                repeatInterval={
+                                                    tasks[rightTask]
+                                                        .repeatInterval
+                                                }
+                                                repeatUnit={
+                                                    tasks[rightTask].repeatUnit
+                                                }
                                             />
                                             <Strict
                                                 strictDeadline={

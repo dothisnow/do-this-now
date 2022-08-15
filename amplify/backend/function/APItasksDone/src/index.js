@@ -45,7 +45,10 @@ exports.handler = async (event) => {
             date.setDate(date.getDate() + newItem.repeatInterval)
         else if (newItem.repeat === 'Weekly')
             date.setDate(date.getDate() + 7 * newItem.repeatInterval)
-        else if (newItem.repeat === 'Monthly')
+        else if (newItem.repeat === 'Weekdays') {
+            const daysToAdd = date.getDay() === 5 ? 3 : 1
+            date.setDate(date.getDate() + daysToAdd * newItem.repeatInterval)
+        } else if (newItem.repeat === 'Monthly')
             date.setMonth(date.getMonth() + newItem.repeatInterval)
         else if (newItem.repeat === 'Yearly')
             date.setFullYear(date.getFullYear() + newItem.repeatInterval)

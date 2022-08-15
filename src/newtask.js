@@ -106,6 +106,7 @@ const NewTask = () => {
     const repeatOptions = [
         'No Repeat',
         'Daily',
+        'Weekdays',
         'Weekly',
         'Monthly',
         'Yearly',

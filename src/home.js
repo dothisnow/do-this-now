@@ -16,7 +16,7 @@ import loginManager from './helpers/LoginManager'
 import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
-import TimeFrame from './components/timeframe'
+import { Repeat, Strict, TimeFrame } from './components/tags'
 
 import ding from './soundeffects/ding.mp3'
 
@@ -83,6 +83,17 @@ const Home = () => {
                                                 tasks[mainTaskToShow].timeFrame
                                             }
                                         />
+                                        <Repeat
+                                            repeat={
+                                                tasks[mainTaskToShow].repeat
+                                            }
+                                        />
+                                        <Strict
+                                            strictDeadline={
+                                                tasks[mainTaskToShow]
+                                                    .strictDeadline
+                                            }
+                                        />
                                     </div>
                                     {/* <div className='mt-2'>
                                 <button
@@ -136,6 +147,14 @@ const Home = () => {
                                                 tasks[leftTask].timeFrame
                                             }
                                         />
+                                        <Repeat
+                                            repeat={tasks[leftTask].repeat}
+                                        />
+                                        <Strict
+                                            strictDeadline={
+                                                tasks[leftTask].strictDeadline
+                                            }
+                                        />
                                     </div>
                                     {tasks.length > 2 && (
                                         <div
@@ -150,6 +169,15 @@ const Home = () => {
                                             <TimeFrame
                                                 timeFrame={
                                                     tasks[rightTask].timeFrame
+                                                }
+                                            />
+                                            <Repeat
+                                                repeat={tasks[rightTask].repeat}
+                                            />
+                                            <Strict
+                                                strictDeadline={
+                                                    tasks[rightTask]
+                                                        .strictDeadline
                                                 }
                                             />
                                         </div>

@@ -6,7 +6,7 @@ import { HomeIcon, PlusCircleIcon } from '@heroicons/react/solid'
 import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
-import TimeFrame from './components/timeframe'
+import { Repeat, Strict, TimeFrame } from './components/tags'
 
 import { useQueryTasks } from './hooks/useQueryTasks'
 import useKeyAction from './hooks/useKeyAction'
@@ -113,7 +113,7 @@ const Tasks = () => {
     )
 }
 
-const Task = ({ isSelected, timeFrame, title }) => (
+const Task = ({ isSelected, repeat, strictDeadline, timeFrame, title }) => (
     <div
         className={
             (isSelected
@@ -123,6 +123,8 @@ const Task = ({ isSelected, timeFrame, title }) => (
         }>
         <span>{title}</span>
         <TimeFrame timeFrame={timeFrame} />
+        <Repeat repeat={repeat} />
+        <Strict strictDeadline={strictDeadline} />
     </div>
 )
 

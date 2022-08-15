@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-// import { CheckCircleIcon } from '@heroicons/react/solid'
+import {
+    CheckCircleIcon,
+    MenuIcon,
+    PlusCircleIcon,
+} from '@heroicons/react/solid'
 
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
@@ -28,16 +32,14 @@ const Home = () => {
 
     const { mutate } = useQueryTaskDone()
 
+    const completeTask = () => {
+        mutate(tasks[mainTaskToShow])
+        setMainTask(0)
+        refetch()
+    }
+
     const keyActions = [
-        [
-            'd',
-            'Task done',
-            () => {
-                mutate(tasks[mainTaskToShow])
-                setMainTask(0)
-                refetch()
-            },
-        ],
+        ['d', 'Task done', completeTask],
         [
             'l',
             'Logout',
@@ -60,19 +62,24 @@ const Home = () => {
     return (
         <RequireAuth>
             <div className='h-screen flex flex-col justify-center'>
-                {/* We've used 3xl here, but feel free to try other max-widths based on your needs */}
-                <div className='max-w-xs mx-auto border border-gray-700 py-auto p-6 rounded bg-gray-800 drop-shadow-sm font-bold text-lg text-center text-white'>
-                    {isLoading ? (
-                        <Loading />
-                    ) : tasks.length > 0 ? (
-                        <>
-                            <div>
-                                <span>{tasks[mainTaskToShow].title}</span>
-                                <TimeFrame
-                                    timeFrame={tasks[mainTaskToShow].timeFrame}
-                                />
-                            </div>
-                            {/* <div className='mt-2'>
+                {isLoading ? (
+                    <Loading />
+                ) : (
+                    <>
+                        <div className='md:max-w-sm mx-5 md:mx-auto border border-gray-700 py-auto p-6 rounded bg-gray-800 drop-shadow-sm font-bold text-lg text-center text-white'>
+                            {tasks.length > 0 ? (
+                                <>
+                                    <div>
+                                        <span>
+                                            {tasks[mainTaskToShow].title}
+                                        </span>
+                                        <TimeFrame
+                                            timeFrame={
+                                                tasks[mainTaskToShow].timeFrame
+                                            }
+                                        />
+                                    </div>
+                                    {/* <div className='mt-2'>
                                 <button
                                     type='button'
                                     title='(Shortcut: d)'
@@ -83,36 +90,68 @@ const Home = () => {
                                     />
                                 </button>
                             </div> */}
-                        </>
-                    ) : (
-                        'No tasks'
-                    )}
-                </div>
-                {tasks.length > 1 && (
-                    <>
-                        <div className='py-2 text-center text-white'>or</div>
-                        <div className='flex flex-row justify-center'>
-                            <div
-                                onClick={() => setMainTask(leftTask)}
-                                title='(Shortcut: 1)'
-                                className='border cursor-pointer border-gray-700 py-auto p-4 rounded bg-gray-800 drop-shadow-sm font-bold text-sm text-center mr-4 opacity-70 text-white'>
-                                <span>{tasks[leftTask].title}</span>
-                                <TimeFrame
-                                    timeFrame={tasks[leftTask].timeFrame}
-                                />
-                            </div>
-                            {tasks.length > 2 && (
-                                <div
-                                    onClick={() => setMainTask(rightTask)}
-                                    title='(Shortcut: 2)'
-                                    className='border cursor-pointer border-gray-700 py-auto p-4 rounded bg-gray-800 drop-shadow-sm font-bold text-sm text-center opacity-70 text-white'>
-                                    <span>{tasks[rightTask].title}</span>
-                                    <TimeFrame
-                                        timeFrame={tasks[rightTask].timeFrame}
-                                    />
-                                </div>
+                                </>
+                            ) : (
+                                'No tasks'
                             )}
                         </div>
+                        <div className='pt-2 flex flex-row justify-center mx-5'>
+                            <button
+                                onClick={completeTask}
+                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600'>
+                                <span>Complete</span>
+                                <CheckCircleIcon className='h-5 w-5 ml-1 inline-block' />
+                            </button>
+                            <button
+                                onClick={() => navigate('/tasks')}
+                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                <span>All tasks</span>
+                                <MenuIcon className='h-5 w-5 ml-1 inline-block' />
+                            </button>
+                            <button
+                                onClick={() => navigate('/new-task')}
+                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                <span>New task</span>
+                                <PlusCircleIcon className='h-5 w-5 ml-1 inline-block' />
+                            </button>
+                        </div>
+                        {tasks.length > 1 && (
+                            <>
+                                <div className='py-2 text-center text-gray-600'>
+                                    or
+                                </div>
+                                <div className='flex flex-col md:flex-row justify-center mx-5'>
+                                    <div
+                                        onClick={() => setMainTask(leftTask)}
+                                        title='(Shortcut: 1)'
+                                        className='border mb-2 cursor-pointer border-gray-700 py-auto p-4 rounded bg-gray-800 drop-shadow-sm font-bold text-sm text-center md:mr-4 md:mb-0 opacity-20 text-white'>
+                                        <span>{tasks[leftTask].title}</span>
+                                        <TimeFrame
+                                            timeFrame={
+                                                tasks[leftTask].timeFrame
+                                            }
+                                        />
+                                    </div>
+                                    {tasks.length > 2 && (
+                                        <div
+                                            onClick={() =>
+                                                setMainTask(rightTask)
+                                            }
+                                            title='(Shortcut: 2)'
+                                            className='border cursor-pointer border-gray-700 py-auto p-4 rounded bg-gray-800 drop-shadow-sm font-bold text-sm text-center opacity-20 text-white'>
+                                            <span>
+                                                {tasks[rightTask].title}
+                                            </span>
+                                            <TimeFrame
+                                                timeFrame={
+                                                    tasks[rightTask].timeFrame
+                                                }
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            </>
+                        )}
                     </>
                 )}
                 <Hints keyActions={keyActions} />

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
+import { ChevronLeftIcon } from '@heroicons/react/solid'
 
 import { useQueryNewTask } from './hooks/useQueryNewTask'
 import useKeyAction from './hooks/useKeyAction'
@@ -118,7 +119,11 @@ const NewTask = () => {
                     <div>
                         <div>
                             <h3 className='text-lg leading-6 font-medium '>
-                                New Task
+                                <ChevronLeftIcon
+                                    className='w-5 h-5 inline-block cursor-pointer'
+                                    onClick={() => navigate(-1)}
+                                />
+                                <span>New Task</span>
                             </h3>
                         </div>
 
@@ -331,6 +336,11 @@ const NewTask = () => {
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div className='text-center'>
+                                <button className='border border-gray-700 bg-gray-800 text-white text-sm rounded p-2 inline-block hover:border-gray-600 hover:bg-gray-700'>
+                                    Submit
+                                </button>
                             </div>
                         </div>
                     </div>

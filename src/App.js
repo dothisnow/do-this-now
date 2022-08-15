@@ -23,7 +23,7 @@ const App = () => {
             <button
                 onClick={loginManager.signOut}
                 type='button'
-                className='md:hidden absolute right-5 bottom-5 px-2.5 py-1.5 border border-transparent text-xs font-medium rounded bg-gray-800 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+                className='fixed right-5 bottom-5 px-2.5 py-1.5 border border-gray-700 text-xs text-white font-medium rounded bg-gray-800 hover:bg-gray-700 hover:border-gray-600'>
                 Log out
             </button>
         </div>

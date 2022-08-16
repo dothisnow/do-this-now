@@ -41,16 +41,45 @@ exports.handler = async (event) => {
         response = await docClient.delete(params).promise()
     else {
         let date = new Date(newItem.due)
-        if (newItem.repeat === 'Daily')
+        if (
+            newItem.repeat === 'Daily' ||
+            (newItem.repeat === 'Custom' && newItem.repeatUnit === 'day')
+        )
             date.setDate(date.getDate() + newItem.repeatInterval)
         else if (newItem.repeat === 'Weekly')
             date.setDate(date.getDate() + 7 * newItem.repeatInterval)
-        else if (newItem.repeat === 'Weekdays') {
+        else if (newItem.repeat === 'Custom' && newItem.repeatUnit === 'week') {
+            if (
+                !newItem.hasOwnProperty('repeatWeekdays') ||
+                !newItem.repeatWeekdays.some((x) => x)
+            )
+                date.setDate(date.getDate() + 7 * newItem.repeatInterval)
+            else {
+                let i
+                for (
+                    i = (date.getDay() + 1) % 7;
+                    !newItem.repeatWeekdays[i];
+                    i = (i + 1) % 7
+                ) {}
+                if (i > date.getDay())
+                    date.setDate(date.getDate() + i - date.getDay())
+                else {
+                    date.setDate(date.getDate() + 7 * newItem.repeatInterval)
+                    date.setDate(date.getDate() + i - date.getDay())
+                }
+            }
+        } else if (newItem.repeat === 'Weekdays') {
             const daysToAdd = date.getDay() === 5 ? 3 : 1
             date.setDate(date.getDate() + daysToAdd * newItem.repeatInterval)
-        } else if (newItem.repeat === 'Monthly')
+        } else if (
+            newItem.repeat === 'Monthly' ||
+            (newItem.repeat === 'Custom' && newItem.repeatUnit === 'month')
+        )
             date.setMonth(date.getMonth() + newItem.repeatInterval)
-        else if (newItem.repeat === 'Yearly')
+        else if (
+            newItem.repeat === 'Yearly' ||
+            (newItem.repeat === 'Custom' && newItem.repeatUnit === 'year')
+        )
             date.setFullYear(date.getFullYear() + newItem.repeatInterval)
         date.setHours(date.getHours() + 2)
         newItem.due = dateString(date)

@@ -18,6 +18,7 @@ const NewTask = () => {
     const yearRef = useRef(null)
 
     const [loading, setLoading] = useState(false)
+    const [isTyping, setIsTyping] = useState(true)
 
     const [title, setTitle] = useState('')
 
@@ -32,14 +33,20 @@ const NewTask = () => {
     const [repeatUnit, setRepeatUnit] = useState('day')
     const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
     const [selectedWeekDays, setSelectedWeekDays] = useState([
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
-        false,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
     ])
+    const toggleWeekday = (index) =>
+        setSelectedWeekDays([
+            ...selectedWeekDays.slice(0, index),
+            !selectedWeekDays[index],
+            ...selectedWeekDays.slice(index + 1),
+        ])
 
     const [timeFrame, setTimeFrame] = useState(15)
 
@@ -77,6 +84,13 @@ const NewTask = () => {
             },
         ],
         ['Escape', 'Home', () => navigate('/')],
+        ['u', 'Toggle Sunday', () => !isTyping && toggleWeekday(0)],
+        ['m', 'Toggle Monday', () => !isTyping && toggleWeekday(1)],
+        ['t', 'Toggle Tuesday', () => !isTyping && toggleWeekday(2)],
+        ['w', 'Toggle Wednesday', () => !isTyping && toggleWeekday(3)],
+        ['r', 'Toggle Thursday', () => !isTyping && toggleWeekday(4)],
+        ['f', 'Toggle Friday', () => !isTyping && toggleWeekday(5)],
+        ['s', 'Toggle Saturday', () => !isTyping && toggleWeekday(6)],
     ]
     useKeyAction(keyActions)
 
@@ -147,6 +161,8 @@ const NewTask = () => {
                                             onChange={(event) =>
                                                 setTitle(event.target.value)
                                             }
+                                            onFocus={() => setIsTyping(true)}
+                                            onBlur={() => setIsTyping(false)}
                                             className='flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded'
                                         />
                                     </div>

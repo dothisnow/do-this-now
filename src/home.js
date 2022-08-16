@@ -7,6 +7,8 @@ import {
     PlusCircleIcon,
 } from '@heroicons/react/solid'
 
+import { useQueryClient } from 'react-query'
+import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 import useKeyAction from './hooks/useKeyAction'
@@ -25,6 +27,8 @@ const Home = () => {
     const navigate = useNavigate()
     const [playDing] = useSound(ding)
 
+    const queryClient = useQueryClient()
+
     const { data, isLoading, refetch } = useQueryTasksTop()
     console.log({ isLoading, data })
 
@@ -34,7 +38,9 @@ const Home = () => {
     const leftTask = mainTaskToShow === 0 ? 1 : 0
     const rightTask = mainTaskToShow === 2 ? 1 : 2
 
-    const { mutate } = useQueryTaskDone()
+    const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
+    const { mutate: mutateDelete, isLoading: deleteIsLoading } =
+        useQueryTaskDelete()
 
     const completeTask = () => {
         playDing()
@@ -61,13 +67,23 @@ const Home = () => {
         ['t', 'Tasks', () => navigate('/tasks')],
         ['1', 'Do left task', () => setMainTask(leftTask)],
         ['2', 'Do right task', () => setMainTask(rightTask)],
+        [
+            'Backspace',
+            'Delete current task',
+            () =>
+                window.confirm(
+                    `Are you sure you want to delete '${tasks[mainTaskToShow].title}'?`
+                ) &&
+                mutateDelete(tasks[mainTaskToShow]) &&
+                queryClient.invalidateQueries('tasks-top'),
+        ],
     ]
     useKeyAction(keyActions)
 
     return (
         <RequireAuth>
             <div className='h-screen flex flex-col justify-center'>
-                {isLoading ? (
+                {isLoading || doneIsLoading || deleteIsLoading ? (
                     <Loading />
                 ) : (
                     <>

@@ -6,6 +6,7 @@ import Home from './home'
 import Login from './login'
 import NewTask from './newtask'
 import Tasks from './tasks'
+import UpdateTask from './updatetask'
 
 const App = () => {
     return (
@@ -17,6 +18,10 @@ const App = () => {
                         <Route path='login' element={<Login />} />
                         <Route path='new-task' element={<NewTask />} />
                         <Route path='tasks' element={<Tasks />} />
+                        <Route
+                            path='update-task/:id'
+                            element={<UpdateTask />}
+                        />
                     </Route>
                 </Routes>
             </Router>

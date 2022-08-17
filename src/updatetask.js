@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 
 import { useQueryNewTask } from './hooks/useQueryNewTask'
@@ -9,7 +9,19 @@ import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
 
-const NewTask = () => {
+const UpdateTask = () => {
+    const { pathname } = useLocation()
+
+    const navigate = useNavigate()
+
+    const taskId = (() => {
+        const path = pathname.split('/')
+        let lastPathItem = path.pop()
+        if (lastPathItem === '') lastPathItem = path.pop()
+        if (lastPathItem === 'update-task') navigate(-1)
+        return lastPathItem
+    })()
+
     const [loading, setLoading] = useState(false)
     const [isTyping, setIsTyping] = useState(true)
 
@@ -41,8 +53,6 @@ const NewTask = () => {
         ])
 
     const timeFrameState = useState(15)
-
-    const navigate = useNavigate()
 
     const { mutate } = useQueryNewTask()
 
@@ -93,7 +103,7 @@ const NewTask = () => {
                                     className='w-5 h-5 inline-block cursor-pointer'
                                     onClick={() => navigate(-1)}
                                 />
-                                <span>New Task</span>
+                                <span>Update Task: {taskId}</span>
                             </h3>
                         </div>
                         <TaskForm
@@ -125,4 +135,4 @@ const NewTask = () => {
     )
 }
 
-export default NewTask
+export default UpdateTask

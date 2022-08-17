@@ -25,7 +25,7 @@ import ding from './soundeffects/ding.mp3'
 const Home = () => {
     const [mainTask, setMainTask] = useState(0) // 0 - Math.min(2, tasks.length-1)
     const navigate = useNavigate()
-    const [playDing] = useSound(ding)
+    const [playDing] = useSound(ding, { volume: 1 })
 
     const queryClient = useQueryClient()
 
@@ -33,6 +33,22 @@ const Home = () => {
     console.log({ isLoading, data })
 
     const tasks = data?.Items ?? []
+
+    const tasksDoneToday = tasks.reduce((acc, cur) => {
+        if (cur.hasOwnProperty('history')) {
+            return (
+                acc +
+                cur.history.filter(
+                    (d) =>
+                        d ===
+                        `${new Date().getFullYear()}-${
+                            new Date().getMonth() + 1
+                        }-${new Date().getDate()}`
+                ).length
+            )
+        }
+        return acc
+    }, 0)
 
     const mainTaskToShow = Math.min(mainTask, tasks.length - 1)
     const leftTask = mainTaskToShow === 0 ? 1 : 0
@@ -87,6 +103,21 @@ const Home = () => {
                     <Loading />
                 ) : (
                     <>
+                        {/* <div className='text-center py-1 font-bold text-gray-500 text-sm'>
+                            Done Today: {tasksDoneToday}
+                        </div> */}
+                        <div className='flex flex-row justify-center mb-2'>
+                            <div className='w-36 border border-gray-500 h-2 rounded-full'>
+                                <div
+                                    className='bg-white h-full rounded-full'
+                                    style={{
+                                        width:
+                                            Math.min(tasksDoneToday * 10, 100) +
+                                            '%',
+                                    }}
+                                />
+                            </div>
+                        </div>
                         <div className='md:max-w-sm mx-5 md:mx-auto border border-gray-700 py-auto p-6 rounded bg-gray-800 drop-shadow-sm font-bold text-lg text-center text-white'>
                             {tasks.length > 0 ? (
                                 <>
@@ -116,6 +147,7 @@ const Home = () => {
                                                 tasks[mainTaskToShow]
                                                     .strictDeadline
                                             }
+                                            dueDate={tasks[mainTaskToShow].due}
                                         />
                                     </div>
                                     {/* <div className='mt-2'>
@@ -183,6 +215,7 @@ const Home = () => {
                                             strictDeadline={
                                                 tasks[leftTask].strictDeadline
                                             }
+                                            dueDate={tasks[leftTask].due}
                                         />
                                     </div>
                                     {tasks.length > 2 && (
@@ -215,6 +248,7 @@ const Home = () => {
                                                     tasks[rightTask]
                                                         .strictDeadline
                                                 }
+                                                dueDate={tasks[rightTask].due}
                                             />
                                         </div>
                                     )}

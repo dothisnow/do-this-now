@@ -114,6 +114,7 @@ const Tasks = () => {
 }
 
 const Task = ({
+    due,
     isSelected,
     repeat,
     repeatInterval,
@@ -132,7 +133,7 @@ const Task = ({
         <span>{title}</span>
         <TimeFrame timeFrame={timeFrame} />
         <Repeat {...{ repeat, repeatInterval, repeatUnit }} />
-        <Strict strictDeadline={strictDeadline} />
+        <Strict strictDeadline={strictDeadline} dueDate={due} />
     </div>
 )
 

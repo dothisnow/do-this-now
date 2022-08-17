@@ -47,7 +47,7 @@ export const Strict = ({ dueDate, strictDeadline }) => {
     return (
         <Tag
             icon={ExclamationCircleIcon}
-            text={dueDate}
+            text='strict'
             color={
                 new Date(dueDate) <
                 new Date(

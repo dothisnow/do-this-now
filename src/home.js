@@ -107,7 +107,7 @@ const Home = () => {
                             Done Today: {tasksDoneToday}
                         </div> */}
                         <div className='flex flex-row justify-center mb-2'>
-                            <div className='w-36 border border-gray-500 h-2 rounded-full'>
+                            <div className='w-36 border border-gray-700 bg-gray-800 h-2 rounded-full'>
                                 <div
                                     className='bg-white h-full rounded-full'
                                     style={{
@@ -195,7 +195,7 @@ const Home = () => {
                                     <div
                                         onClick={() => setMainTask(leftTask)}
                                         title='(Shortcut: 1)'
-                                        className='border mb-2 cursor-pointer border-gray-700 py-auto p-4 rounded bg-gray-800 drop-shadow-sm font-bold text-sm text-center md:mr-4 md:mb-0 opacity-20 text-white'>
+                                        className='border mb-2 cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center md:mr-4 md:mb-0 opacity-20 text-white'>
                                         <span>{tasks[leftTask].title}</span>
                                         <TimeFrame
                                             timeFrame={
@@ -224,7 +224,7 @@ const Home = () => {
                                                 setMainTask(rightTask)
                                             }
                                             title='(Shortcut: 2)'
-                                            className='border cursor-pointer border-gray-700 py-auto p-4 rounded bg-gray-800 drop-shadow-sm font-bold text-sm text-center opacity-20 text-white'>
+                                            className='border cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center opacity-20 text-white'>
                                             <span>
                                                 {tasks[rightTask].title}
                                             </span>

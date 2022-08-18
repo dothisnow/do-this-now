@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { format } from 'date-fns'
 import { Switch } from '@headlessui/react'
 
@@ -13,8 +14,11 @@ const TaskForm = ({
     repeatUnitState: [repeatUnit, setRepeatUnit],
     selectedWeekDaysState: [selectedWeekDays, setSelectedWeekDays],
     timeFrameState: [timeFrame, setTimeFrame],
+    subtasksState: [subtasks, setSubtasks],
     submitForm,
 }) => {
+    const [hasSubtasks, setHasSubtasks] = useState(subtasks.length > 0)
+
     const todayAtMidnight = () => {
         let date = new Date()
         date.setHours(0, 0, 0, 0)
@@ -243,7 +247,84 @@ const TaskForm = ({
                     </div>
                 </div>
             </div>
-            <div className='text-center'>
+            <div className='sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5'>
+                <label
+                    htmlFor='Subtasks'
+                    className='block text-sm font-medium sm:mt-px sm:pt-2'>
+                    Subtasks
+                </label>
+                <div className='mt-1 sm:mt-0 sm:col-span-2'>
+                    <div className='max-w-lg flex'>
+                        <Switch
+                            checked={hasSubtasks}
+                            onChange={(e) => {
+                                if (
+                                    !e &&
+                                    subtasks.length > 0 &&
+                                    !window.confirm(
+                                        'Are you sure you want to remove all subtasks?'
+                                    )
+                                )
+                                    return
+                                if (!e) setSubtasks([])
+                                else setSubtasks([{ done: false, title: '' }])
+                                setHasSubtasks(e)
+                            }}
+                            className={
+                                (hasSubtasks ? 'bg-blue-600' : 'bg-gray-200') +
+                                ' relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+                            }>
+                            <span className='sr-only'>Use setting</span>
+                            <span
+                                aria-hidden='true'
+                                className={
+                                    (hasSubtasks
+                                        ? 'translate-x-5'
+                                        : 'translate-x-0') +
+                                    ' pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200'
+                                }
+                            />
+                        </Switch>
+                    </div>
+                    {hasSubtasks && (
+                        <>
+                            {subtasks.map((subtask, i) => (
+                                <div className='max-w-lg flex mt-3'>
+                                    <input
+                                        type='text'
+                                        value={subtask.title}
+                                        onChange={(e) => {
+                                            setSubtasks([
+                                                ...subtasks.slice(0, i),
+                                                {
+                                                    ...subtask,
+                                                    title: e.target.value,
+                                                },
+                                                ...subtasks.slice(i + 1),
+                                            ])
+                                        }}
+                                        placeholder={`Subtask ${i + 1}`}
+                                        className='flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded'
+                                    />
+                                </div>
+                            ))}
+                            <div className='max-w-lg flex mt-3'>
+                                <button
+                                    onClick={() =>
+                                        setSubtasks([
+                                            ...subtasks,
+                                            { done: false, title: '' },
+                                        ])
+                                    }
+                                    className='flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded'>
+                                    Add Subtask
+                                </button>
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
+            <div className='text-center sm:border-t sm:border-gray-700 pt-5'>
                 <button className='border border-gray-700 bg-gray-800 text-white text-sm rounded p-2 inline-block hover:border-gray-600 hover:bg-gray-700'>
                     Submit
                 </button>

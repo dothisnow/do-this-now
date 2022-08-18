@@ -42,6 +42,8 @@ const NewTask = () => {
 
     const timeFrameState = useState(15)
 
+    const subtasksState = useState([])
+
     const navigate = useNavigate()
 
     const { mutate } = useQueryNewTask()
@@ -57,6 +59,7 @@ const NewTask = () => {
             repeatUnit: repeatUnitState[0],
             repeatWeekdays: selectedWeekDaysState[0],
             timeFrame: timeFrameState[0],
+            subtasks: subtasksState[0],
         }
         mutate(task)
     }
@@ -109,6 +112,7 @@ const NewTask = () => {
                                 repeatUnitState,
                                 selectedWeekDaysState,
                                 timeFrameState,
+                                subtasksState,
                                 submitForm,
                             }}
                         />

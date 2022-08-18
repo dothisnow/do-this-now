@@ -125,6 +125,8 @@ const Home = () => {
                                         <span>
                                             {tasks[mainTaskToShow].title}
                                         </span>
+                                    </div>
+                                    <div>
                                         <TimeFrame
                                             timeFrame={
                                                 tasks[mainTaskToShow].timeFrame

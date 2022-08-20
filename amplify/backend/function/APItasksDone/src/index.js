@@ -38,6 +38,34 @@ exports.handler = async (event) => {
 
     let newItem = data.Item
 
+    if (
+        newItem.hasOwnProperty('subtasks') &&
+        newItem.subtasks.filter((st) => st.done === false).length > 0
+    ) {
+        for (let i = 0; i < newItem.subtasks.length; i++) {
+            if (newItem.subtasks[i].done) continue
+            newItem.subtasks[i].done = true
+            break
+        }
+        const updateParams = {
+            TableName: ENV.STORAGE_TASKS_NAME,
+            Item: newItem,
+        }
+        let subresponse = await docClient.put(updateParams).promise()
+
+        if (newItem.subtasks.filter((st) => st.done === false).length > 0) {
+            return {
+                statusCode: 200,
+                //  Uncomment below to enable CORS requests
+                headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': '*',
+                },
+                body: JSON.stringify(subresponse),
+            }
+        }
+    }
+
     let response
     if (newItem.repeat === 'No Repeat')
         response = await docClient.delete(params).promise()

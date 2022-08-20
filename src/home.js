@@ -135,6 +135,29 @@ const Home = () => {
                                                 : tasks[mainTaskToShow].title}
                                         </span>
                                     </div>
+                                    {tasks[mainTaskToShow].hasOwnProperty(
+                                        'subtasks'
+                                    ) &&
+                                        tasks[mainTaskToShow].subtasks.length >
+                                            0 && (
+                                            <div className='text-xs py-1 font-normal'>
+                                                {tasks[mainTaskToShow].title} (
+                                                {tasks[
+                                                    mainTaskToShow
+                                                ].subtasks.reduce(
+                                                    (acc, cur) =>
+                                                        acc +
+                                                        (cur.done ? 1 : 0),
+                                                    0
+                                                )}
+                                                /
+                                                {
+                                                    tasks[mainTaskToShow]
+                                                        .subtasks.length
+                                                }
+                                                )
+                                            </div>
+                                        )}
                                     <div>
                                         <TimeFrame
                                             timeFrame={
@@ -161,41 +184,6 @@ const Home = () => {
                                             dueDate={tasks[mainTaskToShow].due}
                                         />
                                     </div>
-                                    {tasks[mainTaskToShow].hasOwnProperty(
-                                        'subtasks'
-                                    ) &&
-                                        tasks[mainTaskToShow].subtasks.length >
-                                            0 && (
-                                            <div className='text-xs mt-2 font-normal'>
-                                                Subtask of '
-                                                {tasks[mainTaskToShow].title}' (
-                                                {tasks[
-                                                    mainTaskToShow
-                                                ].subtasks.reduce(
-                                                    (acc, cur) =>
-                                                        acc +
-                                                        (cur.done ? 1 : 0),
-                                                    0
-                                                )}{' '}
-                                                of{' '}
-                                                {
-                                                    tasks[mainTaskToShow]
-                                                        .subtasks.length
-                                                }
-                                                )
-                                            </div>
-                                        )}
-                                    {/* <div className='mt-2'>
-                                <button
-                                    type='button'
-                                    title='(Shortcut: d)'
-                                    className='inline-flex items-center p-1 border border-transparent rounded shadow-sm text-white bg-gray-700 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500'>
-                                    <CheckCircleIcon
-                                        className='h-5 w-5'
-                                        aria-hidden='true'
-                                    />
-                                </button>
-                            </div> */}
                                 </>
                             ) : (
                                 'No tasks'

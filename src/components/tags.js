@@ -1,8 +1,10 @@
 import {
+    CalendarIcon,
     ClockIcon,
     ExclamationCircleIcon,
     RefreshIcon,
 } from '@heroicons/react/solid'
+import { format } from 'date-fns'
 
 const Tag = ({ color, icon, text }) => {
     const IconComponent = icon
@@ -16,6 +18,10 @@ const Tag = ({ color, icon, text }) => {
         </span>
     )
 }
+
+export const DateTag = ({ due }) => (
+    <Tag text={format(new Date(due), 'iii LLL d')} icon={CalendarIcon} />
+)
 
 export const TimeFrame = ({ timeFrame }) => {
     if (!timeFrame) return <></>

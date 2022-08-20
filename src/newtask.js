@@ -50,6 +50,10 @@ const NewTask = () => {
 
     const submitForm = () => {
         setLoading(true)
+        if (titleState[0] === '') {
+            alert('Add a title dumbass.')
+            return setLoading(false)
+        }
         const task = {
             title: titleState[0],
             due: `${dueYearState[0]}-${dueMonthState[0]}-${dueDayState[0]}`,

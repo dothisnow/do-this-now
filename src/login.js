@@ -25,7 +25,7 @@ const Login = () => {
                 })
                 .catch((e) => {
                     alert('e')
-                    console.log(e)
+                    console.error(e)
                 })
         } else {
             loginManager
@@ -37,7 +37,6 @@ const Login = () => {
                     ) {
                         setShowNewPassword(true)
                         setUser(r)
-                        console.log(r)
                     } else {
                         navigate('/')
                     }

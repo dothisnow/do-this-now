@@ -21,12 +21,14 @@ exports.handler = async (event) => {
 
     console.log(`BODY: ${JSON.stringify(body)}`)
 
-    if (!body.hasOwnProperty('title')) return error('Missing title!')
+    if (!body.hasOwnProperty('task') || !body.task.hasOwnProperty('title'))
+        return error('Missing title!')
+    const task = body.task
 
     const params = {
         TableName: ENV.STORAGE_TASKS_NAME,
         Key: {
-            title: body.title,
+            title: task.title,
         },
     }
 
@@ -84,7 +86,9 @@ exports.handler = async (event) => {
         date.setHours(date.getHours() + 2)
         newItem.due = dateString(date)
         if (!newItem?.history) newItem.history = []
-        const now = new Date()
+        const now = body.hasOwnProperty('date')
+            ? new Date(body.date)
+            : new Date()
         newItem.history.push(dateString(now))
         const updateParams = {
             TableName: ENV.STORAGE_TASKS_NAME,

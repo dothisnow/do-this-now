@@ -13,7 +13,6 @@ class LoginManager {
         this.signIn = (password) => Auth.signIn(EMAIL, password)
 
         this.newPassword = (user, password) => {
-            console.log(user)
             return Auth.completeNewPassword(user, password)
         }
 

@@ -17,6 +17,48 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`)
 
+    const today =
+        event.hasOwnProperty('queryStringParameters') &&
+        event.queryStringParameters.hasOwnProperty('date')
+            ? new Date(event.queryStringParameters.date)
+            : new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth(),
+                  new Date().getDate(),
+                  0,
+                  0,
+                  0
+              )
+
+    const sortFlags = [
+        // strict deadline and due today or past due
+        (t) =>
+            t.hasOwnProperty('due') &&
+            t.hasOwnProperty('strictDeadline') &&
+            new Date(t.due) <= today &&
+            t.strictDeadline,
+
+        // has not been done today and is due today or past due
+        (t) =>
+            t.hasOwnProperty('due') &&
+            new Date(t.due) <= today &&
+            (!t.hasOwnProperty('history') ||
+                t.history.filter((d) => d === dateString(new Date())).length ===
+                    0),
+
+        // if I do this today, I won't have to do it tomorrow
+        (t) =>
+            t.hasOwnProperty('due') &&
+            new Date(t.due) <= today &&
+            t.repeat !== 'Daily' &&
+            (t.repeat !== 'Weekdays' || new Date(t.due).getDay() === 5),
+    ]
+
+    const sortProperties = [
+        ['due', (x) => new Date(x)],
+        ['timeFrame', (x) => x],
+    ]
+
     const params = {
         TableName: ENV.STORAGE_TASKS_NAME,
     }
@@ -48,58 +90,6 @@ exports.handler = async (event) => {
         body: JSON.stringify(data),
     }
 }
-
-const sortFlags = [
-    // strict deadline and due today or past due
-    (t) =>
-        t.hasOwnProperty('due') &&
-        t.hasOwnProperty('strictDeadline') &&
-        new Date(t.due) <=
-            new Date(
-                new Date().getFullYear(),
-                new Date().getMonth(),
-                new Date().getDate(),
-                0,
-                0,
-                0
-            ) &&
-        t.strictDeadline,
-
-    // has not been done today and is due today or past due
-    (t) =>
-        t.hasOwnProperty('due') &&
-        new Date(t.due) <=
-            new Date(
-                new Date().getFullYear(),
-                new Date().getMonth(),
-                new Date().getDate(),
-                0,
-                0,
-                0
-            ) &&
-        (!t.hasOwnProperty('history') ||
-            t.history.filter((d) => d === dateString(new Date())).length === 0),
-
-    // if I do this today, I won't have to do it tomorrow
-    (t) =>
-        t.hasOwnProperty('due') &&
-        new Date(t.due) <=
-            new Date(
-                new Date().getFullYear(),
-                new Date().getMonth(),
-                new Date().getDate(),
-                0,
-                0,
-                0
-            ) &&
-        t.repeat !== 'Daily' &&
-        (t.repeat !== 'Weekdays' || new Date(t.due).getDay() === 5),
-]
-
-const sortProperties = [
-    ['due', (x) => new Date(x)],
-    ['timeFrame', (x) => x],
-]
 
 const dateString = (date) =>
     `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`

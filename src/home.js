@@ -30,7 +30,6 @@ const Home = () => {
     const queryClient = useQueryClient()
 
     const { data, isLoading, refetch } = useQueryTasksTop()
-    console.log({ isLoading, data })
 
     const tasks = data?.Items ?? []
 

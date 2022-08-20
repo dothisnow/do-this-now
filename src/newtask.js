@@ -120,7 +120,7 @@ const NewTask = () => {
                 </div>
             </div>
             {loading && (
-                <div className='absolute top-0 left-0 right-0 bottom-0 bg-gray-800 opacity-90 h-screen flex flex-col justify-center'>
+                <div className='fixed top-0 left-0 right-0 bottom-0 bg-gray-800 opacity-90 h-screen flex flex-col justify-center'>
                     <Loading light={false} />
                 </div>
             )}

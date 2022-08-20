@@ -23,7 +23,7 @@ import { Repeat, Strict, TimeFrame } from './components/tags'
 import ding from './soundeffects/ding.mp3'
 
 const Home = () => {
-    const [mainTask, setMainTask] = useState(0) // 0 - Math.min(2, tasks.length-1)
+    const [mainTask, setMainTask] = useState('') // 0 - Math.min(2, tasks.length-1)
     const navigate = useNavigate()
     const [playDing] = useSound(ding, { volume: 1 })
 
@@ -49,9 +49,14 @@ const Home = () => {
         return acc
     }, 0)
 
-    const mainTaskToShow = Math.min(mainTask, tasks.length - 1)
-    const leftTask = mainTaskToShow === 0 ? 1 : 0
-    const rightTask = mainTaskToShow === 2 ? 1 : 2
+    const topTask =
+        mainTask !== ''
+            ? tasks.find(({ title }) => title === mainTask)
+            : tasks[0]
+    const leftTask = tasks.find(({ title }) => title !== topTask.title)
+    const rightTask = tasks.find(
+        ({ title }) => title !== topTask.title && title !== leftTask.title
+    )
 
     const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
     const { mutate: mutateDelete, isLoading: deleteIsLoading } =
@@ -59,8 +64,8 @@ const Home = () => {
 
     const completeTask = () => {
         playDing()
-        mutate(tasks[mainTaskToShow])
-        setMainTask(0)
+        mutate(topTask)
+        setMainTask('')
         refetch()
     }
 
@@ -80,16 +85,16 @@ const Home = () => {
             },
         ],
         ['t', 'Tasks', () => navigate('/tasks')],
-        ['1', 'Do left task', () => setMainTask(leftTask)],
-        ['2', 'Do right task', () => setMainTask(rightTask)],
+        ['1', 'Do left task', () => setMainTask(leftTask.title)],
+        ['2', 'Do right task', () => setMainTask(rightTask.title)],
         [
             'Backspace',
             'Delete current task',
             () =>
                 window.confirm(
-                    `Are you sure you want to delete '${tasks[mainTaskToShow].title}'?`
+                    `Are you sure you want to delete '${topTask.title}'?`
                 ) &&
-                mutateDelete(tasks[mainTaskToShow]) &&
+                mutateDelete(topTask) &&
                 queryClient.invalidateQueries('tasks-top'),
         ],
     ]
@@ -122,66 +127,44 @@ const Home = () => {
                                 <>
                                     <div>
                                         <span>
-                                            {tasks[
-                                                mainTaskToShow
-                                            ].hasOwnProperty('subtasks') &&
-                                            tasks[mainTaskToShow].subtasks
-                                                .length > 0
-                                                ? tasks[
-                                                      mainTaskToShow
-                                                  ].subtasks.find(
+                                            {topTask.hasOwnProperty(
+                                                'subtasks'
+                                            ) && topTask.subtasks.length > 0
+                                                ? topTask.subtasks.find(
                                                       (s) => !s.done
                                                   ).title
-                                                : tasks[mainTaskToShow].title}
+                                                : topTask.title}
                                         </span>
                                     </div>
-                                    {tasks[mainTaskToShow].hasOwnProperty(
-                                        'subtasks'
-                                    ) &&
-                                        tasks[mainTaskToShow].subtasks.length >
-                                            0 && (
+                                    {topTask.hasOwnProperty('subtasks') &&
+                                        topTask.subtasks.length > 0 && (
                                             <div className='text-xs py-1 font-normal'>
-                                                {tasks[mainTaskToShow].title} (
-                                                {tasks[
-                                                    mainTaskToShow
-                                                ].subtasks.reduce(
+                                                {topTask.title} (
+                                                {topTask.subtasks.reduce(
                                                     (acc, cur) =>
                                                         acc +
                                                         (cur.done ? 1 : 0),
                                                     0
                                                 )}
-                                                /
-                                                {
-                                                    tasks[mainTaskToShow]
-                                                        .subtasks.length
-                                                }
-                                                )
+                                                /{topTask.subtasks.length})
                                             </div>
                                         )}
                                     <div>
                                         <TimeFrame
-                                            timeFrame={
-                                                tasks[mainTaskToShow].timeFrame
-                                            }
+                                            timeFrame={topTask.timeFrame}
                                         />
                                         <Repeat
-                                            repeat={
-                                                tasks[mainTaskToShow].repeat
-                                            }
+                                            repeat={topTask.repeat}
                                             repeatInterval={
-                                                tasks[mainTaskToShow]
-                                                    .repeatInterval
+                                                topTask.repeatInterval
                                             }
-                                            repeatUnit={
-                                                tasks[mainTaskToShow].repeatUnit
-                                            }
+                                            repeatUnit={topTask.repeatUnit}
                                         />
                                         <Strict
                                             strictDeadline={
-                                                tasks[mainTaskToShow]
-                                                    .strictDeadline
+                                                topTask.strictDeadline
                                             }
-                                            dueDate={tasks[mainTaskToShow].due}
+                                            dueDate={topTask.due}
                                         />
                                     </div>
                                 </>
@@ -216,62 +199,54 @@ const Home = () => {
                                 </div>
                                 <div className='flex flex-col md:flex-row justify-center mx-5'>
                                     <div
-                                        onClick={() => setMainTask(leftTask)}
+                                        onClick={() =>
+                                            setMainTask(leftTask.title)
+                                        }
                                         title='(Shortcut: 1)'
                                         className='border mb-2 cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center md:mr-4 md:mb-0 opacity-20 text-white'>
-                                        <span>{tasks[leftTask].title}</span>
+                                        <span>{leftTask.title}</span>
                                         <TimeFrame
-                                            timeFrame={
-                                                tasks[leftTask].timeFrame
-                                            }
+                                            timeFrame={leftTask.timeFrame}
                                         />
                                         <Repeat
-                                            repeat={tasks[leftTask].repeat}
+                                            repeat={leftTask.repeat}
                                             repeatInterval={
-                                                tasks[leftTask].repeatInterval
+                                                leftTask.repeatInterval
                                             }
-                                            repeatUnit={
-                                                tasks[leftTask].repeatUnit
-                                            }
+                                            repeatUnit={leftTask.repeatUnit}
                                         />
                                         <Strict
                                             strictDeadline={
-                                                tasks[leftTask].strictDeadline
+                                                leftTask.strictDeadline
                                             }
-                                            dueDate={tasks[leftTask].due}
+                                            dueDate={leftTask.due}
                                         />
                                     </div>
                                     {tasks.length > 2 && (
                                         <div
                                             onClick={() =>
-                                                setMainTask(rightTask)
+                                                setMainTask(rightTask.title)
                                             }
                                             title='(Shortcut: 2)'
                                             className='border cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center opacity-20 text-white'>
-                                            <span>
-                                                {tasks[rightTask].title}
-                                            </span>
+                                            <span>{rightTask.title}</span>
                                             <TimeFrame
-                                                timeFrame={
-                                                    tasks[rightTask].timeFrame
-                                                }
+                                                timeFrame={rightTask.timeFrame}
                                             />
                                             <Repeat
-                                                repeat={tasks[rightTask].repeat}
+                                                repeat={rightTask.repeat}
                                                 repeatInterval={
-                                                    tasks[rightTask]
-                                                        .repeatInterval
+                                                    rightTask.repeatInterval
                                                 }
                                                 repeatUnit={
-                                                    tasks[rightTask].repeatUnit
+                                                    rightTask.repeatUnit
                                                 }
                                             />
                                             <Strict
                                                 strictDeadline={
-                                                    tasks[rightTask]
-                                                        .strictDeadline
+                                                    rightTask.strictDeadline
                                                 }
-                                                dueDate={tasks[rightTask].due}
+                                                dueDate={rightTask.due}
                                             />
                                         </div>
                                     )}

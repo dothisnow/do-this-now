@@ -19,9 +19,19 @@ const Tag = ({ color, icon, text }) => {
     )
 }
 
-export const DateTag = ({ due }) => (
-    <Tag text={format(new Date(due), 'iii LLL d')} icon={CalendarIcon} />
-)
+export const DateTag = ({ due }) => {
+    try {
+        return (
+            <Tag
+                text={format(new Date(due), 'iii LLL d')}
+                icon={CalendarIcon}
+            />
+        )
+    } catch (e) {
+        console.error(e)
+        return <></>
+    }
+}
 
 export const TimeFrame = ({ timeFrame }) => {
     if (!timeFrame) return <></>
@@ -50,33 +60,38 @@ export const Repeat = ({ repeat, repeatInterval, repeatUnit }) => {
 
 export const Strict = ({ dueDate, strictDeadline }) => {
     if (!strictDeadline) return <></>
-    return (
-        <Tag
-            icon={ExclamationCircleIcon}
-            text='strict'
-            color={
-                new Date(dueDate) <
-                new Date(
-                    new Date().getFullYear(),
-                    new Date().getMonth(),
-                    new Date().getDate(),
-                    0,
-                    0,
-                    0
-                )
-                    ? 'text-red-300'
-                    : new Date(dueDate) <=
-                      new Date(
-                          new Date().getFullYear(),
-                          new Date().getMonth(),
-                          new Date().getDate(),
-                          0,
-                          0,
-                          0
-                      )
-                    ? 'text-orange-300'
-                    : 'text-white'
-            }
-        />
-    )
+    try {
+        return (
+            <Tag
+                icon={ExclamationCircleIcon}
+                text='strict'
+                color={
+                    new Date(dueDate) <
+                    new Date(
+                        new Date().getFullYear(),
+                        new Date().getMonth(),
+                        new Date().getDate(),
+                        0,
+                        0,
+                        0
+                    )
+                        ? 'text-red-300'
+                        : new Date(dueDate) <=
+                          new Date(
+                              new Date().getFullYear(),
+                              new Date().getMonth(),
+                              new Date().getDate(),
+                              0,
+                              0,
+                              0
+                          )
+                        ? 'text-orange-300'
+                        : 'text-white'
+                }
+            />
+        )
+    } catch (e) {
+        console.error(e)
+        return <></>
+    }
 }

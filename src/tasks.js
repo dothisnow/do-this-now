@@ -39,18 +39,24 @@ const Tasks = () => {
     ]
     useKeyAction(keyActions)
 
-    const formatDate = (date) =>
-        format(
-            new Date(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate() + 1,
-                0,
-                0,
-                0
-            ),
-            'EEEE, LLLL do, u'
-        )
+    const formatDate = (date) => {
+        try {
+            return format(
+                new Date(
+                    date.getFullYear(),
+                    date.getMonth(),
+                    date.getDate() + 1,
+                    0,
+                    0,
+                    0
+                ),
+                'EEEE, LLLL do, u'
+            )
+        } catch (e) {
+            console.error(e)
+            return date.toDateString()
+        }
+    }
 
     tasks.sort((a, b) =>
         a.due === 'No Due Date'

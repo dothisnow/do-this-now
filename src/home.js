@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import useSound from 'use-sound'
 import {
     CheckCircleIcon,
     MenuIcon,
@@ -14,18 +13,17 @@ import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 import useKeyAction from './hooks/useKeyAction'
 
 import loginManager from './helpers/LoginManager'
+import useDing from './helpers/useDing'
 
 import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
-import ding from './soundeffects/ding.mp3'
-
 const Home = () => {
     const [mainTask, setMainTask] = useState('') // 0 - Math.min(2, tasks.length-1)
     const navigate = useNavigate()
-    const [playDing] = useSound(ding, { volume: 1 })
+    const ding = useDing()
 
     const queryClient = useQueryClient()
 
@@ -63,7 +61,7 @@ const Home = () => {
         useQueryTaskDelete()
 
     const completeTask = () => {
-        playDing()
+        ding()
         mutate(topTask)
         setMainTask('')
         refetch()

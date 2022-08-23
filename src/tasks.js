@@ -1,41 +1,82 @@
-import { Fragment } from 'react'
+import { Fragment, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+
 import { format } from 'date-fns'
 import { HomeIcon, PlusCircleIcon } from '@heroicons/react/solid'
+
+import useDing from './helpers/useDing'
 
 import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import { Repeat, Strict, TimeFrame } from './components/tags'
 
+import { useQueryClient } from 'react-query'
 import { useQueryTasks } from './hooks/useQueryTasks'
+import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
+import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import useKeyAction from './hooks/useKeyAction'
 
 const Tasks = () => {
-    // const [selectedTask, setSelectedTask] = useState(0)
-
+    const [selectedTask, setSelectedTask] = useState(0)
+    const taskElems = useRef([])
+    const ding = useDing()
     const navigate = useNavigate()
+    const queryClient = useQueryClient()
 
-    const { data, isFetching } = useQueryTasks()
+    const { data, isFetching, refetch } = useQueryTasks()
 
     const tasks = (data?.Items ?? []).map((task) => ({
         due: 'No Due Date',
         ...task,
     }))
 
+    const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
+    const { mutate: mutateDelete, isLoading: deleteIsLoading } =
+        useQueryTaskDelete()
+
+    const completeTask = () => {
+        ding()
+        mutate(tasks[selectedTask])
+        refetch()
+    }
+
     const keyActions = [
-        // [
-        //     'ArrowUp',
-        //     'Select previous task',
-        //     () => setSelectedTask(Math.max(selectedTask - 1, 0)),
-        // ],
-        // [
-        //     'ArrowDown',
-        //     'Select next task',
-        //     () => setSelectedTask(Math.min(selectedTask + 1, tasks.length - 1)),
-        // ],
-        ['Escape', 'Home', () => navigate('/')],
+        ['d', 'Task done', completeTask],
         ['n', 'New task', () => navigate('/new-task')],
+        [
+            'ArrowUp',
+            'Select previous task',
+            (e) => {
+                e.preventDefault()
+                setSelectedTask(Math.max(selectedTask - 1, 0))
+                taskElems.current[selectedTask - 1].scrollIntoView({
+                    behavior: 'smooth',
+                })
+            },
+        ],
+        [
+            'ArrowDown',
+            'Select next task',
+            (e) => {
+                e.preventDefault()
+                setSelectedTask(Math.min(selectedTask + 1, tasks.length - 1))
+                taskElems.current[selectedTask + 1].scrollIntoView({
+                    behavior: 'smooth',
+                })
+            },
+        ],
+        ['Escape', 'Home', () => navigate('/')],
+        [
+            'Backspace',
+            'Delete current task',
+            () =>
+                window.confirm(
+                    `Are you sure you want to delete '${tasks[selectedTask].title}'?`
+                ) &&
+                mutateDelete(tasks[selectedTask]) &&
+                queryClient.invalidateQueries('tasks'),
+        ],
     ]
     useKeyAction(keyActions)
 
@@ -68,59 +109,69 @@ const Tasks = () => {
 
     return (
         <RequireAuth>
-            <div className='h-screen my-10 mx-5'>
-                <div className='pb-2 flex flex-row justify-center'>
-                    <button
-                        onClick={() => navigate('/')}
-                        className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
-                        <span>Home</span>
-                        <HomeIcon className='h-5 w-5 ml-1 inline-block' />
-                    </button>
-                    <button
-                        onClick={() => navigate('/new-task')}
-                        className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
-                        <span>New task</span>
-                        <PlusCircleIcon className='h-5 w-5 ml-1 inline-block' />
-                    </button>
+            {doneIsLoading || deleteIsLoading ? (
+                <div className='h-screen flex flex-col justify-center'>
+                    <Loading />
                 </div>
-                {tasks.map((task, i) => (
-                    <Fragment key={task.title}>
-                        {(i === 0 ||
-                            formatDate(new Date(tasks[i - 1].due)) !==
-                                formatDate(new Date(task.due))) && (
-                            <div
-                                className={
-                                    (new Date(task.due) <
-                                    new Date(
-                                        new Date().getFullYear(),
-                                        new Date().getMonth(),
-                                        new Date().getDate(),
-                                        0,
-                                        0,
-                                        0
-                                    )
-                                        ? 'text-orange-300'
-                                        : 'text-white') +
-                                    ' w-96 mx-auto text-center text-sm'
-                                }>
-                                {new Date(task.due).toDateString()}
-                            </div>
-                        )}
-                        <Task
-                            // isSelected={i === selectedTask}
-                            {...task}
-                        />
-                    </Fragment>
-                ))}
-                {isFetching && <Loading />}
-            </div>
-            <Hints keyActions={keyActions} />
+            ) : (
+                <>
+                    <div className='h-screen my-10 mx-5'>
+                        <div className='pb-2 flex flex-row justify-center'>
+                            <button
+                                onClick={() => navigate('/')}
+                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                <span>Home</span>
+                                <HomeIcon className='h-5 w-5 ml-1 inline-block' />
+                            </button>
+                            <button
+                                onClick={() => navigate('/new-task')}
+                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                <span>New task</span>
+                                <PlusCircleIcon className='h-5 w-5 ml-1 inline-block' />
+                            </button>
+                        </div>
+                        {tasks.map((task, i) => (
+                            <Fragment key={task.title}>
+                                {(i === 0 ||
+                                    formatDate(new Date(tasks[i - 1].due)) !==
+                                        formatDate(new Date(task.due))) && (
+                                    <div
+                                        className={
+                                            (new Date(task.due) <
+                                            new Date(
+                                                new Date().getFullYear(),
+                                                new Date().getMonth(),
+                                                new Date().getDate(),
+                                                0,
+                                                0,
+                                                0
+                                            )
+                                                ? 'text-orange-300'
+                                                : 'text-white') +
+                                            ' w-96 mx-auto text-center text-sm'
+                                        }>
+                                        {new Date(task.due).toDateString()}
+                                    </div>
+                                )}
+                                <Task
+                                    isSelected={i === selectedTask}
+                                    innerRef={(e) => (taskElems.current[i] = e)}
+                                    {...task}
+                                />
+                            </Fragment>
+                        ))}
+                        {isFetching && <Loading />}
+                    </div>
+                    <Hints keyActions={keyActions} />
+                </>
+            )}
         </RequireAuth>
     )
 }
 
 const Task = ({
     due,
+    innerRef,
     isSelected,
     repeat,
     repeatInterval,
@@ -130,6 +181,7 @@ const Task = ({
     title,
 }) => (
     <div
+        ref={innerRef}
         className={
             (isSelected
                 ? 'bg-gray-700 border-gray-600'

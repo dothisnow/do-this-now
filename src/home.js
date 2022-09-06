@@ -31,21 +31,21 @@ const Home = () => {
 
     const tasks = data?.Items ?? []
 
-    const tasksDoneToday = tasks.reduce((acc, cur) => {
-        if (cur.hasOwnProperty('history')) {
-            return (
-                acc +
-                cur.history.filter(
-                    (d) =>
-                        d ===
-                        `${new Date().getFullYear()}-${
-                            new Date().getMonth() + 1
-                        }-${new Date().getDate()}`
-                ).length
-            )
-        }
-        return acc
-    }, 0)
+    // const tasksDoneToday = tasks.reduce((acc, cur) => {
+    //     if (cur.hasOwnProperty('history')) {
+    //         return (
+    //             acc +
+    //             cur.history.filter(
+    //                 (d) =>
+    //                     d ===
+    //                     `${new Date().getFullYear()}-${
+    //                         new Date().getMonth() + 1
+    //                     }-${new Date().getDate()}`
+    //             ).length
+    //         )
+    //     }
+    //     return acc
+    // }, 0)
 
     const topTask =
         mainTask !== ''
@@ -119,7 +119,7 @@ const Home = () => {
                         {/* <div className='text-center py-1 font-bold text-gray-500 text-sm'>
                             Done Today: {tasksDoneToday}
                         </div> */}
-                        <div className='flex flex-row justify-center mb-2'>
+                        {/* <div className='flex flex-row justify-center mb-2'>
                             <div className='w-36 border border-gray-700 bg-gray-800 h-2 rounded-full'>
                                 <div
                                     className='bg-white h-full rounded-full'
@@ -130,7 +130,7 @@ const Home = () => {
                                     }}
                                 />
                             </div>
-                        </div>
+                        </div> */}
                         <div className='md:max-w-sm mx-5 md:mx-auto border border-gray-700 py-auto p-6 rounded bg-gray-800 drop-shadow-sm font-bold text-lg text-center text-white'>
                             {tasks.length > 0 ? (
                                 <>

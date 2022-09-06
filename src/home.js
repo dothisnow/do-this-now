@@ -60,10 +60,21 @@ const Home = () => {
     const { mutate: mutateDelete, isLoading: deleteIsLoading } =
         useQueryTaskDelete()
 
+    const subtasksDone =
+        topTask &&
+        topTask.hasOwnProperty('subtasks') &&
+        Array.isArray(topTask.subtasks)
+            ? topTask.subtasks.reduce((acc, cur) => acc + (cur.done ? 1 : 0), 0)
+            : 0
+
     const completeTask = () => {
         ding()
         mutate(topTask)
-        setMainTask('')
+        if (
+            !topTask.hasOwnProperty('subtasks') ||
+            subtasksDone + 1 >= topTask.subtasks.length
+        )
+            setMainTask('')
         refetch()
     }
 
@@ -137,14 +148,8 @@ const Home = () => {
                                     {topTask.hasOwnProperty('subtasks') &&
                                         topTask.subtasks.length > 0 && (
                                             <div className='text-xs py-1 font-normal'>
-                                                {topTask.title} (
-                                                {topTask.subtasks.reduce(
-                                                    (acc, cur) =>
-                                                        acc +
-                                                        (cur.done ? 1 : 0),
-                                                    0
-                                                )}
-                                                /{topTask.subtasks.length})
+                                                {topTask.title} ({subtasksDone}/
+                                                {topTask.subtasks.length})
                                             </div>
                                         )}
                                     <div>

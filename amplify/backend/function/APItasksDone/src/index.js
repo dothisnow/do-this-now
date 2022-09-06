@@ -118,6 +118,17 @@ exports.handler = async (event) => {
             ? new Date(body.date)
             : new Date()
         newItem.history.push(dateString(now))
+
+        if (
+            newItem.hasOwnProperty('subtasks') &&
+            Array.isArray(newItem.subtasks) &&
+            newItem.subtasks.length > 0
+        )
+            newItem.subtasks = newItem.subtasks.map((x) => ({
+                ...x,
+                done: false,
+            }))
+
         const updateParams = {
             TableName: ENV.STORAGE_TASKS_NAME,
             Item: newItem,

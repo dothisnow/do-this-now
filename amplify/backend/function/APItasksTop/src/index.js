@@ -43,8 +43,7 @@ exports.handler = async (event) => {
             t.hasOwnProperty('due') &&
             new Date(t.due) <= today &&
             (!t.hasOwnProperty('history') ||
-                t.history.filter((d) => d === dateString(new Date())).length ===
-                    0),
+                t.history.filter((d) => d === dateString(today)).length === 0),
 
         // if I do this today, I won't have to do it tomorrow
         (t) =>

@@ -78,6 +78,19 @@
           "delete"
         ]
       }
+    },
+    "/tasks/get": {
+      "name": "/tasks/get",
+      "lambdaFunction": "APIgetTask",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
     }
   }
 }

@@ -101,6 +101,22 @@
           ]
         }
       ]
+    },
+    "APIgetTask": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "tasks",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        }
+      ]
     }
   },
   "auth": {
@@ -177,6 +193,14 @@
         {
           "category": "function",
           "resourceName": "APItasksDone",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "APIgetTask",
           "attributes": [
             "Name",
             "Arn"

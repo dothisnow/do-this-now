@@ -138,7 +138,11 @@ const Home = () => {
                                         <span>
                                             {topTask.hasOwnProperty(
                                                 'subtasks'
-                                            ) && topTask.subtasks.length > 0
+                                            ) &&
+                                            topTask.subtasks.length > 0 &&
+                                            topTask.subtasks.some(
+                                                (x) => !x.done
+                                            )
                                                 ? topTask.subtasks.find(
                                                       (s) => !s.done
                                                   ).title

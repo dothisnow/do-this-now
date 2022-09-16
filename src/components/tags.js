@@ -21,9 +21,43 @@ const Tag = ({ color, icon, text }) => {
 
 export const DateTag = ({ due }) => {
     try {
+        const dueDate = new Date(due)
+        const today = new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate(),
+            0,
+            0,
+            0
+        )
+        const tomorrow = new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate() + 1,
+            0,
+            0,
+            0
+        )
+        const yesterday = new Date(
+            new Date().getFullYear(),
+            new Date().getMonth(),
+            new Date().getDate() - 1,
+            0,
+            0,
+            0
+        )
+        console.log(dueDate - today)
         return (
             <Tag
-                text={format(new Date(due), 'iii LLL d')}
+                text={
+                    dueDate - today === 0
+                        ? 'Today'
+                        : dueDate - tomorrow === 0
+                        ? 'Tomorrow'
+                        : dueDate - yesterday === 0
+                        ? 'Yesterday'
+                        : format(dueDate, 'iii LLL d')
+                }
                 icon={CalendarIcon}
             />
         )

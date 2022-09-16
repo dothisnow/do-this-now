@@ -107,6 +107,8 @@ const Tasks = () => {
             : new Date(a.due) - new Date(b.due)
     )
 
+    console.log(new Date('2022-11-17'))
+
     return (
         <RequireAuth>
             {doneIsLoading || deleteIsLoading ? (

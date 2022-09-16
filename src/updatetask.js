@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 
+import { useQueryGetTask } from './hooks/useQueryGetTask'
 import { useQueryNewTask } from './hooks/useQueryNewTask'
 import useKeyAction from './hooks/useKeyAction'
 
@@ -21,6 +22,10 @@ const UpdateTask = () => {
         if (lastPathItem === 'update-task') navigate(-1)
         return lastPathItem
     })()
+
+    const { data: task, isLoading: isTaskLoading } = useQueryGetTask(taskId)
+
+    console.log(task)
 
     const [loading, setLoading] = useState(false)
     const [isTyping, setIsTyping] = useState(true)
@@ -94,40 +99,41 @@ const UpdateTask = () => {
 
     return (
         <RequireAuth>
-            <div className='space-y-8 divide-y divide-gray-700 p-10 text-white'>
-                <div className='space-y-8 divide-y divide-gray-700 sm:space-y-5'>
-                    <div>
-                        <div>
-                            <h3 className='text-lg leading-6 font-medium '>
-                                <ChevronLeftIcon
-                                    className='w-5 h-5 inline-block cursor-pointer'
-                                    onClick={() => navigate(-1)}
-                                />
-                                <span>Update Task: {taskId}</span>
-                            </h3>
-                        </div>
-                        <TaskForm
-                            {...{
-                                setIsTyping,
-                                titleState,
-                                dueMonthState,
-                                dueDayState,
-                                dueYearState,
-                                strictDeadlineState,
-                                repeatState,
-                                repeatIntervalState,
-                                repeatUnitState,
-                                selectedWeekDaysState,
-                                timeFrameState,
-                                submitForm,
-                            }}
-                        />
-                    </div>
-                </div>
-            </div>
-            {loading && (
+            {loading && isTaskLoading ? (
                 <div className='absolute top-0 left-0 right-0 bottom-0 bg-gray-800 opacity-90 h-screen flex flex-col justify-center'>
                     <Loading light={false} />
+                </div>
+            ) : (
+                <div className='space-y-8 divide-y divide-gray-700 p-10 text-white'>
+                    <div className='space-y-8 divide-y divide-gray-700 sm:space-y-5'>
+                        <div>
+                            <div>
+                                <h3 className='text-lg leading-6 font-medium '>
+                                    <ChevronLeftIcon
+                                        className='w-5 h-5 inline-block cursor-pointer'
+                                        onClick={() => navigate(-1)}
+                                    />
+                                    <span>Update Task: {taskId}</span>
+                                </h3>
+                            </div>
+                            <TaskForm
+                                {...{
+                                    setIsTyping,
+                                    titleState,
+                                    dueMonthState,
+                                    dueDayState,
+                                    dueYearState,
+                                    strictDeadlineState,
+                                    repeatState,
+                                    repeatIntervalState,
+                                    repeatUnitState,
+                                    selectedWeekDaysState,
+                                    timeFrameState,
+                                    submitForm,
+                                }}
+                            />
+                        </div>
+                    </div>
                 </div>
             )}
             {/* <Hints keyActions={keyActions} /> */}

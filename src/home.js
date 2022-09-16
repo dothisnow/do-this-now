@@ -106,6 +106,7 @@ const Home = () => {
                 mutateDelete(topTask) &&
                 queryClient.invalidateQueries('tasks-top'),
         ],
+        ['Escape', 'Reset selected task', () => setMainTask('')],
     ]
     useKeyAction(keyActions)
 

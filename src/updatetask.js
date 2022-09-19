@@ -23,6 +23,8 @@ const UpdateTask = () => {
         return lastPathItem
     })()
 
+    console.log(decodeURI(taskId))
+
     const { data: task, isLoading: isTaskLoading } = useQueryGetTask(taskId)
 
     console.log(task)
@@ -30,7 +32,7 @@ const UpdateTask = () => {
     const [loading, setLoading] = useState(false)
     const [isTyping, setIsTyping] = useState(true)
 
-    const titleState = useState('')
+    const titleState = useState(taskId)
 
     const dueMonthState = useState(new Date().getMonth() + 1)
     const dueDayState = useState(new Date().getDate())

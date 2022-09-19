@@ -4,6 +4,7 @@ import {
     BellIcon,
     CheckCircleIcon,
     MenuIcon,
+    PencilIcon,
     PlusCircleIcon,
 } from '@heroicons/react/solid'
 
@@ -99,6 +100,7 @@ const Home = () => {
         ],
         ['s', 'Snooze task', () => mutateSnooze(topTask)],
         ['t', 'Tasks', () => navigate('/tasks')],
+        ['u', 'Update task', () => navigate(`/update-task/${topTask.title}`)],
         ['1', 'Do left task', () => setMainTask(leftTask.title)],
         ['2', 'Do right task', () => setMainTask(rightTask.title)],
         [
@@ -213,6 +215,14 @@ const Home = () => {
                                 className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
                                 <span>Snooze</span>
                                 <BellIcon className='h-5 w-5 ml-1 inline-block' />
+                            </button>
+                            <button
+                                onClick={() =>
+                                    navigate(`/update-task/${topTask.title}`)
+                                }
+                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                <span>Update</span>
+                                <PencilIcon className='h-5 w-5 ml-1 inline-block' />
                             </button>
                         </div>
                         {tasks.length > 1 && (

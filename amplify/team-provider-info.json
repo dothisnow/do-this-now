@@ -49,7 +49,7 @@
         },
         "APItasksUpdate": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
-          "s3Key": "amplify-builds/APItasksUpdate-6555487a393978326675-build.zip"
+          "s3Key": "amplify-builds/APItasksUpdate-6550656f49545a2f6d67-build.zip"
         },
         "APItasksDone": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
@@ -58,6 +58,10 @@
         "APIgetTask": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
           "s3Key": "amplify-builds/APIgetTask-673162567a7456653175-build.zip"
+        },
+        "APItasksSnooze": {
+          "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
+          "s3Key": "amplify-builds/APItasksSnooze-73644a75656f62676f61-build.zip"
         }
       }
     }

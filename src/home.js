@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
+    BellIcon,
     CheckCircleIcon,
     MenuIcon,
     PlusCircleIcon,
 } from '@heroicons/react/solid'
 
 import { useQueryClient } from 'react-query'
+import { useQuerySnoozeTask } from './hooks/useQuerySnoozeTask'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
@@ -59,6 +61,8 @@ const Home = () => {
     const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
     const { mutate: mutateDelete, isLoading: deleteIsLoading } =
         useQueryTaskDelete()
+    const { mutate: mutateSnooze, isLoading: snoozeIsLoading } =
+        useQuerySnoozeTask()
 
     const subtasksDone =
         topTask &&
@@ -93,6 +97,7 @@ const Home = () => {
                 navigate('/new-task')
             },
         ],
+        ['s', 'Snooze task', () => mutateSnooze(topTask)],
         ['t', 'Tasks', () => navigate('/tasks')],
         ['1', 'Do left task', () => setMainTask(leftTask.title)],
         ['2', 'Do right task', () => setMainTask(rightTask.title)],
@@ -112,7 +117,10 @@ const Home = () => {
     return (
         <RequireAuth>
             <div className='h-screen flex flex-col justify-center'>
-                {isLoading || doneIsLoading || deleteIsLoading ? (
+                {isLoading ||
+                doneIsLoading ||
+                deleteIsLoading ||
+                snoozeIsLoading ? (
                     <Loading />
                 ) : (
                     <>
@@ -198,6 +206,12 @@ const Home = () => {
                                 className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
                                 <span>New task</span>
                                 <PlusCircleIcon className='h-5 w-5 ml-1 inline-block' />
+                            </button>
+                            <button
+                                onClick={() => mutateSnooze(topTask)}
+                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                <span>Snooze</span>
+                                <BellIcon className='h-5 w-5 ml-1 inline-block' />
                             </button>
                         </div>
                         {tasks.length > 1 && (

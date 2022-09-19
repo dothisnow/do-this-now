@@ -159,6 +159,7 @@ const Tasks = () => {
                                     isSelected={i === selectedTask}
                                     innerRef={(e) => (taskElems.current[i] = e)}
                                     {...task}
+                                    onClick={() => setSelectedTask(i)}
                                 />
                             </Fragment>
                         ))}
@@ -181,6 +182,7 @@ const Task = ({
     strictDeadline,
     timeFrame,
     title,
+    onClick,
 }) => (
     <div
         ref={innerRef}
@@ -189,7 +191,8 @@ const Task = ({
                 ? 'bg-gray-700 border-gray-600'
                 : 'bg-gray-800 border-gray-700') +
             ' block md:max-w-sm max-w-96 mx-auto border p-4 my-1 rounded drop-shadow-sm font-bold text-md text-center text-white'
-        }>
+        }
+        onClick={onClick}>
         <span>{title}</span>
         <TimeFrame timeFrame={timeFrame} />
         <Repeat {...{ repeat, repeatInterval, repeatUnit }} />

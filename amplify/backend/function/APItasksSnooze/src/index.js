@@ -23,29 +23,21 @@ exports.handler = async (event) => {
 
     if (!body.hasOwnProperty('title')) return error('Missing title!')
 
-    let newItem
-    if (body.hasOwnProperty('oldTitle')) {
-        const getParams = {
-            TableName: ENV.STORAGE_TASKS_NAME,
-            Key: {
-                title: body.oldTitle,
-            },
-        }
-
-        const oldItem = await docClient.get(getParams).promise()
-        if (oldItem) await docClient.delete(getParams).promise()
-
-        const newItem = { ...oldItem, ...body }
-    } else {
-        const newItem = body
-    }
-
-    const putParams = {
+    var updateParams = {
         TableName: ENV.STORAGE_TASKS_NAME,
-        Item: newItem,
+        Key: {
+            title: body.title,
+        },
+        UpdateExpression: 'set #snooze = :snooze',
+        ExpressionAttributeNames: { '#snooze': 'snooze' },
+        ExpressionAttributeValues: {
+            ':snooze': new Date(
+                new Date().getTime() + 60 * 60 * 1000
+            ).toISOString(),
+        },
     }
 
-    const response = await docClient.delete(putParams).promise()
+    const response = await docClient.update(updateParams).promise()
 
     return {
         statusCode: 200,

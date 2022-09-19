@@ -91,6 +91,19 @@
           "delete"
         ]
       }
+    },
+    "/tasks/snooze": {
+      "name": "/tasks/snooze",
+      "lambdaFunction": "APItasksSnooze",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
     }
   }
 }

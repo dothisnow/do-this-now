@@ -20,12 +20,15 @@ const UpdateTask = () => {
         let lastPathItem = path.pop()
         if (lastPathItem === '') lastPathItem = path.pop()
         if (lastPathItem === 'update-task') navigate(-1)
-        return lastPathItem
+        return decodeURI(lastPathItem)
     })()
 
-    console.log(decodeURI(taskId))
+    console.log(taskId)
 
-    const { data: task, isLoading: isTaskLoading } = useQueryGetTask(taskId)
+    const {
+        data: { Item: task },
+        isLoading: isTaskLoading,
+    } = useQueryGetTask(taskId)
 
     console.log(task)
 
@@ -34,9 +37,15 @@ const UpdateTask = () => {
 
     const titleState = useState(taskId)
 
-    const dueMonthState = useState(new Date().getMonth() + 1)
-    const dueDayState = useState(new Date().getDate())
-    const dueYearState = useState(new Date().getFullYear())
+    const dueMonthState = useState(
+        task?.due ? new Date(task.due).getMonth() + 1 : 1
+    )
+    const dueDayState = useState(
+        task?.due ? new Date(task.due).getDate() + 1 : 1
+    )
+    const dueYearState = useState(
+        task?.due ? new Date(task.due).getFullYear() + 1 : 1998
+    )
 
     const strictDeadlineState = useState(false)
 

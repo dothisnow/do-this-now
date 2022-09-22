@@ -23,44 +23,33 @@ const UpdateTask = () => {
         return decodeURI(lastPathItem)
     })()
 
-    console.log(taskId)
+    const titleState = useState(taskId)
 
-    const {
-        data: { Item: task },
-        isLoading: isTaskLoading,
-    } = useQueryGetTask(taskId)
+    const { data, isLoading: isTaskLoading } = useQueryGetTask(taskId)
+
+    const task = data?.Item ?? undefined
 
     console.log(task)
 
     const [loading, setLoading] = useState(false)
     const [isTyping, setIsTyping] = useState(true)
 
-    const titleState = useState(taskId)
-
     const dueMonthState = useState(
         task?.due ? new Date(task.due).getMonth() + 1 : 1
     )
-    const dueDayState = useState(
-        task?.due ? new Date(task.due).getDate() + 1 : 1
-    )
+    const dueDayState = useState(task?.due ? new Date(task.due).getDate() : 1)
     const dueYearState = useState(
-        task?.due ? new Date(task.due).getFullYear() + 1 : 1998
+        task?.due ? new Date(task.due).getFullYear() : 1998
     )
 
-    const strictDeadlineState = useState(false)
+    const strictDeadlineState = useState(task?.strictDeadline ?? false)
 
-    const repeatState = useState('No Repeat')
-    const repeatIntervalState = useState(1)
-    const repeatUnitState = useState('day')
-    const selectedWeekDaysState = useState([
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-    ])
+    const repeatState = useState(task?.repeat ?? 'No Repeat')
+    const repeatIntervalState = useState(task?.repeatInterval ?? 1)
+    const repeatUnitState = useState(task?.repeatUnit ?? 'day')
+    const selectedWeekDaysState = useState(
+        task?.selectedWeekDays ?? [true, true, true, true, true, true, true]
+    )
     const toggleWeekday = (index) =>
         selectedWeekDaysState[1]([
             ...selectedWeekDaysState[0].slice(0, index),
@@ -68,7 +57,9 @@ const UpdateTask = () => {
             ...selectedWeekDaysState[0].slice(index + 1),
         ])
 
-    const timeFrameState = useState(15)
+    const timeFrameState = useState(task?.timeFrame ?? 15)
+
+    const subtasksState = useState([])
 
     const { mutate } = useQueryNewTask()
 
@@ -140,6 +131,7 @@ const UpdateTask = () => {
                                     repeatUnitState,
                                     selectedWeekDaysState,
                                     timeFrameState,
+                                    subtasksState,
                                     submitForm,
                                 }}
                             />

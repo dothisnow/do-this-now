@@ -17,7 +17,7 @@ const TaskForm = ({
     subtasksState: [subtasks, setSubtasks],
     submitForm,
 }) => {
-    const [hasSubtasks, setHasSubtasks] = useState(subtasks.length > 0)
+    const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
 
     const todayAtMidnight = () => {
         let date = new Date()

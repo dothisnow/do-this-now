@@ -5,9 +5,11 @@ export const useQueryGetTask = (title) =>
     useQuery(
         ['get-task'],
         () => {
-            return API.get('tasks', '/tasks/get', {
+            const data = API.get('tasks', '/tasks/get', {
                 queryStringParameters: { title },
             })
+            console.log(data)
+            return data
         },
         {
             refetchOnWindowFocus: false,

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import { HomeIcon, PlusCircleIcon } from '@heroicons/react/solid'
 
+import { newSafeDate } from './helpers/dates'
 import useDing from './helpers/useDing'
 
 import Hints from './components/hints'
@@ -104,7 +105,7 @@ const Tasks = () => {
             ? -1
             : b.due === 'No Due Date'
             ? 1
-            : new Date(a.due) - new Date(b.due)
+            : newSafeDate(a.due) - newSafeDate(b.due)
     )
 
     return (
@@ -133,11 +134,13 @@ const Tasks = () => {
                         {tasks.map((task, i) => (
                             <Fragment key={task.title}>
                                 {(i === 0 ||
-                                    formatDate(new Date(tasks[i - 1].due)) !==
-                                        formatDate(new Date(task.due))) && (
+                                    formatDate(
+                                        newSafeDate(tasks[i - 1].due)
+                                    ) !==
+                                        formatDate(newSafeDate(task.due))) && (
                                     <div
                                         className={
-                                            (new Date(task.due) <
+                                            (newSafeDate(task.due) <
                                             new Date(
                                                 new Date().getFullYear(),
                                                 new Date().getMonth(),
@@ -150,7 +153,7 @@ const Tasks = () => {
                                                 : 'text-white') +
                                             ' w-96 mx-auto text-center text-sm'
                                         }>
-                                        {new Date(task.due).toDateString()}
+                                        {newSafeDate(task.due).toDateString()}
                                     </div>
                                 )}
                                 <Task

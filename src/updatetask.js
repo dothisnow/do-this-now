@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 
 import { useQueryGetTask } from './hooks/useQueryGetTask'
-import { useQueryNewTask } from './hooks/useQueryNewTask'
+import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
 import useKeyAction from './hooks/useKeyAction'
 
 import Loading from './components/loading'
@@ -26,30 +26,57 @@ const UpdateTask = () => {
     const titleState = useState(taskId)
 
     const { data, isLoading: isTaskLoading } = useQueryGetTask(taskId)
-
     const task = data?.Item ?? undefined
-
-    console.log(task)
 
     const [loading, setLoading] = useState(false)
     const [isTyping, setIsTyping] = useState(true)
 
-    const dueMonthState = useState(
-        task?.due ? new Date(task.due).getMonth() + 1 : 1
-    )
-    const dueDayState = useState(task?.due ? new Date(task.due).getDate() : 1)
-    const dueYearState = useState(
-        task?.due ? new Date(task.due).getFullYear() : 1998
-    )
+    const dueMonthState = useState(1)
+    const dueDayState = useState(1)
+    const dueYearState = useState(1998)
+    const strictDeadlineState = useState(false)
+    const repeatState = useState('No Repeat')
+    const repeatIntervalState = useState(1)
+    const repeatUnitState = useState('day')
+    const selectedWeekDaysState = useState([
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+        true,
+    ])
+    const timeFrameState = useState(15)
+    const subtasksState = useState([])
 
-    const strictDeadlineState = useState(task?.strictDeadline ?? false)
+    useEffect(() => {
+        if (task) {
+            dueMonthState[1](new Date(task.due).getMonth() + 1)
+            dueDayState[1](new Date(task.due).getDate())
+            dueYearState[1](new Date(task.due).getFullYear())
+            strictDeadlineState[1](task.strictDeadline)
+            repeatState[1](task.repeat)
+            repeatIntervalState[1](task.repeatInterval)
+            repeatUnitState[1](task.repeatUnit)
+            selectedWeekDaysState[1](task.selectedWeekDays)
+            timeFrameState[1](task.timeFrame)
+            subtasksState[1](task.subtasks)
+        }
+    }, [
+        dueDayState,
+        dueMonthState,
+        dueYearState,
+        repeatState,
+        repeatIntervalState,
+        repeatUnitState,
+        selectedWeekDaysState,
+        strictDeadlineState,
+        subtasksState,
+        timeFrameState,
+        task,
+    ])
 
-    const repeatState = useState(task?.repeat ?? 'No Repeat')
-    const repeatIntervalState = useState(task?.repeatInterval ?? 1)
-    const repeatUnitState = useState(task?.repeatUnit ?? 'day')
-    const selectedWeekDaysState = useState(
-        task?.selectedWeekDays ?? [true, true, true, true, true, true, true]
-    )
     const toggleWeekday = (index) =>
         selectedWeekDaysState[1]([
             ...selectedWeekDaysState[0].slice(0, index),
@@ -57,11 +84,7 @@ const UpdateTask = () => {
             ...selectedWeekDaysState[0].slice(index + 1),
         ])
 
-    const timeFrameState = useState(task?.timeFrame ?? 15)
-
-    const subtasksState = useState([])
-
-    const { mutate } = useQueryNewTask()
+    const { mutate } = useQueryUpdateTask()
 
     const submitForm = () => {
         setLoading(true)
@@ -101,7 +124,7 @@ const UpdateTask = () => {
 
     return (
         <RequireAuth>
-            {loading && isTaskLoading ? (
+            {(loading && isTaskLoading) || !task ? (
                 <div className='absolute top-0 left-0 right-0 bottom-0 bg-gray-800 opacity-90 h-screen flex flex-col justify-center'>
                     <Loading light={false} />
                 </div>

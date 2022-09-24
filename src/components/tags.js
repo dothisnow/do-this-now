@@ -6,6 +6,8 @@ import {
 } from '@heroicons/react/solid'
 import { format } from 'date-fns'
 
+import { newSafeDate } from '../helpers/dates'
+
 const Tag = ({ color, icon, text }) => {
     const IconComponent = icon
     return (
@@ -56,7 +58,7 @@ export const DateTag = ({ due }) => {
                         ? 'Tomorrow'
                         : dueDate - yesterday === 0
                         ? 'Yesterday'
-                        : format(dueDate, 'iii LLL d')
+                        : format(newSafeDate(due), 'iii LLL d')
                 }
                 icon={CalendarIcon}
             />
@@ -100,7 +102,7 @@ export const Strict = ({ dueDate, strictDeadline }) => {
                 icon={ExclamationCircleIcon}
                 text='strict'
                 color={
-                    new Date(dueDate) <
+                    newSafeDate(dueDate) <
                     new Date(
                         new Date().getFullYear(),
                         new Date().getMonth(),
@@ -110,7 +112,7 @@ export const Strict = ({ dueDate, strictDeadline }) => {
                         0
                     )
                         ? 'text-red-300'
-                        : new Date(dueDate) <=
+                        : newSafeDate(dueDate) <=
                           new Date(
                               new Date().getFullYear(),
                               new Date().getMonth(),

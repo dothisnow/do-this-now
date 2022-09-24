@@ -17,25 +17,22 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 exports.handler = async (event) => {
     console.log(`EVENT: ${JSON.stringify(event)}`)
 
-    if (
-        !event.hasOwnProperty('queryStringParameters') ||
-        !event.queryStringParameters.hasOwnProperty('title')
-    )
-        return error('Missing title!')
-
     const title = event.queryStringParameters.title
+
+    console.log(`TITLE: ${JSON.stringify(title)}`)
 
     const params = {
         TableName: ENV.STORAGE_TASKS_NAME,
-        Key: {
-            title,
-        },
+        Key: { title },
     }
 
     const data = await docClient.get(params).promise()
 
+    console.log(`DATA: ${JSON.stringify(data)}`)
+
     return {
         statusCode: 200,
+        //  Uncomment below to enable CORS requests
         headers: {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Headers': '*',
@@ -43,12 +40,3 @@ exports.handler = async (event) => {
         body: JSON.stringify(data),
     }
 }
-
-const error = (m) => ({
-    statusCode: 502,
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-    },
-    body: JSON.stringify(m),
-})

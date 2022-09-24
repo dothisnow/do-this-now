@@ -25,6 +25,7 @@ const UpdateTask = () => {
 
     const titleState = useState(taskId)
 
+    const [oldTask, setOldTask] = useState(null)
     const { data, isLoading: isTaskLoading } = useQueryGetTask(taskId)
     const task = data?.Item ?? undefined
 
@@ -51,7 +52,7 @@ const UpdateTask = () => {
     const subtasksState = useState([])
 
     useEffect(() => {
-        if (task) {
+        if (task && task !== oldTask) {
             dueMonthState[1](new Date(task.due).getMonth() + 1)
             dueDayState[1](new Date(task.due).getDate())
             dueYearState[1](new Date(task.due).getFullYear())
@@ -62,11 +63,13 @@ const UpdateTask = () => {
             selectedWeekDaysState[1](task.selectedWeekDays)
             timeFrameState[1](task.timeFrame)
             subtasksState[1](task.subtasks)
+            setOldTask(task)
         }
     }, [
         dueDayState,
         dueMonthState,
         dueYearState,
+        oldTask,
         repeatState,
         repeatIntervalState,
         repeatUnitState,
@@ -88,6 +91,7 @@ const UpdateTask = () => {
 
     const submitForm = () => {
         setLoading(true)
+        console.log('Submitted!')
         const task = {
             title: titleState[0],
             due: `${dueYearState[0]}-${dueMonthState[0]}-${dueDayState[0]}`,

@@ -153,7 +153,7 @@ const error = (m) => ({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': '*',
     },
-    body: JSON.stringify(m),
+    body: JSON.stringify('Missing title!'),
 })
 
 const dateString = (date) =>

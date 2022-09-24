@@ -35,9 +35,9 @@ exports.handler = async (event) => {
         const oldItem = await docClient.get(getParams).promise()
         if (oldItem) await docClient.delete(getParams).promise()
 
-        const newItem = { ...oldItem, ...body }
+        newItem = { ...oldItem, ...body }
     } else {
-        const newItem = body
+        newItem = body
     }
 
     const putParams = {
@@ -45,7 +45,9 @@ exports.handler = async (event) => {
         Item: newItem,
     }
 
-    const response = await docClient.delete(putParams).promise()
+    console.log({ putParams })
+
+    const response = await docClient.put(putParams).promise()
 
     return {
         statusCode: 200,

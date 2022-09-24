@@ -2,7 +2,9 @@
   "permissions": {
     "storage": {
       "tasks": [
-        "update"
+        "create",
+        "read",
+        "delete"
       ]
     }
   },

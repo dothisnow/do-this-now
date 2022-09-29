@@ -101,6 +101,7 @@ const UpdateTask = () => {
             repeatUnit: repeatUnitState[0],
             repeatWeekdays: selectedWeekDaysState[0],
             timeFrame: timeFrameState[0],
+            ...(taskId !== titleState[0] ? { oldTitle: taskId } : {}),
         }
         mutate(task)
     }

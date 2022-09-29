@@ -2,7 +2,7 @@ import { Fragment, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { format } from 'date-fns'
-import { HomeIcon, PlusCircleIcon } from '@heroicons/react/solid'
+import { ArrowDownIcon, HomeIcon, PlusCircleIcon } from '@heroicons/react/solid'
 
 import { newSafeDate } from './helpers/dates'
 import useDing from './helpers/useDing'
@@ -14,20 +14,27 @@ import { Repeat, Strict, TimeFrame } from './components/tags'
 
 import { useQueryClient } from 'react-query'
 import { useQueryTasks } from './hooks/useQueryTasks'
+import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import useKeyAction from './hooks/useKeyAction'
 
 const Tasks = () => {
     const [selectedTask, setSelectedTask] = useState(0)
+    const [sort, setSort] = useState(0)
     const taskElems = useRef([])
     const ding = useDing()
     const navigate = useNavigate()
     const queryClient = useQueryClient()
 
     const { data, isFetching, refetch } = useQueryTasks()
+    const {
+        data: dataTop,
+        isFetching: isFetchingTop,
+        refetch: refetchTop,
+    } = useQueryTasksTop()
 
-    const tasks = (data?.Items ?? []).map((task) => ({
+    const tasks = ((sort === 0 ? data : dataTop)?.Items ?? []).map((task) => ({
         due: 'No Due Date',
         ...task,
     }))
@@ -40,11 +47,17 @@ const Tasks = () => {
         ding()
         mutate(tasks[selectedTask])
         refetch()
+        refetchTop()
     }
 
     const keyActions = [
         ['d', 'Task done', completeTask],
         ['n', 'New task', () => navigate('/new-task')],
+        [
+            'o',
+            'Toggle order between date and top',
+            () => setSort((s) => (s + 1) % 2),
+        ],
         [
             'ArrowUp',
             'Select previous task',
@@ -100,15 +113,14 @@ const Tasks = () => {
         }
     }
 
-    tasks.sort((a, b) =>
-        a.due === 'No Due Date'
-            ? -1
-            : b.due === 'No Due Date'
-            ? 1
-            : newSafeDate(a.due) - newSafeDate(b.due)
-    )
-
-    console.log(new Date('2022-11-17'))
+    if (sort === 0)
+        tasks.sort((a, b) =>
+            a.due === 'No Due Date'
+                ? -1
+                : b.due === 'No Due Date'
+                ? 1
+                : newSafeDate(a.due) - newSafeDate(b.due)
+        )
 
     return (
         <RequireAuth>
@@ -132,31 +144,46 @@ const Tasks = () => {
                                 <span>New task</span>
                                 <PlusCircleIcon className='h-5 w-5 ml-1 inline-block' />
                             </button>
+                            <button
+                                onClick={() => setSort((s) => (s + 1) % 2)}
+                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                <span>Toggle order</span>
+                                <ArrowDownIcon className='h-5 w-5 ml-1 inline-block' />
+                            </button>
                         </div>
+                        <div>{sort}</div>
                         {tasks.map((task, i) => (
                             <Fragment key={task.title}>
-                                {(i === 0 ||
-                                    formatDate(
-                                        newSafeDate(tasks[i - 1].due)
-                                    ) !==
-                                        formatDate(newSafeDate(task.due))) && (
-                                    <div
-                                        className={
-                                            (newSafeDate(task.due) <
-                                            new Date(
-                                                new Date().getFullYear(),
-                                                new Date().getMonth(),
-                                                new Date().getDate(),
-                                                0,
-                                                0,
-                                                0
-                                            )
-                                                ? 'text-orange-300'
-                                                : 'text-white') +
-                                            ' w-96 mx-auto text-center text-sm'
-                                        }>
-                                        {newSafeDate(task.due).toDateString()}
-                                    </div>
+                                {sort === 0 && (
+                                    <>
+                                        {(i === 0 ||
+                                            formatDate(
+                                                newSafeDate(tasks[i - 1].due)
+                                            ) !==
+                                                formatDate(
+                                                    newSafeDate(task.due)
+                                                )) && (
+                                            <div
+                                                className={
+                                                    (newSafeDate(task.due) <
+                                                    new Date(
+                                                        new Date().getFullYear(),
+                                                        new Date().getMonth(),
+                                                        new Date().getDate(),
+                                                        0,
+                                                        0,
+                                                        0
+                                                    )
+                                                        ? 'text-orange-300'
+                                                        : 'text-white') +
+                                                    ' w-96 mx-auto text-center text-sm'
+                                                }>
+                                                {newSafeDate(
+                                                    task.due
+                                                ).toDateString()}
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                                 <Task
                                     isSelected={i === selectedTask}
@@ -166,7 +193,8 @@ const Tasks = () => {
                                 />
                             </Fragment>
                         ))}
-                        {isFetching && <Loading />}
+                        {(sort === 0 && isFetching) ||
+                            (sort === 1 && isFetchingTop && <Loading />)}
                     </div>
                     <Hints keyActions={keyActions} />
                 </>

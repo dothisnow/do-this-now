@@ -34,22 +34,6 @@ const Home = () => {
 
     const tasks = data?.Items ?? []
 
-    // const tasksDoneToday = tasks.reduce((acc, cur) => {
-    //     if (cur.hasOwnProperty('history')) {
-    //         return (
-    //             acc +
-    //             cur.history.filter(
-    //                 (d) =>
-    //                     d ===
-    //                     `${new Date().getFullYear()}-${
-    //                         new Date().getMonth() + 1
-    //                     }-${new Date().getDate()}`
-    //             ).length
-    //         )
-    //     }
-    //     return acc
-    // }, 0)
-
     const topTask =
         mainTask !== ''
             ? tasks.find(({ title }) => title === mainTask)

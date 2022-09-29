@@ -2,7 +2,12 @@ import { Fragment, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { format } from 'date-fns'
-import { ArrowDownIcon, HomeIcon, PlusCircleIcon } from '@heroicons/react/solid'
+import {
+    ArrowDownIcon,
+    HomeIcon,
+    PencilIcon,
+    PlusCircleIcon,
+} from '@heroicons/react/solid'
 
 import { newSafeDate } from './helpers/dates'
 import useDing from './helpers/useDing'
@@ -57,6 +62,11 @@ const Tasks = () => {
             'o',
             'Toggle order between date and top',
             () => setSort((s) => (s + 1) % 2),
+        ],
+        [
+            'u',
+            'Update task',
+            () => navigate(`/update-task/${tasks[selectedTask].title}`),
         ],
         [
             'ArrowUp',
@@ -149,6 +159,16 @@ const Tasks = () => {
                                 className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
                                 <span>Toggle order</span>
                                 <ArrowDownIcon className='h-5 w-5 ml-1 inline-block' />
+                            </button>
+                            <button
+                                onClick={() =>
+                                    navigate(
+                                        `/update-task/${tasks[selectedTask].title}`
+                                    )
+                                }
+                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                <span>Update</span>
+                                <PencilIcon className='h-5 w-5 ml-1 inline-block' />
                             </button>
                         </div>
                         <div>{sort}</div>

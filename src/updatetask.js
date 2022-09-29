@@ -116,7 +116,7 @@ const UpdateTask = () => {
                 submitForm()
             },
         ],
-        ['Escape', 'Home', () => navigate('/')],
+        ['Escape', 'Back', () => navigate(-1)],
         ['u', 'Toggle Sunday', () => !isTyping && toggleWeekday(0)],
         ['m', 'Toggle Monday', () => !isTyping && toggleWeekday(1)],
         ['t', 'Toggle Tuesday', () => !isTyping && toggleWeekday(2)],

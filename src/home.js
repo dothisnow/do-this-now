@@ -106,6 +106,28 @@ const Home = () => {
     ]
     useKeyAction(keyActions)
 
+    const Buttons = () => {
+        const info = [
+            [completeTask, 'Complete', CheckCircleIcon],
+            [() => navigate('/tasks'), 'All tasks', MenuIcon],
+            [() => navigate('/new-task'), 'New task', PlusCircleIcon],
+            [snoozeTask, 'Snooze', BellIcon],
+            [
+                () => navigate(`/update-task/${topTask.title}`),
+                'Update',
+                PencilIcon,
+            ],
+            [deleteTask, 'Delete', TrashIcon],
+        ]
+        return (
+            <>
+                {info.map(([func, text, icon]) => (
+                    <Button key={text} onClick={func} text={text} icon={icon} />
+                ))}
+            </>
+        )
+    }
+
     return (
         <RequireAuth>
             <div className='h-screen flex flex-col justify-center'>
@@ -181,38 +203,7 @@ const Home = () => {
                             )}
                         </div>
                         <div className='pt-2 pr-2 flex flex-row flex-wrap justify-center mx-5 md:max-w-2xl md:mx-auto'>
-                            <Button
-                                onClick={completeTask}
-                                text='Complete'
-                                icon={CheckCircleIcon}
-                            />
-                            <Button
-                                onClick={() => navigate('/tasks')}
-                                text='All tasks'
-                                icon={MenuIcon}
-                            />
-                            <Button
-                                onClick={() => navigate('/new-task')}
-                                text='New tasks'
-                                icon={PlusCircleIcon}
-                            />
-                            <Button
-                                onClick={() => snoozeTask()}
-                                text='Snooze'
-                                icon={BellIcon}
-                            />
-                            <Button
-                                onClick={() =>
-                                    navigate(`/update-task/${topTask.title}`)
-                                }
-                                text='Update'
-                                icon={PencilIcon}
-                            />
-                            <Button
-                                onClick={() => deleteTask()}
-                                text='Delete'
-                                icon={TrashIcon}
-                            />
+                            <Buttons />
                         </div>
                         {tasks.length > 1 && (
                             <>

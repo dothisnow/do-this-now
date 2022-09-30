@@ -91,7 +91,6 @@ const UpdateTask = () => {
 
     const submitForm = () => {
         setLoading(true)
-        console.log('Submitted!')
         const task = {
             title: titleState[0],
             due: `${dueYearState[0]}-${dueMonthState[0]}-${dueDayState[0]}`,

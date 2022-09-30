@@ -48,7 +48,6 @@ export const DateTag = ({ due }) => {
             0,
             0
         )
-        console.log(dueDate - today)
         return (
             <Tag
                 text={

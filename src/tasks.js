@@ -17,7 +17,6 @@ import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import { Repeat, Strict, TimeFrame } from './components/tags'
 
-import { useQueryClient } from 'react-query'
 import { useQueryTasks } from './hooks/useQueryTasks'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
@@ -30,14 +29,9 @@ const Tasks = () => {
     const taskElems = useRef([])
     const ding = useDing()
     const navigate = useNavigate()
-    const queryClient = useQueryClient()
 
-    const { data, isFetching, refetch } = useQueryTasks()
-    const {
-        data: dataTop,
-        isFetching: isFetchingTop,
-        refetch: refetchTop,
-    } = useQueryTasksTop()
+    const { data, isFetching } = useQueryTasks()
+    const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()
 
     const tasks = ((sort === 0 ? data : dataTop)?.Items ?? []).map((task) => ({
         due: 'No Due Date',
@@ -51,8 +45,6 @@ const Tasks = () => {
     const completeTask = () => {
         ding()
         mutate(tasks[selectedTask])
-        refetch()
-        refetchTop()
     }
 
     const keyActions = [
@@ -97,9 +89,7 @@ const Tasks = () => {
             () =>
                 window.confirm(
                     `Are you sure you want to delete '${tasks[selectedTask].title}'?`
-                ) &&
-                mutateDelete(tasks[selectedTask]) &&
-                queryClient.invalidateQueries('tasks'),
+                ) && mutateDelete(tasks[selectedTask]),
         ],
     ]
     useKeyAction(keyActions)
@@ -171,7 +161,6 @@ const Tasks = () => {
                                 <PencilIcon className='h-5 w-5 ml-1 inline-block' />
                             </button>
                         </div>
-                        <div>{sort}</div>
                         {tasks.map((task, i) => (
                             <Fragment key={task.title}>
                                 {sort === 0 && (

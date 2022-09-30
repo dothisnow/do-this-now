@@ -1,6 +1,9 @@
 /* Amplify Params - DO NOT EDIT
 	ENV
 	REGION
+	STORAGE_HISTORY_ARN
+	STORAGE_HISTORY_NAME
+	STORAGE_HISTORY_STREAMARN
 	STORAGE_TASKS_ARN
 	STORAGE_TASKS_NAME
 	STORAGE_TASKS_STREAMARN
@@ -66,6 +69,8 @@ exports.handler = async (event) => {
         }
     }
 
+    const now = body.hasOwnProperty('date') ? new Date(body.date) : new Date()
+
     let response
     if (newItem.repeat === 'No Repeat')
         response = await docClient.delete(params).promise()
@@ -114,9 +119,6 @@ exports.handler = async (event) => {
         date.setHours(date.getHours() + 2)
         newItem.due = dateString(date)
         if (!newItem?.history) newItem.history = []
-        const now = body.hasOwnProperty('date')
-            ? new Date(body.date)
-            : new Date()
         newItem.history.push(dateString(now))
 
         if (
@@ -135,6 +137,39 @@ exports.handler = async (event) => {
         }
         response = await docClient.put(updateParams).promise()
     }
+
+    const historyGetParams = {
+        TableName: ENV.STORAGE_HISTORY_NAME,
+        Key: {
+            date: dateString(now),
+        },
+    }
+
+    let historyPutParams = {
+        TableName: ENV.STORAGE_HISTORY_NAME,
+    }
+    await docClient
+        .get(historyGetParams)
+        .promise()
+        .then((oldHistory) => {
+            historyPutParams.Item = oldHistory.Item
+            if (historyPutParams.Item?.tasks) {
+                historyPutParams.Item.tasks = [
+                    ...historyPutParams.Item?.tasks,
+                    task.title,
+                ]
+            } else {
+                historyPutParams.Item.tasks = [task.title]
+            }
+        })
+        .catch(() => {
+            historyPutParams.Item = {
+                date: dateString(now),
+                tasks: [task.title],
+            }
+        })
+
+    await docClient.put(historyPutParams).promise()
 
     return {
         statusCode: 200,

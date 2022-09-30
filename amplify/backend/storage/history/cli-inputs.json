@@ -1,0 +1,10 @@
+{
+  "resourceName": "history",
+  "tableName": "history",
+  "partitionKey": {
+    "fieldName": "date",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}

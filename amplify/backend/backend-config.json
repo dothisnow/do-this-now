@@ -3,6 +3,10 @@
     "tasks": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
+    },
+    "history": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
     }
   },
   "function": {
@@ -94,6 +98,15 @@
         {
           "category": "storage",
           "resourceName": "tasks",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        },
+        {
+          "category": "storage",
+          "resourceName": "history",
           "attributes": [
             "Name",
             "Arn",

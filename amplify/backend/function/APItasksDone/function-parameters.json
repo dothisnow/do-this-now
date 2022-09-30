@@ -5,6 +5,10 @@
         "create",
         "read",
         "delete"
+      ],
+      "history": [
+        "create",
+        "read"
       ]
     }
   },

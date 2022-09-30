@@ -6,9 +6,9 @@ import {
     MenuIcon,
     PencilIcon,
     PlusCircleIcon,
+    TrashIcon,
 } from '@heroicons/react/solid'
 
-import { useQueryClient } from 'react-query'
 import { useQuerySnoozeTask } from './hooks/useQuerySnoozeTask'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
@@ -18,6 +18,7 @@ import useKeyAction from './hooks/useKeyAction'
 import loginManager from './helpers/LoginManager'
 import useDing from './helpers/useDing'
 
+import Button from './components/button'
 import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
@@ -28,9 +29,7 @@ const Home = () => {
     const navigate = useNavigate()
     const ding = useDing()
 
-    const queryClient = useQueryClient()
-
-    const { data, isLoading, refetch } = useQueryTasksTop()
+    const { data, isLoading } = useQueryTasksTop()
 
     const tasks = data?.Items ?? []
 
@@ -64,7 +63,22 @@ const Home = () => {
             subtasksDone + 1 >= topTask.subtasks.length
         )
             setMainTask('')
-        refetch()
+    }
+
+    const snoozeTask = () => {
+        mutateSnooze(topTask)
+        setMainTask('')
+    }
+
+    const deleteTask = () => {
+        if (
+            !window.confirm(
+                `Are you sure you want to delete '${topTask.title}'?`
+            )
+        )
+            return
+        mutateDelete(topTask)
+        setMainTask('')
     }
 
     const keyActions = [
@@ -82,21 +96,12 @@ const Home = () => {
                 navigate('/new-task')
             },
         ],
-        ['s', 'Snooze task', () => mutateSnooze(topTask)],
+        ['s', 'Snooze task', () => snoozeTask()],
         ['t', 'Tasks', () => navigate('/tasks')],
         ['u', 'Update task', () => navigate(`/update-task/${topTask.title}`)],
         ['1', 'Do left task', () => setMainTask(leftTask.title)],
         ['2', 'Do right task', () => setMainTask(rightTask.title)],
-        [
-            'Backspace',
-            'Delete current task',
-            () =>
-                window.confirm(
-                    `Are you sure you want to delete '${topTask.title}'?`
-                ) &&
-                mutateDelete(topTask) &&
-                queryClient.invalidateQueries('tasks-top'),
-        ],
+        ['Backspace', 'Delete current task', () => deleteTask()],
         ['Escape', 'Reset selected task', () => setMainTask('')],
     ]
     useKeyAction(keyActions)
@@ -175,43 +180,43 @@ const Home = () => {
                                 'No tasks'
                             )}
                         </div>
-                        <div className='pt-2 flex flex-row justify-center mx-5'>
-                            <button
+                        <div className='pt-2 pr-2 flex flex-row flex-wrap justify-center mx-5 md:max-w-2xl md:mx-auto'>
+                            <Button
                                 onClick={completeTask}
-                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600'>
-                                <span>Complete</span>
-                                <CheckCircleIcon className='h-5 w-5 ml-1 inline-block' />
-                            </button>
-                            <button
+                                text='Complete'
+                                icon={CheckCircleIcon}
+                            />
+                            <Button
                                 onClick={() => navigate('/tasks')}
-                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
-                                <span>All tasks</span>
-                                <MenuIcon className='h-5 w-5 ml-1 inline-block' />
-                            </button>
-                            <button
+                                text='All tasks'
+                                icon={MenuIcon}
+                            />
+                            <Button
                                 onClick={() => navigate('/new-task')}
-                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
-                                <span>New task</span>
-                                <PlusCircleIcon className='h-5 w-5 ml-1 inline-block' />
-                            </button>
-                            <button
-                                onClick={() => mutateSnooze(topTask)}
-                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
-                                <span>Snooze</span>
-                                <BellIcon className='h-5 w-5 ml-1 inline-block' />
-                            </button>
-                            <button
+                                text='New tasks'
+                                icon={PlusCircleIcon}
+                            />
+                            <Button
+                                onClick={() => snoozeTask()}
+                                text='Snooze'
+                                icon={BellIcon}
+                            />
+                            <Button
                                 onClick={() =>
                                     navigate(`/update-task/${topTask.title}`)
                                 }
-                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
-                                <span>Update</span>
-                                <PencilIcon className='h-5 w-5 ml-1 inline-block' />
-                            </button>
+                                text='Update'
+                                icon={PencilIcon}
+                            />
+                            <Button
+                                onClick={() => deleteTask()}
+                                text='Delete'
+                                icon={TrashIcon}
+                            />
                         </div>
                         {tasks.length > 1 && (
                             <>
-                                <div className='py-2 text-center text-gray-600'>
+                                <div className='pb-2 text-center text-gray-600'>
                                     or
                                 </div>
                                 <div className='flex flex-col md:flex-row justify-center mx-5'>

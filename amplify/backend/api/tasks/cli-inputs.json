@@ -104,6 +104,19 @@
           "delete"
         ]
       }
+    },
+    "/tasks/progresstoday": {
+      "name": "/tasks/progresstoday",
+      "lambdaFunction": "APIprogressToday",
+      "permissions": {
+        "setting": "private",
+        "auth": [
+          "create",
+          "read",
+          "update",
+          "delete"
+        ]
+      }
     }
   }
 }

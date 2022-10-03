@@ -1,15 +1,16 @@
 import { useQuery } from 'react-query'
 import API from '@aws-amplify/api'
 
-export const useQueryTasksTop = () =>
-    useQuery(
-        ['tasks-top'],
+import { dateString } from '../helpers/dates'
+
+export const useQueryTasksTop = () => {
+    const date = dateString(new Date())
+    return useQuery(
+        ['tasks-top', date],
         () => {
             return API.get('tasks', '/tasks/top', {
                 queryStringParameters: {
-                    date: `${new Date().getFullYear()}-${
-                        new Date().getMonth() + 1
-                    }-${new Date().getDate()}`,
+                    date,
                 },
             })
         },
@@ -18,3 +19,4 @@ export const useQueryTasksTop = () =>
             refetchIntervalInBackground: false,
         }
     )
+}

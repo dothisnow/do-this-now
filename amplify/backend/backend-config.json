@@ -146,6 +146,22 @@
           ]
         }
       ]
+    },
+    "APIprogressToday": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "history",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        }
+      ]
     }
   },
   "auth": {
@@ -238,6 +254,14 @@
         {
           "category": "function",
           "resourceName": "APItasksSnooze",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "APIprogressToday",
           "attributes": [
             "Name",
             "Arn"

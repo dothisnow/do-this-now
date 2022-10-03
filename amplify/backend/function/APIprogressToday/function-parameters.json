@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "storage": {
+      "history": [
+        "create",
+        "read"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

@@ -58,7 +58,12 @@ const Tasks = () => {
         [
             'u',
             'Update task',
-            () => navigate(`/update-task/${tasks[selectedTask].title}`),
+            () =>
+                navigate(
+                    `/update-task/${encodeURIComponent(
+                        tasks[selectedTask].title
+                    )}`
+                ),
         ],
         [
             'ArrowUp',
@@ -153,7 +158,9 @@ const Tasks = () => {
                             <button
                                 onClick={() =>
                                     navigate(
-                                        `/update-task/${tasks[selectedTask].title}`
+                                        `/update-task/${encodeURIComponent(
+                                            tasks[selectedTask].title
+                                        )}`
                                     )
                                 }
                                 className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>

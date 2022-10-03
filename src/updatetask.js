@@ -20,7 +20,7 @@ const UpdateTask = () => {
         let lastPathItem = path.pop()
         if (lastPathItem === '') lastPathItem = path.pop()
         if (lastPathItem === 'update-task') navigate(-1)
-        return decodeURI(lastPathItem)
+        return decodeURIComponent(lastPathItem)
     })()
 
     const titleState = useState(taskId)
@@ -100,6 +100,9 @@ const UpdateTask = () => {
             repeatUnit: repeatUnitState[0],
             repeatWeekdays: selectedWeekDaysState[0],
             timeFrame: timeFrameState[0],
+            ...(subtasksState[0].length > 0
+                ? { subtasks: subtasksState[0] }
+                : {}),
             ...(taskId !== titleState[0] ? { oldTitle: taskId } : {}),
         }
         mutate(task)

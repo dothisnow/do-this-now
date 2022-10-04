@@ -9,7 +9,7 @@ import {
     TrashIcon,
 } from '@heroicons/react/solid'
 
-import { useQueryProgressToday } from './hooks/useQueryProgressToday'
+// import { useQueryProgressToday } from './hooks/useQueryProgressToday'
 import { useQuerySnoozeTask } from './hooks/useQuerySnoozeTask'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
@@ -31,8 +31,8 @@ const Home = () => {
     const ding = useDing()
 
     const { data, isLoading } = useQueryTasksTop()
-    const { date: progress, isLoading: isLoadingProgress } =
-        useQueryProgressToday()
+    // const { date: progress, isLoading: isLoadingProgress } =
+    //     useQueryProgressToday()
 
     const tasks = data?.Items ?? []
 
@@ -148,12 +148,12 @@ const Home = () => {
                     <Loading />
                 ) : (
                     <>
-                        {isLoadingProgress || (
+                        {/* {isLoadingProgress || (
                             <div className='text-center py-1 font-bold text-gray-500 text-sm'>
                                 Done Today:{' '}
                                 {progress?.done ?? JSON.stringify(progress)}
                             </div>
-                        )}
+                        )} */}
                         {/* <div className='flex flex-row justify-center mb-2'>
                             <div className='w-36 border border-gray-700 bg-gray-800 h-2 rounded-full'>
                                 <div

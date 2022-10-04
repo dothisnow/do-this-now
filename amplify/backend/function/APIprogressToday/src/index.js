@@ -6,18 +6,76 @@
 	STORAGE_HISTORY_STREAMARN
 Amplify Params - DO NOT EDIT */
 
+const ENV = require('process').env
+
+const AWS = require('aws-sdk')
+const docClient = new AWS.DynamoDB.DocumentClient()
+
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`);
-    return {
+    console.log(`EVENT: ${JSON.stringify(event)}`)
+
+    const today =
+        event.hasOwnProperty('queryStringParameters') &&
+        event.queryStringParameters.hasOwnProperty('date')
+            ? new Date(event.queryStringParameters.date)
+            : new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth(),
+                  new Date().getDate(),
+                  0,
+                  0,
+                  0
+              )
+
+    console.log(`TODAY: ${today}`)
+
+    const historyGetParams = {
+        TableName: ENV.STORAGE_HISTORY_NAME,
+        Key: {
+            date: dateString(today),
+        },
+    }
+
+    let data = await docClient.get(historyGetParams).promise()
+
+    const done = data?.Item?.tasks?.length ?? 0
+    const doneBeforeToday = data?.Item?.doneBeforeToday ?? 0
+    const todo = getTodo(today)
+
+    console.log(`DONE: ${done}`)
+    console.log(`DONE BEFORE TODAY: ${doneBeforeToday}`)
+    console.log(`TODO: ${todo}`)
+
+    const res = {
         statusCode: 200,
-    //  Uncomment below to enable CORS requests
-    //  headers: {
-    //      "Access-Control-Allow-Origin": "*",
-    //      "Access-Control-Allow-Headers": "*"
-    //  }, 
-        body: JSON.stringify('Hello from Lambda!'),
-    };
-};
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+        },
+        body: JSON.stringify({
+            done,
+            doneBeforeToday,
+            todo,
+        }),
+    }
+
+    console.log(`RETURN: ${JSON.stringify(res)}`)
+
+    return res
+}
+
+const getTodo = (date) => {
+    switch (date.getDay()) {
+        case 0:
+        case 6:
+            return 5
+        default:
+            return 10
+    }
+}
+
+const dateString = (date) =>
+    `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`

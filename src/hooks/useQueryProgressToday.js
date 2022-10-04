@@ -13,8 +13,8 @@ export const useQueryProgressToday = () => {
             })
         },
         {
-            refetchOnWindowFocus: false,
-            refetchOnMount: false,
+            refetchInterval: 1000 * 2,
+            refetchIntervalInBackground: false,
         }
     )
 }

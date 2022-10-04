@@ -31,7 +31,7 @@ const Home = () => {
     const ding = useDing()
 
     const { data, isLoading } = useQueryTasksTop()
-    const { date: progress, isLoading: isLoadingProgress } =
+    const { data: progress, isLoading: isLoadingProgress } =
         useQueryProgressToday()
 
     const tasks = data?.Items ?? []
@@ -138,6 +138,9 @@ const Home = () => {
         )
     }
 
+    const tasksDoneToday =
+        (progress?.done ?? 0) + (progress?.doneBeforeToday ?? 0)
+
     return (
         <RequireAuth>
             <div className='h-screen flex flex-col justify-center'>
@@ -148,24 +151,25 @@ const Home = () => {
                     <Loading />
                 ) : (
                     <>
-                        {isLoadingProgress || (
-                            <div className='text-center py-1 font-bold text-gray-500 text-sm'>
-                                Done Today:{' '}
-                                {progress?.done ?? JSON.stringify(progress)}
+                        {!isLoadingProgress && (
+                            <div className='flex flex-row justify-center mb-2'>
+                                <div className='w-36 border border-gray-700 bg-gray-800 h-2 rounded-full'>
+                                    <div
+                                        className='bg-white h-full rounded-full'
+                                        style={{
+                                            width:
+                                                Math.min(
+                                                    (tasksDoneToday /
+                                                        (progress?.todo ??
+                                                            10)) *
+                                                        100,
+                                                    100
+                                                ) + '%',
+                                        }}
+                                    />
+                                </div>
                             </div>
                         )}
-                        {/* <div className='flex flex-row justify-center mb-2'>
-                            <div className='w-36 border border-gray-700 bg-gray-800 h-2 rounded-full'>
-                                <div
-                                    className='bg-white h-full rounded-full'
-                                    style={{
-                                        width:
-                                            Math.min(tasksDoneToday * 10, 100) +
-                                            '%',
-                                    }}
-                                />
-                            </div>
-                        </div> */}
                         <div className='md:max-w-sm mx-5 md:mx-auto border border-gray-700 py-auto p-6 rounded bg-gray-800 drop-shadow-sm font-bold text-lg text-center text-white'>
                             {tasks.length > 0 ? (
                                 <>

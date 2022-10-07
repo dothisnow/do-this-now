@@ -171,6 +171,34 @@ exports.handler = async (event) => {
 
     await docClient.put(historyPutParams).promise()
 
+    const doneToday =
+        (historyPutParams.Item?.doneBeforeToday ?? 0) +
+        historyPutParams.Item.tasks.length
+    const doneBeforeTomorrow = Math.max(0, doneToday - getTodo(now))
+
+    const historyUpdateParams = {
+        TableName: ENV.STORAGE_HISTORY_NAME,
+        Key: {
+            date: dateString(
+                new Date(
+                    now.getFullYear(),
+                    now.getMonth(),
+                    now.getDate() + 1,
+                    0,
+                    0,
+                    0
+                )
+            ),
+        },
+        UpdateExpression: 'set #x = :y',
+        ExpressionAttributeNames: { '#x': 'doneBeforeToday' },
+        ExpressionAttributeValues: {
+            ':y': doneBeforeTomorrow,
+        },
+    }
+
+    console.log(await docClient.update(historyUpdateParams).promise())
+
     return {
         statusCode: 200,
         //  Uncomment below to enable CORS requests
@@ -182,7 +210,7 @@ exports.handler = async (event) => {
     }
 }
 
-const error = (m) => ({
+const error = () => ({
     statusCode: 502,
     headers: {
         'Access-Control-Allow-Origin': '*',
@@ -193,3 +221,13 @@ const error = (m) => ({
 
 const dateString = (date) =>
     `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+
+const getTodo = (date) => {
+    switch (date.getDay()) {
+        case 0:
+        case 6:
+            return 5
+        default:
+            return 10
+    }
+}

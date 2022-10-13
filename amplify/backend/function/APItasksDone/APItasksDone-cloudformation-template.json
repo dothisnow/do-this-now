@@ -264,7 +264,9 @@
                 "dynamodb:List*",
                 "dynamodb:Describe*",
                 "dynamodb:Scan",
-                "dynamodb:Query"
+                "dynamodb:Query",
+                "dynamodb:Update*",
+                "dynamodb:RestoreTable*"
               ],
               "Resource": [
                 {

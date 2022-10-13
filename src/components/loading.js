@@ -1,6 +1,6 @@
 import { PuzzleIcon } from '@heroicons/react/solid'
 
-const Loading = ({ light = true, className = '' }) => (
+const Loading = ({ light = true }) => (
     <PuzzleIcon
         className={
             (light ? 'text-gray-600' : 'text-gray-200') +

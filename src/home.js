@@ -94,7 +94,7 @@ const Home = () => {
         [
             'n',
             'New task',
-            (e) => {
+            e => {
                 e.preventDefault()
                 navigate('/new-task')
             },
@@ -143,7 +143,7 @@ const Home = () => {
 
     return (
         <RequireAuth>
-            <div className='h-screen flex flex-col justify-center'>
+            <div className="h-screen flex flex-col justify-center">
                 {isLoading ||
                 doneIsLoading ||
                 deleteIsLoading ||
@@ -152,10 +152,10 @@ const Home = () => {
                 ) : (
                     <>
                         {!isLoadingProgress && (
-                            <div className='flex flex-row justify-center mb-2'>
-                                <div className='w-36 border border-gray-700 bg-gray-800 h-2 rounded-full'>
+                            <div className="flex flex-row justify-center mb-2">
+                                <div className="w-36 border border-gray-700 bg-gray-800 h-2 rounded-full">
                                     <div
-                                        className='bg-white h-full rounded-full'
+                                        className="bg-white h-full rounded-full"
                                         style={{
                                             width:
                                                 Math.min(
@@ -170,7 +170,7 @@ const Home = () => {
                                 </div>
                             </div>
                         )}
-                        <div className='md:max-w-sm mx-5 md:mx-auto border border-gray-700 py-auto p-6 rounded bg-gray-800 drop-shadow-sm font-bold text-lg text-center text-white'>
+                        <div className="md:max-w-sm mx-5 md:mx-auto border border-gray-700 py-auto p-6 rounded bg-gray-800 drop-shadow-sm font-bold text-lg text-center text-white">
                             {tasks.length > 0 ? (
                                 <>
                                     <div>
@@ -179,18 +179,16 @@ const Home = () => {
                                                 'subtasks'
                                             ) &&
                                             topTask.subtasks.length > 0 &&
-                                            topTask.subtasks.some(
-                                                (x) => !x.done
-                                            )
+                                            topTask.subtasks.some(x => !x.done)
                                                 ? topTask.subtasks.find(
-                                                      (s) => !s.done
+                                                      s => !s.done
                                                   ).title
                                                 : topTask.title}
                                         </span>
                                     </div>
                                     {topTask.hasOwnProperty('subtasks') &&
                                         topTask.subtasks.length > 0 && (
-                                            <div className='text-xs py-1 font-normal'>
+                                            <div className="text-xs py-1 font-normal">
                                                 {topTask.title} ({subtasksDone}/
                                                 {topTask.subtasks.length})
                                             </div>
@@ -219,21 +217,21 @@ const Home = () => {
                                 'No tasks'
                             )}
                         </div>
-                        <div className='pt-2 pr-2 flex flex-row flex-wrap justify-center mx-5 md:max-w-2xl md:mx-auto'>
+                        <div className="pt-2 pr-2 flex flex-row flex-wrap justify-center mx-5 md:max-w-2xl md:mx-auto">
                             <Buttons />
                         </div>
                         {tasks.length > 1 && (
                             <>
-                                <div className='pb-2 text-center text-gray-600'>
+                                <div className="pb-2 text-center text-gray-600">
                                     or
                                 </div>
-                                <div className='flex flex-col md:flex-row justify-center mx-5'>
+                                <div className="flex flex-col md:flex-row justify-center mx-5">
                                     <div
                                         onClick={() =>
                                             setMainTask(leftTask.title)
                                         }
-                                        title='(Shortcut: 1)'
-                                        className='border mb-2 cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center md:mr-4 md:mb-0 opacity-20 text-white'>
+                                        title="(Shortcut: 1)"
+                                        className="border mb-2 cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center md:mr-4 md:mb-0 opacity-20 text-white">
                                         <span>{leftTask.title}</span>
                                         <DateTag due={leftTask.due} />
                                         <TimeFrame
@@ -258,8 +256,8 @@ const Home = () => {
                                             onClick={() =>
                                                 setMainTask(rightTask.title)
                                             }
-                                            title='(Shortcut: 2)'
-                                            className='border cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center opacity-20 text-white'>
+                                            title="(Shortcut: 2)"
+                                            className="border cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center opacity-20 text-white">
                                             <span>{rightTask.title}</span>
                                             <DateTag due={rightTask.due} />
                                             <TimeFrame

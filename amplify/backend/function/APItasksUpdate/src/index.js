@@ -14,7 +14,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-exports.handler = async (event) => {
+exports.handler = async event => {
     console.log(`EVENT: ${JSON.stringify(event)}`)
 
     const body = JSON.parse(event.body)
@@ -23,22 +23,23 @@ exports.handler = async (event) => {
 
     if (!body.hasOwnProperty('title')) return error('Missing title!')
 
-    let newItem
-    if (body.hasOwnProperty('oldTitle')) {
-        const getParams = {
-            TableName: ENV.STORAGE_TASKS_NAME,
-            Key: {
-                title: body.oldTitle,
-            },
-        }
-
-        const oldItem = await docClient.get(getParams).promise()
-        if (oldItem) await docClient.delete(getParams).promise()
-
-        newItem = { ...oldItem, ...body }
-    } else {
-        newItem = body
+    const getParams = {
+        TableName: ENV.STORAGE_TASKS_NAME,
+        Key: {
+            title: body.hasOwnProperty('oldTitle') ? body.oldTitle : body.title,
+        },
     }
+
+    const { Item: oldItem } = await docClient.get(getParams).promise()
+
+    if (oldItem && body.hasOwnProperty('oldTitle'))
+        await docClient.delete(getParams).promise()
+
+    console.log(`OLD ITEM: ${JSON.stringify(oldItem)}`)
+
+    const newItem = { ...oldItem, ...body }
+
+    console.log(`NEW ITEM: ${JSON.stringify(oldItem)}`)
 
     const putParams = {
         TableName: ENV.STORAGE_TASKS_NAME,
@@ -60,7 +61,7 @@ exports.handler = async (event) => {
     }
 }
 
-const error = (m) => ({
+const error = m => ({
     statusCode: 502,
     headers: {
         'Access-Control-Allow-Origin': '*',

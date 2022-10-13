@@ -33,7 +33,7 @@ const NewTask = () => {
         true,
         true,
     ])
-    const toggleWeekday = (index) =>
+    const toggleWeekday = index =>
         selectedWeekDaysState[1]([
             ...selectedWeekDaysState[0].slice(0, index),
             !selectedWeekDaysState[0][index],
@@ -59,7 +59,7 @@ const NewTask = () => {
             due: `${dueYearState[0]}-${dueMonthState[0]}-${dueDayState[0]}`,
             strictDeadline: strictDeadlineState[0],
             repeat: repeatState[0],
-            repeatInterval: repeatIntervalState[0],
+            repeatInterval: parseInt(repeatIntervalState[0]),
             repeatUnit: repeatUnitState[0],
             repeatWeekdays: selectedWeekDaysState[0],
             timeFrame: timeFrameState[0],
@@ -72,7 +72,7 @@ const NewTask = () => {
         [
             'Enter',
             'Submit form',
-            (e) => {
+            e => {
                 e.preventDefault()
                 e.stopPropagation()
                 submitForm()
@@ -91,13 +91,13 @@ const NewTask = () => {
 
     return (
         <RequireAuth>
-            <div className='space-y-8 divide-y divide-gray-700 p-10 text-white'>
-                <div className='space-y-8 divide-y divide-gray-700 sm:space-y-5'>
+            <div className="space-y-8 divide-y divide-gray-700 p-10 text-white">
+                <div className="space-y-8 divide-y divide-gray-700 sm:space-y-5">
                     <div>
                         <div>
-                            <h3 className='text-lg leading-6 font-medium '>
+                            <h3 className="text-lg leading-6 font-medium ">
                                 <ChevronLeftIcon
-                                    className='w-5 h-5 inline-block cursor-pointer'
+                                    className="w-5 h-5 inline-block cursor-pointer"
                                     onClick={() => navigate(-1)}
                                 />
                                 <span>New Task</span>
@@ -124,7 +124,7 @@ const NewTask = () => {
                 </div>
             </div>
             {loading && (
-                <div className='fixed top-0 left-0 right-0 bottom-0 bg-gray-800 opacity-90 h-screen flex flex-col justify-center'>
+                <div className="fixed top-0 left-0 right-0 bottom-0 bg-gray-800 opacity-90 h-screen flex flex-col justify-center">
                     <Loading light={false} />
                 </div>
             )}

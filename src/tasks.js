@@ -33,7 +33,7 @@ const Tasks = () => {
     const { data, isFetching } = useQueryTasks()
     const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()
 
-    const tasks = ((sort === 0 ? data : dataTop)?.Items ?? []).map((task) => ({
+    const tasks = ((sort === 0 ? data : dataTop)?.Items ?? []).map(task => ({
         due: 'No Due Date',
         ...task,
     }))
@@ -53,7 +53,7 @@ const Tasks = () => {
         [
             'o',
             'Toggle order between date and top',
-            () => setSort((s) => (s + 1) % 2),
+            () => setSort(s => (s + 1) % 2),
         ],
         [
             'u',
@@ -68,7 +68,7 @@ const Tasks = () => {
         [
             'ArrowUp',
             'Select previous task',
-            (e) => {
+            e => {
                 e.preventDefault()
                 setSelectedTask(Math.max(selectedTask - 1, 0))
                 taskElems.current[selectedTask - 1].scrollIntoView({
@@ -79,7 +79,7 @@ const Tasks = () => {
         [
             'ArrowDown',
             'Select next task',
-            (e) => {
+            e => {
                 e.preventDefault()
                 setSelectedTask(Math.min(selectedTask + 1, tasks.length - 1))
                 taskElems.current[selectedTask + 1].scrollIntoView({
@@ -99,7 +99,7 @@ const Tasks = () => {
     ]
     useKeyAction(keyActions)
 
-    const formatDate = (date) => {
+    const formatDate = date => {
         try {
             return format(
                 new Date(
@@ -130,30 +130,30 @@ const Tasks = () => {
     return (
         <RequireAuth>
             {doneIsLoading || deleteIsLoading ? (
-                <div className='h-screen flex flex-col justify-center'>
+                <div className="h-screen flex flex-col justify-center">
                     <Loading />
                 </div>
             ) : (
                 <>
-                    <div className='h-screen my-10 mx-5'>
-                        <div className='pb-2 flex flex-row justify-center'>
+                    <div className="h-screen my-10 mx-5">
+                        <div className="pb-2 flex flex-row justify-center">
                             <button
                                 onClick={() => navigate('/')}
-                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                className="block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2">
                                 <span>Home</span>
-                                <HomeIcon className='h-5 w-5 ml-1 inline-block' />
+                                <HomeIcon className="h-5 w-5 ml-1 inline-block" />
                             </button>
                             <button
                                 onClick={() => navigate('/new-task')}
-                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                className="block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2">
                                 <span>New task</span>
-                                <PlusCircleIcon className='h-5 w-5 ml-1 inline-block' />
+                                <PlusCircleIcon className="h-5 w-5 ml-1 inline-block" />
                             </button>
                             <button
-                                onClick={() => setSort((s) => (s + 1) % 2)}
-                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                onClick={() => setSort(s => (s + 1) % 2)}
+                                className="block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2">
                                 <span>Toggle order</span>
-                                <ArrowDownIcon className='h-5 w-5 ml-1 inline-block' />
+                                <ArrowDownIcon className="h-5 w-5 ml-1 inline-block" />
                             </button>
                             <button
                                 onClick={() =>
@@ -163,9 +163,9 @@ const Tasks = () => {
                                         )}`
                                     )
                                 }
-                                className='block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2'>
+                                className="block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2">
                                 <span>Update</span>
-                                <PencilIcon className='h-5 w-5 ml-1 inline-block' />
+                                <PencilIcon className="h-5 w-5 ml-1 inline-block" />
                             </button>
                         </div>
                         {tasks.map((task, i) => (
@@ -192,7 +192,7 @@ const Tasks = () => {
                                                     )
                                                         ? 'text-orange-300'
                                                         : 'text-white') +
-                                                    ' w-96 mx-auto text-center text-sm'
+                                                    ' mx-auto text-center text-sm md:max-w-sm max-w-96'
                                                 }>
                                                 {newSafeDate(
                                                     task.due
@@ -203,7 +203,7 @@ const Tasks = () => {
                                 )}
                                 <Task
                                     isSelected={i === selectedTask}
-                                    innerRef={(e) => (taskElems.current[i] = e)}
+                                    innerRef={e => (taskElems.current[i] = e)}
                                     {...task}
                                     onClick={() => setSelectedTask(i)}
                                 />

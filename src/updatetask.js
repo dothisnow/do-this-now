@@ -54,7 +54,7 @@ const UpdateTask = () => {
     useEffect(() => {
         if (task && task !== oldTask) {
             dueMonthState[1](new Date(task.due).getMonth() + 1)
-            dueDayState[1](new Date(task.due).getDate())
+            dueDayState[1](new Date(task.due).getDate() + 1)
             dueYearState[1](new Date(task.due).getFullYear())
             strictDeadlineState[1](task.strictDeadline)
             repeatState[1](task.repeat)
@@ -80,7 +80,7 @@ const UpdateTask = () => {
         task,
     ])
 
-    const toggleWeekday = (index) =>
+    const toggleWeekday = index =>
         selectedWeekDaysState[1]([
             ...selectedWeekDaysState[0].slice(0, index),
             !selectedWeekDaysState[0][index],
@@ -112,7 +112,7 @@ const UpdateTask = () => {
         [
             'Enter',
             'Submit form',
-            (e) => {
+            e => {
                 e.preventDefault()
                 e.stopPropagation()
                 submitForm()
@@ -132,17 +132,17 @@ const UpdateTask = () => {
     return (
         <RequireAuth>
             {(loading && isTaskLoading) || !task ? (
-                <div className='absolute top-0 left-0 right-0 bottom-0 bg-gray-800 opacity-90 h-screen flex flex-col justify-center'>
+                <div className="absolute top-0 left-0 right-0 bottom-0 bg-gray-800 opacity-90 h-screen flex flex-col justify-center">
                     <Loading light={false} />
                 </div>
             ) : (
-                <div className='space-y-8 divide-y divide-gray-700 p-10 text-white'>
-                    <div className='space-y-8 divide-y divide-gray-700 sm:space-y-5'>
+                <div className="space-y-8 divide-y divide-gray-700 p-10 text-white">
+                    <div className="space-y-8 divide-y divide-gray-700 sm:space-y-5">
                         <div>
                             <div>
-                                <h3 className='text-lg leading-6 font-medium '>
+                                <h3 className="text-lg leading-6 font-medium ">
                                     <ChevronLeftIcon
-                                        className='w-5 h-5 inline-block cursor-pointer'
+                                        className="w-5 h-5 inline-block cursor-pointer"
                                         onClick={() => navigate(-1)}
                                     />
                                     <span>Update Task: {taskId}</span>

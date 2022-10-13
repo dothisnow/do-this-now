@@ -96,7 +96,7 @@ const UpdateTask = () => {
             due: `${dueYearState[0]}-${dueMonthState[0]}-${dueDayState[0]}`,
             strictDeadline: strictDeadlineState[0],
             repeat: repeatState[0],
-            repeatInterval: repeatIntervalState[0],
+            repeatInterval: parseInt(repeatIntervalState[0]),
             repeatUnit: repeatUnitState[0],
             repeatWeekdays: selectedWeekDaysState[0],
             timeFrame: timeFrameState[0],

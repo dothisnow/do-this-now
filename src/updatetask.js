@@ -40,13 +40,13 @@ const UpdateTask = () => {
     const repeatIntervalState = useState(1)
     const repeatUnitState = useState('day')
     const selectedWeekDaysState = useState([
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
-        true,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
     ])
     const timeFrameState = useState(15)
     const subtasksState = useState([])

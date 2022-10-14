@@ -34,7 +34,9 @@ const Home = () => {
     const { data: progress, isLoading: isLoadingProgress } =
         useQueryProgressToday()
 
-    const tasks = data?.Items ?? []
+    const tasks = (data?.Items ?? []).filter(
+        x => !x.snooze || new Date(x.snooze) < new Date()
+    )
 
     const topTask =
         mainTask !== ''

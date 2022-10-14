@@ -60,7 +60,7 @@ const UpdateTask = () => {
             repeatState[1](task.repeat)
             repeatIntervalState[1](task.repeatInterval)
             repeatUnitState[1](task.repeatUnit)
-            selectedWeekDaysState[1](task.selectedWeekDays)
+            selectedWeekDaysState[1](task.repeatWeekdays)
             timeFrameState[1](task.timeFrame)
             subtasksState[1](task.subtasks)
             setOldTask(task)

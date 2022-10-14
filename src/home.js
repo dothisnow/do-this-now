@@ -155,7 +155,7 @@ const Home = () => {
                     <>
                         {!isLoadingProgress && (
                             <div className="flex flex-row justify-center mb-2">
-                                <div className="w-36 border border-gray-700 bg-gray-800 h-2 rounded-full">
+                                <div className="w-36 border border-gray-700 bg-gray-800 h-2 rounded-full mt-0.5">
                                     <div
                                         className="bg-white h-full rounded-full"
                                         style={{
@@ -170,6 +170,14 @@ const Home = () => {
                                         }}
                                     />
                                 </div>
+                                {tasksDoneToday - (progress?.todo ?? 10) >
+                                    0 && (
+                                    <div className="text-white text-xs leading-3 ml-1 font-bold">
+                                        +{' '}
+                                        {tasksDoneToday -
+                                            (progress?.todo ?? 10)}
+                                    </div>
+                                )}
                             </div>
                         )}
                         <div className="md:max-w-sm mx-5 md:mx-auto border border-gray-700 py-auto p-6 rounded bg-gray-800 drop-shadow-sm font-bold text-lg text-center text-white">

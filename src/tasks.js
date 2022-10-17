@@ -201,6 +201,18 @@ const Tasks = () => {
                                         )}
                                     </>
                                 )}
+                                {sort === 1 &&
+                                    i > 0 &&
+                                    newSafeDate(task.due) > new Date() &&
+                                    newSafeDate(tasks[i - 1].due) <=
+                                        new Date() && (
+                                        <div
+                                            className={
+                                                'text-white mx-auto text-center text-sm md:max-w-sm max-w-96'
+                                            }>
+                                            Due after today
+                                        </div>
+                                    )}
                                 <Task
                                     isSelected={i === selectedTask}
                                     innerRef={e => (taskElems.current[i] = e)}

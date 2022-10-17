@@ -15,7 +15,7 @@ import useDing from './helpers/useDing'
 import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
-import { Repeat, Strict, TimeFrame } from './components/tags'
+import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
 import { useQueryTasks } from './hooks/useQueryTasks'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
@@ -206,6 +206,7 @@ const Tasks = () => {
                                     innerRef={e => (taskElems.current[i] = e)}
                                     {...task}
                                     onClick={() => setSelectedTask(i)}
+                                    showDate={sort === 1}
                                 />
                             </Fragment>
                         ))}
@@ -226,6 +227,7 @@ const Task = ({
     repeat,
     repeatInterval,
     repeatUnit,
+    showDate,
     strictDeadline,
     timeFrame,
     title,
@@ -241,6 +243,7 @@ const Task = ({
         }
         onClick={onClick}>
         <span>{title}</span>
+        {showDate && <DateTag due={due} />}
         <TimeFrame timeFrame={timeFrame} />
         <Repeat {...{ repeat, repeatInterval, repeatUnit }} />
         <Strict strictDeadline={strictDeadline} dueDate={due} />

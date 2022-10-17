@@ -43,6 +43,22 @@ const TaskForm = ({
         }
     }
 
+    const updateDate = newDate => {
+        setDueYear(newDate.getFullYear())
+        setDueMonth(newDate.getMonth() + 1)
+        setDueDay(newDate.getDate())
+    }
+
+    const decrementDate = () => {
+        let newDate = new Date(dueYear, dueMonth - 1, dueDay - 1, 0, 0, 0)
+        updateDate(newDate)
+    }
+
+    const incrementDate = () => {
+        let newDate = new Date(dueYear, dueMonth - 1, dueDay + 1, 0, 0, 0)
+        updateDate(newDate)
+    }
+
     return (
         <div className="mt-6 sm:mt-5 space-y-6 sm:space-y-5">
             <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-700 sm:pt-5">
@@ -75,6 +91,11 @@ const TaskForm = ({
                 </label>
                 <div className="mt-1 sm:mt-0 sm:col-span-2">
                     <div className="max-w-lg flex rounded-md shadow-sm">
+                        <button
+                            className="border border-gray-700 bg-gray-800 text-white text-sm rounded p-2 inline-block hover:border-gray-600 hover:bg-gray-700 mr-3"
+                            onClick={decrementDate}>
+                            -
+                        </button>
                         <input
                             type="number"
                             max={12}
@@ -107,8 +128,13 @@ const TaskForm = ({
                             placeholder="YYYY"
                             value={dueYear}
                             onChange={e => setDueYear(e.target.value)}
-                            className="flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded"
+                            className="flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded mr-3"
                         />
+                        <button
+                            className="border border-gray-700 bg-gray-800 text-white text-sm rounded p-2 inline-block hover:border-gray-600 hover:bg-gray-700"
+                            onClick={incrementDate}>
+                            +
+                        </button>
                     </div>
                     <div className="max-w-lg text-center text-gray-600 mt-1">
                         {format(

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { format } from 'date-fns'
 import {
     ArrowDownIcon,
+    CheckCircleIcon,
     HomeIcon,
     PencilIcon,
     PlusCircleIcon,
@@ -47,6 +48,16 @@ const Tasks = () => {
         mutate(tasks[selectedTask])
     }
 
+    const scrollIntoView = elem => {
+        window.scrollTo({
+            behavior: 'smooth',
+            top:
+                elem.getBoundingClientRect().top -
+                document.body.getBoundingClientRect().top -
+                200,
+        })
+    }
+
     const keyActions = [
         ['d', 'Task done', completeTask],
         ['n', 'New task', () => navigate('/new-task')],
@@ -71,9 +82,7 @@ const Tasks = () => {
             e => {
                 e.preventDefault()
                 setSelectedTask(Math.max(selectedTask - 1, 0))
-                taskElems.current[selectedTask - 1].scrollIntoView({
-                    behavior: 'smooth',
-                })
+                scrollIntoView(taskElems.current[selectedTask - 1])
             },
         ],
         [
@@ -82,9 +91,7 @@ const Tasks = () => {
             e => {
                 e.preventDefault()
                 setSelectedTask(Math.min(selectedTask + 1, tasks.length - 1))
-                taskElems.current[selectedTask + 1].scrollIntoView({
-                    behavior: 'smooth',
-                })
+                scrollIntoView(taskElems.current[selectedTask + 1])
             },
         ],
         ['Escape', 'Home', () => navigate('/')],
@@ -155,18 +162,6 @@ const Tasks = () => {
                                 <span>Toggle order</span>
                                 <ArrowDownIcon className="h-5 w-5 ml-1 inline-block" />
                             </button>
-                            <button
-                                onClick={() =>
-                                    navigate(
-                                        `/update-task/${encodeURIComponent(
-                                            tasks[selectedTask].title
-                                        )}`
-                                    )
-                                }
-                                className="block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2">
-                                <span>Update</span>
-                                <PencilIcon className="h-5 w-5 ml-1 inline-block" />
-                            </button>
                         </div>
                         {tasks.map((task, i) => (
                             <Fragment key={task.title}>
@@ -220,6 +215,29 @@ const Tasks = () => {
                                     onClick={() => setSelectedTask(i)}
                                     showDate={sort === 1}
                                 />
+                                {i === selectedTask && (
+                                    <div className="flex flex-row justify-center py-2">
+                                        <button
+                                            onClick={completeTask}
+                                            className="block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2">
+                                            <span>Complete</span>
+                                            <CheckCircleIcon className="h-5 w-5 ml-1 inline-block" />
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                navigate(
+                                                    `/update-task/${encodeURIComponent(
+                                                        tasks[selectedTask]
+                                                            .title
+                                                    )}`
+                                                )
+                                            }
+                                            className="block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2">
+                                            <span>Update</span>
+                                            <PencilIcon className="h-5 w-5 ml-1 inline-block" />
+                                        </button>
+                                    </div>
+                                )}
                             </Fragment>
                         ))}
                         {(sort === 0 && isFetching) ||

@@ -17,7 +17,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-exports.handler = async (event) => {
+exports.handler = async event => {
     console.log(`EVENT: ${JSON.stringify(event)}`)
 
     const body = JSON.parse(event.body)
@@ -43,7 +43,7 @@ exports.handler = async (event) => {
 
     if (
         newItem.hasOwnProperty('subtasks') &&
-        newItem.subtasks.filter((st) => st.done === false).length > 0
+        newItem.subtasks.filter(st => st.done === false).length > 0
     ) {
         for (let i = 0; i < newItem.subtasks.length; i++) {
             if (newItem.subtasks[i].done) continue
@@ -56,7 +56,7 @@ exports.handler = async (event) => {
         }
         let subresponse = await docClient.put(updateParams).promise()
 
-        if (newItem.subtasks.filter((st) => st.done === false).length > 0) {
+        if (newItem.subtasks.filter(st => st.done === false).length > 0) {
             return {
                 statusCode: 200,
                 //  Uncomment below to enable CORS requests
@@ -86,7 +86,7 @@ exports.handler = async (event) => {
         else if (newItem.repeat === 'Custom' && newItem.repeatUnit === 'week') {
             if (
                 !newItem.hasOwnProperty('repeatWeekdays') ||
-                !newItem.repeatWeekdays.some((x) => x)
+                !newItem.repeatWeekdays.some(x => x)
             )
                 date.setDate(date.getDate() + 7 * newItem.repeatInterval)
             else {
@@ -126,7 +126,7 @@ exports.handler = async (event) => {
             Array.isArray(newItem.subtasks) &&
             newItem.subtasks.length > 0
         )
-            newItem.subtasks = newItem.subtasks.map((x) => ({
+            newItem.subtasks = newItem.subtasks.map(x => ({
                 ...x,
                 done: false,
             }))
@@ -151,7 +151,7 @@ exports.handler = async (event) => {
     await docClient
         .get(historyGetParams)
         .promise()
-        .then((oldHistory) => {
+        .then(oldHistory => {
             historyPutParams.Item = oldHistory.Item
             if (historyPutParams.Item?.tasks) {
                 historyPutParams.Item.tasks = [
@@ -219,15 +219,16 @@ const error = () => ({
     body: JSON.stringify('Missing title!'),
 })
 
-const dateString = (date) =>
+const dateString = date =>
     `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 
-const getTodo = (date) => {
+const getTodo = date => {
     switch (date.getDay()) {
         case 0:
-        case 6:
             return 5
+        case 6:
+            return 6
         default:
-            return 10
+            return 11
     }
 }

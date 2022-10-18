@@ -14,7 +14,7 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-exports.handler = async (event) => {
+exports.handler = async event => {
     console.log(`EVENT: ${JSON.stringify(event)}`)
 
     const today =
@@ -67,15 +67,16 @@ exports.handler = async (event) => {
     return res
 }
 
-const getTodo = (date) => {
+const getTodo = date => {
     switch (date.getDay()) {
         case 0:
-        case 6:
             return 5
+        case 6:
+            return 6
         default:
-            return 10
+            return 11
     }
 }
 
-const dateString = (date) =>
+const dateString = date =>
     `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`

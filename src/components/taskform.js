@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { Switch } from '@headlessui/react'
 
@@ -18,6 +18,12 @@ const TaskForm = ({
     submitForm,
 }) => {
     const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
+
+    useEffect(() => {
+        if (!selectedWeekDays) {
+            setSelectedWeekDays(new Array(7).fill(false))
+        }
+    }, [selectedWeekDays, setSelectedWeekDays])
 
     const todayAtMidnight = () => {
         let date = new Date()
@@ -221,8 +227,8 @@ const TaskForm = ({
                                     <option value="year">Years</option>
                                 </select>
                             </div>
-                            {repeatUnit === 'week' && (
-                                <div className="max-w-lg flex mt-3">
+                            {repeatUnit === 'week' && selectedWeekDays && (
+                                <div className="pointer-events-auto max-w-lg flex mt-3">
                                     {selectedWeekDays.map((_, i) => (
                                         <div
                                             onClick={() =>

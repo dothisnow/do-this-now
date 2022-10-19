@@ -143,7 +143,7 @@ const Tasks = () => {
             ) : (
                 <>
                     <div className="h-screen my-10 mx-5">
-                        <div className="pb-2 flex flex-row justify-center md:hidden">
+                        <div className="pb-2 flex flex-row justify-center md:hidden flex-wrap">
                             <button
                                 onClick={() => navigate('/')}
                                 className="block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2">
@@ -216,7 +216,7 @@ const Tasks = () => {
                                     showDate={sort === 1}
                                 />
                                 {i === selectedTask && (
-                                    <div className="flex flex-row justify-center py-2 md:hidden">
+                                    <div className="flex flex-row flex-wrap justify-center py-2 md:hidden">
                                         <button
                                             onClick={completeTask}
                                             className="block p-2 bg-gray-800 border border-gray-700 rounded text-sm text-white hover:bg-gray-700 hover:border-gray-600 ml-2">

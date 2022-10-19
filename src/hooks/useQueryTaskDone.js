@@ -3,7 +3,7 @@ import API from '@aws-amplify/api'
 
 export const useQueryTaskDone = () => {
     return useMutation(
-        (task) => {
+        task => {
             return API.post('tasks', '/tasks/done', {
                 body: {
                     task,
@@ -11,7 +11,7 @@ export const useQueryTaskDone = () => {
                         new Date().getMonth() + 1
                     }-${new Date().getDate()}`,
                 },
-            })
+            }).catch(console.error)
         }
         // { onSuccess: () => navigate('/tasks') }
     )

@@ -5,8 +5,10 @@ import API from '@aws-amplify/api'
 export const useQueryUpdateTask = () => {
     const navigate = useNavigate()
     return useMutation(
-        (task) => {
-            return API.post('tasks', '/tasks/update', { body: task })
+        task => {
+            return API.post('tasks', '/tasks/update', { body: task }).catch(
+                console.error
+            )
         },
         { onSuccess: () => navigate(-1) }
     )

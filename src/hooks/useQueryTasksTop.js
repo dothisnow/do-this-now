@@ -12,7 +12,7 @@ export const useQueryTasksTop = () => {
                 queryStringParameters: {
                     date,
                 },
-            })
+            }).catch(console.error)
         },
         {
             refetchInterval: 1000 * 2,

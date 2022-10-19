@@ -10,7 +10,7 @@ export const useQueryProgressToday = () => {
         () => {
             return API.get('tasks', '/tasks/progresstoday', {
                 queryStringParameters: { date },
-            })
+            }).catch(console.error)
         },
         {
             refetchInterval: 1000 * 2,

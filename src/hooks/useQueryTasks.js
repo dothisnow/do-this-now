@@ -5,7 +5,7 @@ export const useQueryTasks = () =>
     useQuery(
         ['tasks'],
         () => {
-            return API.get('tasks', '/tasks', {})
+            return API.get('tasks', '/tasks', {}).catch(console.error)
         },
         {
             refetchInterval: 1000 * 2,

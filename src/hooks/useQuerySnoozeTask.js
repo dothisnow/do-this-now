@@ -8,7 +8,7 @@ export const useQuerySnoozeTask = () => {
                 body: {
                     title,
                 },
-            })
+            }).catch(console.error)
         }
         // { onSuccess: () => navigate('/tasks') }
     )

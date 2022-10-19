@@ -142,7 +142,7 @@ const UpdateTask = () => {
                             <div>
                                 <h3 className="text-lg leading-6 font-medium ">
                                     <ChevronLeftIcon
-                                        className="w-5 h-5 inline-block cursor-pointer"
+                                        className="w-5 h-5 inline-block cursor-pointer md:hidden"
                                         onClick={() => navigate(-1)}
                                     />
                                     <span>Update Task: {taskId}</span>

@@ -227,12 +227,12 @@ const Home = () => {
                                 'No tasks'
                             )}
                         </div>
-                        <div className="pt-2 pr-2 flex flex-row flex-wrap justify-center mx-5 md:max-w-2xl md:mx-auto">
+                        <div className="pt-2 pr-2 flex flex-row flex-wrap justify-center mx-5 md:hidden">
                             <Buttons />
                         </div>
                         {tasks.length > 1 && (
                             <>
-                                <div className="pb-2 text-center text-gray-600">
+                                <div className="md:pt-1 pb-2 text-center text-gray-600">
                                     or
                                 </div>
                                 <div className="flex flex-col md:flex-row justify-center mx-5">

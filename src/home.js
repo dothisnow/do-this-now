@@ -24,6 +24,7 @@ import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
+import { newSafeDate } from './helpers/dates'
 
 const Home = () => {
     const [mainTask, setMainTask] = useState('') // 0 - Math.min(2, tasks.length-1)
@@ -34,9 +35,26 @@ const Home = () => {
     const { data: progress, isLoading: isLoadingProgress } =
         useQueryProgressToday()
 
-    const tasks = (data?.Items ?? []).filter(
+    let tasks = (data?.Items ?? []).filter(
         x => !x.snooze || new Date(x.snooze) < new Date()
     )
+
+    // if top task is strict and due, only show strict tasks that are due
+    const isDue = i =>
+        newSafeDate(tasks?.[i]?.due ?? '2050-01-01') <= new Date()
+    const isStrictAndDue = i => tasks?.[i]?.strictDeadline && isDue(i)
+    if (isStrictAndDue(0)) {
+        for (let i = 1; i < tasks.length; i++) {
+            if (!isStrictAndDue(i)) tasks = tasks.slice(0, i)
+        }
+    }
+
+    // if top task is due, only show tasks that are due
+    if (isDue(0)) {
+        for (let i = 1; i < tasks.length; i++) {
+            if (!isDue(i)) tasks = tasks.slice(0, i)
+        }
+    }
 
     const topTask =
         mainTask !== ''

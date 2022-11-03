@@ -70,11 +70,11 @@ exports.handler = async event => {
 const getTodo = date => {
     switch (date.getDay()) {
         case 0:
-            return 5
+            return 4
         case 6:
-            return 6
+            return 5
         default:
-            return 11
+            return 10
     }
 }
 

@@ -54,7 +54,7 @@ const UpdateTask = () => {
     useEffect(() => {
         if (task && task !== oldTask) {
             dueMonthState[1](new Date(task.due).getMonth() + 1)
-            dueDayState[1](new Date(task.due).getDate() + 1)
+            dueDayState[1](new Date(task.due).getDate())
             dueYearState[1](new Date(task.due).getFullYear())
             strictDeadlineState[1](task.strictDeadline)
             repeatState[1](task.repeat)

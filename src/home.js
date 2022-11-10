@@ -259,7 +259,7 @@ const Home = () => {
                                             setMainTask(leftTask.title)
                                         }
                                         title="(Shortcut: 1)"
-                                        className="border mb-2 cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center md:mr-4 md:mb-0 opacity-20 text-white">
+                                        className="border mb-2 cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center md:mb-0 opacity-20 text-white">
                                         <span>{leftTask.title}</span>
                                         <DateTag due={leftTask.due} />
                                         <TimeFrame
@@ -285,7 +285,7 @@ const Home = () => {
                                                 setMainTask(rightTask.title)
                                             }
                                             title="(Shortcut: 2)"
-                                            className="border cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center opacity-20 text-white">
+                                            className="border cursor-pointer border-gray-700 hover:border-gray-600 py-auto p-4 rounded bg-gray-800 hover:bg-gray-700 drop-shadow-sm font-bold text-sm text-center md:ml-4 opacity-20 text-white">
                                             <span>{rightTask.title}</span>
                                             <DateTag due={rightTask.due} />
                                             <TimeFrame

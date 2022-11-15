@@ -222,13 +222,13 @@ const error = () => ({
 const dateString = date =>
     `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 
-const getTodo = date => {
-    switch (date.getDay()) {
-        case 0:
-            return 4
-        case 6:
-            return 5
-        default:
-            return 10
-    }
-}
+const getTodo = date => 10 //{
+//    switch (date.getDay()) {
+//        case 0:
+//            return 4
+//        case 6:
+//            return 5
+//        default:
+//            return 10
+//    }
+//}

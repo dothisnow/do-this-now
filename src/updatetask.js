@@ -9,6 +9,7 @@ import useKeyAction from './hooks/useKeyAction'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
+import { newSafeDate } from './helpers/dates'
 
 const UpdateTask = () => {
     const { pathname } = useLocation()
@@ -53,9 +54,9 @@ const UpdateTask = () => {
 
     useEffect(() => {
         if (task && task !== oldTask) {
-            dueMonthState[1](new Date(task.due).getMonth() + 1)
-            dueDayState[1](new Date(task.due).getDate())
-            dueYearState[1](new Date(task.due).getFullYear())
+            dueMonthState[1](newSafeDate(task.due).getMonth() + 1)
+            dueDayState[1](newSafeDate(task.due).getDate())
+            dueYearState[1](newSafeDate(task.due).getFullYear())
             strictDeadlineState[1](task.strictDeadline)
             repeatState[1](task.repeat)
             repeatIntervalState[1](task.repeatInterval)

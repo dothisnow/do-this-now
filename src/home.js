@@ -188,14 +188,16 @@ const Home = () => {
                                         }}
                                     />
                                 </div>
-                                {tasksDoneToday - (progress?.todo ?? 10) >
-                                    0 && (
-                                    <div className="text-white text-xs leading-3 ml-1 font-bold">
-                                        +{' '}
-                                        {tasksDoneToday -
-                                            (progress?.todo ?? 10)}
-                                    </div>
-                                )}
+                                <div className="text-gray-700 text-xs leading-3 ml-2 font-bold">
+                                    {tasksDoneToday - (progress?.todo ?? 10) > 0
+                                        ? `+ ${
+                                              tasksDoneToday -
+                                              (progress?.todo ?? 10)
+                                          }`
+                                        : `${tasksDoneToday} / ${
+                                              progress?.todo ?? 10
+                                          }`}
+                                </div>
                             </div>
                         )}
                         <div className="md:max-w-sm mx-5 md:mx-auto border border-gray-700 py-auto p-6 rounded bg-gray-800 drop-shadow-sm font-bold text-lg text-center text-white">

@@ -1,4 +1,3 @@
-//import { Auth, Hub, API } from 'aws-amplify'
 import { AuthState } from '@aws-amplify/ui-components'
 
 const initialState = {
@@ -7,7 +6,12 @@ const initialState = {
     hasLoadedUser: false,
 }
 
-const rootReducer = (state = initialState, action) => {
+type Action = {
+    type: string
+    payload: any
+}
+
+const rootReducer = (state = initialState, action: Action) => {
     switch (action.type) {
         case 'logout':
             return { ...initialState, hasLoadedUser: true }

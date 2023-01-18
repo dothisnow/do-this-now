@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import useKeyAction from '../hooks/useKeyAction'
+import useKeyAction, { KeyAction } from '../hooks/useKeyAction'
 
 type HintProps = {
     letter: string
@@ -15,14 +15,16 @@ const Hint = ({ letter, text }: HintProps) => (
     </li>
 )
 
-type KeyAction = [string, string, () => void]
-
 const Hints = ({ keyActions }: { keyActions: KeyAction[] }) => {
     const [show, setShow] = useState(false)
 
-    const hintKeyActions = [['h', 'Show hints', () => setShow(true)]]
+    const hintKeyActions: KeyAction[] = [
+        ['h', 'Show hints', () => setShow(true)],
+    ]
     useKeyAction(hintKeyActions)
-    const hintKeyUpActions = [['h', 'Show hints', () => setShow(false)]]
+    const hintKeyUpActions: KeyAction[] = [
+        ['h', 'Show hints', () => setShow(false)],
+    ]
     useKeyAction(hintKeyUpActions, 'keyup')
 
     return (

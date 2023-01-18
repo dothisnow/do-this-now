@@ -1,8 +1,13 @@
 import { useCallback, useEffect } from 'react'
 
-const useKeyAction = (keyActions, event = 'keydown') => {
+export type KeyAction = [string, string, (e?: KeyboardEvent) => void]
+
+const useKeyAction = (
+    keyActions: KeyAction[],
+    event: 'keydown' | 'keyup' = 'keydown'
+) => {
     const callback = useCallback(
-        (e) => {
+        (e: KeyboardEvent) => {
             for (const kA of keyActions) if (kA[0] === e.key) kA[2](e)
         },
         [keyActions]

@@ -1,3 +1,4 @@
+import { FC } from 'react'
 import {
     CalendarIcon,
     ClockIcon,
@@ -8,20 +9,30 @@ import { format } from 'date-fns'
 
 import { newSafeDate } from '../helpers/dates'
 
-const Tag = ({ color, icon, text }) => {
+import { DateString, RepeatOptions } from '../types/task'
+
+const Tag = ({
+    color,
+    icon,
+    text,
+}: {
+    color?: `text-${string}`
+    icon: FC<{ className: string }>
+    text: string
+}) => {
     const IconComponent = icon
     return (
         <span
             className={`${
                 color ?? 'text-white'
             } inline-block text-xs bg-white bg-opacity-20 rounded p-1 px-1.5 ml-2`}>
-            <IconComponent className='h-3.5 inline-block mr-1' />
+            <IconComponent className="h-3.5 inline-block mr-1" />
             <span>{text}</span>
         </span>
     )
 }
 
-export const DateTag = ({ due }) => {
+export const DateTag = ({ due }: { due: DateString }) => {
     try {
         const dueDate = new Date(due)
         const today = new Date(
@@ -51,11 +62,11 @@ export const DateTag = ({ due }) => {
         return (
             <Tag
                 text={
-                    dueDate - today === 0
+                    dueDate.getTime() - today.getTime() === 0
                         ? 'Today'
-                        : dueDate - tomorrow === 0
+                        : dueDate.getTime() - tomorrow.getTime() === 0
                         ? 'Tomorrow'
-                        : dueDate - yesterday === 0
+                        : dueDate.getTime() - yesterday.getTime() === 0
                         ? 'Yesterday'
                         : format(newSafeDate(due), 'iii LLL d')
                 }
@@ -68,7 +79,7 @@ export const DateTag = ({ due }) => {
     }
 }
 
-export const TimeFrame = ({ timeFrame }) => {
+export const TimeFrame = ({ timeFrame }: { timeFrame?: number }) => {
     if (!timeFrame) return <></>
     const text =
         timeFrame < 60
@@ -79,7 +90,15 @@ export const TimeFrame = ({ timeFrame }) => {
     return <Tag icon={ClockIcon} text={text} />
 }
 
-export const Repeat = ({ repeat, repeatInterval, repeatUnit }) => {
+export const Repeat = ({
+    repeat,
+    repeatInterval,
+    repeatUnit,
+}: {
+    repeat: RepeatOptions
+    repeatInterval?: number
+    repeatUnit?: string
+}) => {
     if (repeat === 'No Repeat') return <></>
     if (repeat === 'Custom')
         return (
@@ -93,13 +112,19 @@ export const Repeat = ({ repeat, repeatInterval, repeatUnit }) => {
     return <Tag icon={RefreshIcon} text={repeat.toLowerCase()} />
 }
 
-export const Strict = ({ dueDate, strictDeadline }) => {
+export const Strict = ({
+    dueDate,
+    strictDeadline,
+}: {
+    dueDate: DateString
+    strictDeadline?: boolean
+}) => {
     if (!strictDeadline) return <></>
     try {
         return (
             <Tag
                 icon={ExclamationCircleIcon}
-                text='strict'
+                text="strict"
                 color={
                     newSafeDate(dueDate) <
                     new Date(

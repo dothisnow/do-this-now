@@ -1,6 +1,10 @@
 import { useCallback, useEffect } from 'react'
 
-export type KeyAction = [string, string, (e?: KeyboardEvent) => void]
+export type KeyAction = [
+    string,
+    string,
+    (e: KeyboardEvent) => void | (() => void)
+]
 
 const useKeyAction = (
     keyActions: KeyAction[],

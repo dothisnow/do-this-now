@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { KeyboardEvent, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { ChevronLeftIcon } from '@heroicons/react/solid'
 
 import { useQueryGetTask } from './hooks/useQueryGetTask'
 import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
-import useKeyAction from './hooks/useKeyAction'
+import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
@@ -21,8 +21,11 @@ const UpdateTask = () => {
         let lastPathItem = path.pop()
         if (lastPathItem === '') lastPathItem = path.pop()
         if (lastPathItem === 'update-task') navigate(-1)
+        if (!lastPathItem) return ''
         return decodeURIComponent(lastPathItem)
     })()
+
+    if (taskId === '') navigate(-1)
 
     const titleState = useState(taskId)
 
@@ -81,7 +84,7 @@ const UpdateTask = () => {
         task,
     ])
 
-    const toggleWeekday = index =>
+    const toggleWeekday = (index: 0 | 1 | 2 | 3 | 3 | 5 | 6) =>
         selectedWeekDaysState[1]([
             ...selectedWeekDaysState[0].slice(0, index),
             !selectedWeekDaysState[0][index],
@@ -97,7 +100,7 @@ const UpdateTask = () => {
             due: `${dueYearState[0]}-${dueMonthState[0]}-${dueDayState[0]}`,
             strictDeadline: strictDeadlineState[0],
             repeat: repeatState[0],
-            repeatInterval: parseInt(repeatIntervalState[0]),
+            repeatInterval: repeatIntervalState[0],
             repeatUnit: repeatUnitState[0],
             repeatWeekdays: selectedWeekDaysState[0],
             timeFrame: timeFrameState[0],
@@ -109,11 +112,11 @@ const UpdateTask = () => {
         mutate(task)
     }
 
-    const keyActions = [
+    const keyActions: KeyAction[] = [
         [
             'Enter',
             'Submit form',
-            e => {
+            (e: KeyboardEvent) => {
                 e.preventDefault()
                 e.stopPropagation()
                 submitForm()

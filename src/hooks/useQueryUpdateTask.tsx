@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import API from '@aws-amplify/api'
 
-export const useQueryUpdateTask = () => {
+export const useQueryUpdateTask = (): { mutate: (task: any) => void } => {
     const navigate = useNavigate()
     return useMutation(
-        task => {
+        async task => {
             return API.post('tasks', '/tasks/update', { body: task }).catch(
                 console.error
             )

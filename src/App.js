@@ -10,7 +10,7 @@ import UpdateTask from './updatetask'
 
 const App = () => {
     return (
-        <div className="md:pointer-events-none w-100vw h-100vh bg-gray-900">
+        <div className="w-100vw h-100vh bg-gray-900">
             <Router>
                 <Routes>
                     <Route path="/">

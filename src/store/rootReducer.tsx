@@ -8,7 +8,7 @@ const initialState = {
 
 type Action = {
     type: string
-    payload: any
+    payload?: any
 }
 
 const rootReducer = (state = initialState, action: Action) => {

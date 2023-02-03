@@ -28,7 +28,7 @@ const Hints = ({ keyActions }: { keyActions: KeyAction[] }) => {
     useKeyAction(hintKeyUpActions, 'keyup')
 
     return (
-        <div>
+        <>
             {show && (
                 <>
                     <div className="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" />
@@ -48,12 +48,12 @@ const Hints = ({ keyActions }: { keyActions: KeyAction[] }) => {
                     </div>
                 </>
             )}
-            <span
+            <div
                 onClick={() => setShow(x => !x)}
-                className="text-gray-400 absolute top-2 right-2 text-sm">
+                className="fixed text-gray-400 top-0 right-0 text-sm p-2">
                 (<i>h</i> for hint)
-            </span>
-        </div>
+            </div>
+        </>
     )
 }
 

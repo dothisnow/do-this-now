@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { format } from 'date-fns'
 import { Switch } from '@headlessui/react'
 
+import { RepeatOptions, SubTask } from '../types/task'
+
 const TaskForm = ({
     setIsTyping,
     titleState: [title, setTitle],
@@ -16,6 +18,20 @@ const TaskForm = ({
     timeFrameState: [timeFrame, setTimeFrame],
     subtasksState: [subtasks, setSubtasks],
     submitForm,
+}: {
+    setIsTyping: (isTyping: boolean) => void
+    titleState: [string, (title: string) => void]
+    dueMonthState: [number, (dueMonth: number) => void]
+    dueDayState: [number, (dueDay: number) => void]
+    dueYearState: [number, (dueYear: number) => void]
+    strictDeadlineState: [boolean, (strictDeadline: boolean) => void]
+    repeatState: [RepeatOptions, (repeat: RepeatOptions) => void]
+    repeatIntervalState: [number, (repeatInterval: number) => void]
+    repeatUnitState: [string, (repeatUnit: string) => void]
+    selectedWeekDaysState: [boolean[], (selectedWeekDays: boolean[]) => void]
+    timeFrameState: [string, (timeFrame: string) => void]
+    subtasksState: [SubTask[], (subtasks: SubTask[]) => void]
+    submitForm: () => void
 }) => {
     const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
 
@@ -32,8 +48,8 @@ const TaskForm = ({
     }
 
     const dayDiff = Math.round(
-        (new Date(dueYear, dueMonth - 1, dueDay, 0, 0, 0, 0) -
-            todayAtMidnight()) /
+        (new Date(dueYear, dueMonth - 1, dueDay, 0, 0, 0, 0).getTime() -
+            todayAtMidnight().getTime()) /
             (1000 * 60 * 60 * 24)
     )
 
@@ -49,7 +65,7 @@ const TaskForm = ({
         }
     }
 
-    const updateDate = newDate => {
+    const updateDate = (newDate: Date) => {
         setDueYear(newDate.getFullYear())
         setDueMonth(newDate.getMonth() + 1)
         setDueDay(newDate.getDate())
@@ -111,7 +127,9 @@ const TaskForm = ({
                             id="due-month"
                             placeholder="MM"
                             value={dueMonth}
-                            onChange={e => setDueMonth(e.target.value)}
+                            onChange={e =>
+                                setDueMonth(parseInt(e.target.value))
+                            }
                             className="flex-1 mr-3 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded"
                         />
                         <input
@@ -123,7 +141,7 @@ const TaskForm = ({
                             id="due-day"
                             placeholder="DD"
                             value={dueDay}
-                            onChange={e => setDueDay(e.target.value)}
+                            onChange={e => setDueDay(parseInt(e.target.value))}
                             className="flex-1 mr-3 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded"
                         />
                         <input
@@ -133,7 +151,7 @@ const TaskForm = ({
                             id="due-year"
                             placeholder="YYYY"
                             value={dueYear}
-                            onChange={e => setDueYear(e.target.value)}
+                            onChange={e => setDueYear(parseInt(e.target.value))}
                             className="flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded mr-3"
                         />
                         <button
@@ -193,7 +211,9 @@ const TaskForm = ({
                             name="repeat"
                             className="flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded pr-10"
                             value={repeat}
-                            onChange={e => setRepeat(e.target.value)}>
+                            onChange={e =>
+                                setRepeat(e.target.value as RepeatOptions)
+                            }>
                             {repeatOptions.map(option => (
                                 <option key={option}>{option}</option>
                             ))}
@@ -211,7 +231,9 @@ const TaskForm = ({
                                     min={1}
                                     value={repeatInterval}
                                     onChange={e =>
-                                        setRepeatInterval(e.target.value)
+                                        setRepeatInterval(
+                                            parseInt(e.target.value)
+                                        )
                                     }
                                     className="flex-1 block w-full focus:ring-blue-500 focus:border-blue-500 min-w-0 sm:text-sm border border-gray-700 placeholder-gray-400 text-white bg-gray-800 w-full p-2.5 rounded mr-3"
                                 />
@@ -368,7 +390,7 @@ const TaskForm = ({
 }
 
 const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-const repeatOptions = [
+const repeatOptions: RepeatOptions[] = [
     'No Repeat',
     'Daily',
     'Weekdays',

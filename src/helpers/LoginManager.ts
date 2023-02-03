@@ -1,16 +1,31 @@
 import store from '../store/store'
 import { Auth } from 'aws-amplify'
-import { Hub /*, API*/ } from 'aws-amplify'
-// import * as queries from '../graphql/queries'
+import { Hub } from 'aws-amplify'
 import { AuthState } from '@aws-amplify/ui-components'
 
 const EMAIL = 'maxlascombe@gmail.com'
 
+type LoginState =
+    | 'signIn'
+    | 'signUp'
+    | 'signIn_failure'
+    | 'tokenRefresh'
+    | 'tokenRefresh_failure'
+    | 'configured'
+    | 'signOut'
+
 class LoginManager {
+    formState: 'signIn' | 'signedIn'
+    loginState: LoginState
+    newPassword: (user: any, password: string) => Promise<any>
+    signIn: (password: string) => Promise<any>
+    signOut: () => Promise<any> | undefined
+
     constructor() {
+        this.formState = 'signIn'
         this.loginState = 'signIn'
 
-        this.signIn = (password) => Auth.signIn(EMAIL, password)
+        this.signIn = password => Auth.signIn(EMAIL, password)
 
         this.newPassword = (user, password) => {
             return Auth.completeNewPassword(user, password)
@@ -24,8 +39,8 @@ class LoginManager {
             }
         }
 
-        const listener = (data) => {
-            switch (data.payload.event) {
+        const listener = (data: any) => {
+            switch (data?.payload?.event) {
                 case 'signIn':
                     this.loadData()
                     store.dispatch({
@@ -46,7 +61,7 @@ class LoginManager {
                 case 'tokenRefresh_failure':
                     break
                 case 'configured':
-                    this.loadData(Math.random())
+                    this.loadData()
                     break
                 case 'signOut':
                     this.loadData()
@@ -59,9 +74,9 @@ class LoginManager {
         Hub.listen('auth', listener)
     }
 
-    loadData(val = null) {
+    loadData = () => {
         Auth.currentAuthenticatedUser()
-            .then((user) => {
+            .then(user => {
                 store.dispatch({
                     type: 'changeUserGroups',
                     payload:
@@ -71,22 +86,16 @@ class LoginManager {
                 })
                 return Auth.currentUserInfo()
             })
-            .then((data) => {
+            .then(data => {
                 if (data !== null) {
                     this.formState = 'signedIn'
-                    // API.graphql({query: queries.getUser, variables: {id: data.username}}).then(userData => {
-                    //   if (userData.data.getUser?.hasOwnProperty('accounts'))
-                    //     store.dispatch({type: 'changeAccounts', payload: userData.data.getUser.accounts.items})
-                    //   if (userData.data.getUser?.consented)
-                    //     store.dispatch({type: 'changeHasConsented', payload: true})
                     store.dispatch({ type: 'changeUser', payload: data })
-                    // })
                 } else {
                     store.dispatch({ type: 'logout' })
                     this.formState = 'signIn'
                 }
             })
-            .catch((e) => {
+            .catch(() => {
                 store.dispatch({ type: 'logout' })
                 this.formState = 'signIn'
             })

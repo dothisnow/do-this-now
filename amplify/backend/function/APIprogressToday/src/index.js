@@ -15,56 +15,56 @@ const docClient = new AWS.DynamoDB.DocumentClient()
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async event => {
-    console.log(`EVENT: ${JSON.stringify(event)}`)
+  console.log(`EVENT: ${JSON.stringify(event)}`)
 
-    const today =
-        event.hasOwnProperty('queryStringParameters') &&
-        event.queryStringParameters.hasOwnProperty('date')
-            ? new Date(event.queryStringParameters.date)
-            : new Date(
-                  new Date().getFullYear(),
-                  new Date().getMonth(),
-                  new Date().getDate(),
-                  0,
-                  0,
-                  0
-              )
+  const today =
+    event.hasOwnProperty('queryStringParameters') &&
+    event.queryStringParameters.hasOwnProperty('date')
+      ? new Date(event.queryStringParameters.date)
+      : new Date(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate(),
+          0,
+          0,
+          0
+        )
 
-    console.log(`TODAY: ${today}`)
+  console.log(`TODAY: ${today}`)
 
-    const historyGetParams = {
-        TableName: ENV.STORAGE_HISTORY_NAME,
-        Key: {
-            date: dateString(today),
-        },
-    }
+  const historyGetParams = {
+    TableName: ENV.STORAGE_HISTORY_NAME,
+    Key: {
+      date: dateString(today),
+    },
+  }
 
-    let data = await docClient.get(historyGetParams).promise()
+  let data = await docClient.get(historyGetParams).promise()
 
-    const done = data?.Item?.tasks?.length ?? 0
-    const doneBeforeToday = data?.Item?.doneBeforeToday ?? 0
-    const todo = getTodo(today)
+  const done = data?.Item?.tasks?.length ?? 0
+  const doneBeforeToday = data?.Item?.doneBeforeToday ?? 0
+  const todo = getTodo(today)
 
-    console.log(`DONE: ${done}`)
-    console.log(`DONE BEFORE TODAY: ${doneBeforeToday}`)
-    console.log(`TODO: ${todo}`)
+  console.log(`DONE: ${done}`)
+  console.log(`DONE BEFORE TODAY: ${doneBeforeToday}`)
+  console.log(`TODO: ${todo}`)
 
-    const res = {
-        statusCode: 200,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-        },
-        body: JSON.stringify({
-            done,
-            doneBeforeToday,
-            todo,
-        }),
-    }
+  const res = {
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+    body: JSON.stringify({
+      done,
+      doneBeforeToday,
+      todo,
+    }),
+  }
 
-    console.log(`RETURN: ${JSON.stringify(res)}`)
+  console.log(`RETURN: ${JSON.stringify(res)}`)
 
-    return res
+  return res
 }
 
 const getTodo = date => 10 // {
@@ -79,4 +79,4 @@ const getTodo = date => 10 // {
 //}
 
 const dateString = date =>
-    `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`

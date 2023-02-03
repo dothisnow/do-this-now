@@ -18,11 +18,7 @@
         {
           "category": "storage",
           "resourceName": "tasks",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         }
       ]
     },
@@ -34,11 +30,7 @@
         {
           "category": "storage",
           "resourceName": "tasks",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         }
       ]
     },
@@ -50,11 +42,7 @@
         {
           "category": "storage",
           "resourceName": "tasks",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         }
       ]
     },
@@ -66,11 +54,7 @@
         {
           "category": "storage",
           "resourceName": "tasks",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         }
       ]
     },
@@ -82,11 +66,7 @@
         {
           "category": "storage",
           "resourceName": "tasks",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         }
       ]
     },
@@ -98,20 +78,12 @@
         {
           "category": "storage",
           "resourceName": "tasks",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         },
         {
           "category": "storage",
           "resourceName": "history",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         }
       ]
     },
@@ -123,11 +95,7 @@
         {
           "category": "storage",
           "resourceName": "tasks",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         }
       ]
     },
@@ -139,11 +107,7 @@
         {
           "category": "storage",
           "resourceName": "tasks",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         }
       ]
     },
@@ -155,11 +119,7 @@
         {
           "category": "storage",
           "resourceName": "history",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
+          "attributes": ["Name", "Arn", "StreamArn"]
         }
       ]
     }
@@ -173,20 +133,14 @@
       "frontendAuthConfig": {
         "socialProviders": [],
         "usernameAttributes": [],
-        "signupAttributes": [
-          "EMAIL"
-        ],
+        "signupAttributes": ["EMAIL"],
         "passwordProtectionSettings": {
           "passwordPolicyMinLength": 8,
           "passwordPolicyCharacters": []
         },
         "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
+        "mfaTypes": ["SMS"],
+        "verificationMechanisms": ["EMAIL"]
       }
     }
   },
@@ -198,74 +152,47 @@
         {
           "category": "function",
           "resourceName": "APItasks",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
+          "attributes": ["Name", "Arn"]
         },
         {
           "category": "function",
           "resourceName": "APItasksTop",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
+          "attributes": ["Name", "Arn"]
         },
         {
           "category": "function",
           "resourceName": "APItasksNew",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
+          "attributes": ["Name", "Arn"]
         },
         {
           "category": "function",
           "resourceName": "APItasksUpdate",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
+          "attributes": ["Name", "Arn"]
         },
         {
           "category": "function",
           "resourceName": "APItasksDelete",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
+          "attributes": ["Name", "Arn"]
         },
         {
           "category": "function",
           "resourceName": "APItasksDone",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
+          "attributes": ["Name", "Arn"]
         },
         {
           "category": "function",
           "resourceName": "APIgetTask",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
+          "attributes": ["Name", "Arn"]
         },
         {
           "category": "function",
           "resourceName": "APItasksSnooze",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
+          "attributes": ["Name", "Arn"]
         },
         {
           "category": "function",
           "resourceName": "APIprogressToday",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
+          "attributes": ["Name", "Arn"]
         }
       ]
     }

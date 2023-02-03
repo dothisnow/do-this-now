@@ -15,57 +15,57 @@ const docClient = new AWS.DynamoDB.DocumentClient()
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
 exports.handler = async event => {
-    console.log(`EVENT: ${JSON.stringify(event)}`)
+  console.log(`EVENT: ${JSON.stringify(event)}`)
 
-    const body = JSON.parse(event.body)
+  const body = JSON.parse(event.body)
 
-    console.log(`BODY: ${JSON.stringify(body)}`)
+  console.log(`BODY: ${JSON.stringify(body)}`)
 
-    if (!body.hasOwnProperty('title')) return error('Missing title!')
+  if (!body.hasOwnProperty('title')) return error('Missing title!')
 
-    const getParams = {
-        TableName: ENV.STORAGE_TASKS_NAME,
-        Key: {
-            title: body.hasOwnProperty('oldTitle') ? body.oldTitle : body.title,
-        },
-    }
+  const getParams = {
+    TableName: ENV.STORAGE_TASKS_NAME,
+    Key: {
+      title: body.hasOwnProperty('oldTitle') ? body.oldTitle : body.title,
+    },
+  }
 
-    const { Item: oldItem } = await docClient.get(getParams).promise()
+  const { Item: oldItem } = await docClient.get(getParams).promise()
 
-    if (oldItem && body.hasOwnProperty('oldTitle'))
-        await docClient.delete(getParams).promise()
+  if (oldItem && body.hasOwnProperty('oldTitle'))
+    await docClient.delete(getParams).promise()
 
-    console.log(`OLD ITEM: ${JSON.stringify(oldItem)}`)
+  console.log(`OLD ITEM: ${JSON.stringify(oldItem)}`)
 
-    const newItem = { ...oldItem, ...body }
+  const newItem = { ...oldItem, ...body }
 
-    console.log(`NEW ITEM: ${JSON.stringify(oldItem)}`)
+  console.log(`NEW ITEM: ${JSON.stringify(oldItem)}`)
 
-    const putParams = {
-        TableName: ENV.STORAGE_TASKS_NAME,
-        Item: newItem,
-    }
+  const putParams = {
+    TableName: ENV.STORAGE_TASKS_NAME,
+    Item: newItem,
+  }
 
-    console.log({ putParams })
+  console.log({ putParams })
 
-    const response = await docClient.put(putParams).promise()
+  const response = await docClient.put(putParams).promise()
 
-    return {
-        statusCode: 200,
-        //  Uncomment below to enable CORS requests
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-        },
-        body: JSON.stringify(response),
-    }
+  return {
+    statusCode: 200,
+    //  Uncomment below to enable CORS requests
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+    body: JSON.stringify(response),
+  }
 }
 
 const error = m => ({
-    statusCode: 502,
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-    },
-    body: JSON.stringify('Missing title!'),
+  statusCode: 502,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': '*',
+  },
+  body: JSON.stringify('Missing title!'),
 })

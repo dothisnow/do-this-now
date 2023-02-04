@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 
 export const useQueryTaskDone = () => {
   return useMutation(
-    task => {
+    async task => {
       return API.post('tasks', '/tasks/done', {
         body: {
           task,
@@ -13,6 +13,5 @@ export const useQueryTaskDone = () => {
         },
       }).catch(console.error)
     }
-    // { onSuccess: () => navigate('/tasks') }
   )
 }

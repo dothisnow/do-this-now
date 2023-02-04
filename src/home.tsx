@@ -36,11 +36,12 @@ const Home = () => {
     useQueryProgressToday()
 
   let tasks = (data?.Items ?? []).filter(
-    x => !x.snooze || new Date(x.snooze) < new Date()
+    (x: { snooze: number }) => !x.snooze || new Date(x.snooze) < new Date()
   )
 
   // if top task is strict and due, only show strict tasks that are due
-  const isDue = i => newSafeDate(tasks?.[i]?.due ?? '2050-01-01') <= new Date()
+  const isDue = (i: number) =>
+    newSafeDate(tasks?.[i]?.due ?? '2050-01-01') <= new Date()
   const isStrictAndDue = i => tasks?.[i]?.strictDeadline && isDue(i)
   if (isStrictAndDue(0)) {
     for (let i = 1; i < tasks.length; i++) {

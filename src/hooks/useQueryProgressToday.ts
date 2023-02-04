@@ -3,15 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 
 import { dateString } from '../helpers/dates'
 
-export const useQueryTasksTop = () => {
+export const useQueryProgressToday = () => {
   const date = dateString(new Date())
   return useQuery(
-    ['tasks-top', date],
-    () => {
-      return API.get('tasks', '/tasks/top', {
-        queryStringParameters: {
-          date,
-        },
+    ['progress-today', date],
+    async () => {
+      return API.get('tasks', '/tasks/progresstoday', {
+        queryStringParameters: { date },
       }).catch(console.error)
     },
     {

@@ -1,6 +1,6 @@
 import { Switch } from '@headlessui/react'
 import { format } from 'date-fns'
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
 import { RepeatOptions, SubTask } from '../types/task'
 
@@ -19,18 +19,18 @@ const TaskForm = ({
   subtasksState: [subtasks, setSubtasks],
   submitForm,
 }: {
-  setIsTyping: (isTyping: boolean) => void
-  titleState: [string, (title: string) => void]
-  dueMonthState: [number, (dueMonth: number) => void]
-  dueDayState: [number, (dueDay: number) => void]
-  dueYearState: [number, (dueYear: number) => void]
-  strictDeadlineState: [boolean, (strictDeadline: boolean) => void]
-  repeatState: [RepeatOptions, (repeat: RepeatOptions) => void]
-  repeatIntervalState: [number, (repeatInterval: number) => void]
-  repeatUnitState: [string, (repeatUnit: string) => void]
-  selectedWeekDaysState: [boolean[], (selectedWeekDays: boolean[]) => void]
-  timeFrameState: [string, (timeFrame: string) => void]
-  subtasksState: [SubTask[], (subtasks: SubTask[]) => void]
+  setIsTyping: Dispatch<SetStateAction<boolean>>
+  titleState: [string, Dispatch<SetStateAction<string>>]
+  dueMonthState: [number, Dispatch<SetStateAction<number>>]
+  dueDayState: [number, Dispatch<SetStateAction<number>>]
+  dueYearState: [number, Dispatch<SetStateAction<number>>]
+  strictDeadlineState: [boolean, Dispatch<SetStateAction<boolean>>]
+  repeatState: [RepeatOptions, Dispatch<SetStateAction<RepeatOptions>>]
+  repeatIntervalState: [number, Dispatch<SetStateAction<number>>]
+  repeatUnitState: [string, Dispatch<SetStateAction<string>>]
+  selectedWeekDaysState: [boolean[], Dispatch<SetStateAction<boolean[]>>]
+  timeFrameState: [number, Dispatch<SetStateAction<number>>]
+  subtasksState: [SubTask[], Dispatch<SetStateAction<SubTask[]>>]
   submitForm: () => void
 }) => {
   const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
@@ -275,7 +275,7 @@ const TaskForm = ({
               step={15}
               min={15}
               value={timeFrame}
-              onChange={e => setTimeFrame(e.target.value)}
+              onChange={e => setTimeFrame(parseInt(e.target.value))}
               className='mr-3 block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
             />
             <div className='py-2.5 text-sm'>mins</div>

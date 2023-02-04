@@ -1,5 +1,11 @@
 import { useCallback, useEffect } from 'react'
 
+export type KeyboardEvent = {
+  key: string
+  preventDefault: () => void
+  stopPropagation: () => void
+}
+
 export type KeyAction = [
   string,
   string,

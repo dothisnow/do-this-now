@@ -1,8 +1,8 @@
 import { ChevronLeftIcon } from '@heroicons/react/solid'
-import { KeyboardEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import useKeyAction, { KeyAction } from './hooks/useKeyAction'
+import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
 import { useQueryGetTask } from './hooks/useQueryGetTask'
 import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
 
@@ -10,6 +10,7 @@ import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
 import { newSafeDate } from './helpers/dates'
+import { RepeatOptions, SubTask } from './types/task'
 
 const UpdateTask = () => {
   const { pathname } = useLocation()
@@ -40,7 +41,7 @@ const UpdateTask = () => {
   const dueDayState = useState(1)
   const dueYearState = useState(1998)
   const strictDeadlineState = useState(false)
-  const repeatState = useState('No Repeat')
+  const repeatState = useState<RepeatOptions>('No Repeat')
   const repeatIntervalState = useState(1)
   const repeatUnitState = useState('day')
   const selectedWeekDaysState = useState([
@@ -53,7 +54,7 @@ const UpdateTask = () => {
     false,
   ])
   const timeFrameState = useState(15)
-  const subtasksState = useState([])
+  const subtasksState = useState<SubTask[]>([])
 
   useEffect(() => {
     if (task && task !== oldTask) {
@@ -84,7 +85,7 @@ const UpdateTask = () => {
     task,
   ])
 
-  const toggleWeekday = (index: 0 | 1 | 2 | 3 | 3 | 5 | 6) =>
+  const toggleWeekday = (index: 0 | 1 | 2 | 3 | 4 | 5 | 6) =>
     selectedWeekDaysState[1]([
       ...selectedWeekDaysState[0].slice(0, index),
       !selectedWeekDaysState[0][index],
@@ -173,7 +174,6 @@ const UpdateTask = () => {
           </div>
         </div>
       )}
-      {/* <Hints keyActions={keyActions} /> */}
     </RequireAuth>
   )
 }

@@ -6,10 +6,10 @@ import {
   PlusCircleIcon,
   TrashIcon,
 } from '@heroicons/react/solid'
-import { useState } from 'react'
+import { FC, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import useKeyAction from './hooks/useKeyAction'
+import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
 import { useQueryProgressToday } from './hooks/useQueryProgressToday'
 import { useQuerySnoozeTask } from './hooks/useQuerySnoozeTask'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
@@ -36,12 +36,13 @@ const Home = () => {
     useQueryProgressToday()
 
   let tasks = (data?.Items ?? []).filter(
-    x => !x.snooze || new Date(x.snooze) < new Date()
+    (x: { snooze: number }) => !x.snooze || new Date(x.snooze) < new Date()
   )
 
   // if top task is strict and due, only show strict tasks that are due
-  const isDue = i => newSafeDate(tasks?.[i]?.due ?? '2050-01-01') <= new Date()
-  const isStrictAndDue = i => tasks?.[i]?.strictDeadline && isDue(i)
+  const isDue = (i: number) =>
+    newSafeDate(tasks?.[i]?.due ?? '2050-01-01') <= new Date()
+  const isStrictAndDue = (i: number) => tasks?.[i]?.strictDeadline && isDue(i)
   if (isStrictAndDue(0)) {
     for (let i = 1; i < tasks.length; i++) {
       if (!isStrictAndDue(i)) tasks = tasks.slice(0, i)
@@ -56,10 +57,15 @@ const Home = () => {
   }
 
   const topTask =
-    mainTask !== '' ? tasks.find(({ title }) => title === mainTask) : tasks[0]
-  const leftTask = tasks.find(({ title }) => title !== topTask.title)
+    mainTask !== ''
+      ? tasks.find(({ title }: (typeof tasks)[number]) => title === mainTask)
+      : tasks[0]
+  const leftTask = tasks.find(
+    ({ title }: (typeof tasks)[number]) => title !== topTask.title
+  )
   const rightTask = tasks.find(
-    ({ title }) => title !== topTask.title && title !== leftTask.title
+    ({ title }: (typeof tasks)[number]) =>
+      title !== topTask.title && title !== leftTask.title
   )
 
   const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
@@ -72,7 +78,11 @@ const Home = () => {
     topTask &&
     topTask.hasOwnProperty('subtasks') &&
     Array.isArray(topTask.subtasks)
-      ? topTask.subtasks.reduce((acc, cur) => acc + (cur.done ? 1 : 0), 0)
+      ? topTask.subtasks.reduce(
+          (acc: number, cur: (typeof topTask.subtasks)[number]) =>
+            acc + (cur.done ? 1 : 0),
+          0
+        )
       : 0
 
   const completeTask = () => {
@@ -97,7 +107,7 @@ const Home = () => {
     setMainTask('')
   }
 
-  const keyActions = [
+  const keyActions: KeyAction[] = [
     ['d', 'Task done', completeTask],
     [
       'l',
@@ -107,7 +117,7 @@ const Home = () => {
     [
       'n',
       'New task',
-      e => {
+      (e: KeyboardEvent) => {
         e.preventDefault()
         navigate('/new-task')
       },
@@ -127,7 +137,7 @@ const Home = () => {
   useKeyAction(keyActions)
 
   const Buttons = () => {
-    const info = [
+    const info: [() => void, string, FC][] = [
       [completeTask, 'Complete', CheckCircleIcon],
       [() => navigate('/tasks'), 'All tasks', MenuIcon],
       [() => navigate('/new-task'), 'New task', PlusCircleIcon],
@@ -186,8 +196,12 @@ const Home = () => {
                     <span>
                       {topTask.hasOwnProperty('subtasks') &&
                       topTask.subtasks.length > 0 &&
-                      topTask.subtasks.some(x => !x.done)
-                        ? topTask.subtasks.find(s => !s.done).title
+                      topTask.subtasks.some(
+                        (s: (typeof topTask.subtasks)[number]) => !s.done
+                      )
+                        ? topTask.subtasks.find(
+                            (s: (typeof topTask.subtasks)[number]) => !s.done
+                          ).title
                         : topTask.title}
                     </span>
                   </div>

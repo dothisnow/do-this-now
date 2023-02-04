@@ -18,11 +18,13 @@ import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
-import useKeyAction from './hooks/useKeyAction'
+import useKeyAction, { KeyboardEvent } from './hooks/useKeyAction'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasks } from './hooks/useQueryTasks'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
+
+import { Task } from './types/task'
 
 const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState(0)
@@ -34,10 +36,12 @@ const Tasks = () => {
   const { data, isFetching } = useQueryTasks()
   const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()
 
-  const tasks = ((sort === 0 ? data : dataTop)?.Items ?? []).map(task => ({
-    due: 'No Due Date',
-    ...task,
-  }))
+  const tasks = ((sort === 0 ? data : dataTop)?.Items ?? []).map(
+    (task: Task) => ({
+      due: 'No Due Date',
+      ...task,
+    })
+  )
 
   const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
   const { mutate: mutateDelete, isLoading: deleteIsLoading } =
@@ -48,7 +52,7 @@ const Tasks = () => {
     mutate(tasks[selectedTask])
   }
 
-  const scrollIntoView = elem => {
+  const scrollIntoView = (elem: HTMLElement) => {
     window.scrollTo({
       behavior: 'smooth',
       top:
@@ -73,7 +77,7 @@ const Tasks = () => {
     [
       'ArrowUp',
       'Select previous task',
-      e => {
+      (e: KeyboardEvent) => {
         e.preventDefault()
         setSelectedTask(Math.max(selectedTask - 1, 0))
         scrollIntoView(taskElems.current[selectedTask - 1])
@@ -82,7 +86,7 @@ const Tasks = () => {
     [
       'ArrowDown',
       'Select next task',
-      e => {
+      (e: KeyboardEvent) => {
         e.preventDefault()
         setSelectedTask(Math.min(selectedTask + 1, tasks.length - 1))
         scrollIntoView(taskElems.current[selectedTask + 1])

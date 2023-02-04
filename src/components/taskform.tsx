@@ -2,7 +2,7 @@ import { Switch } from '@headlessui/react'
 import { format } from 'date-fns'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
-import { RepeatOptions, SubTask } from '../types/task'
+import { RepeatOption, RepeatUnit, SubTask } from '../types/task'
 
 const TaskForm = ({
   setIsTyping,
@@ -25,9 +25,9 @@ const TaskForm = ({
   dueDayState: [number, Dispatch<SetStateAction<number>>]
   dueYearState: [number, Dispatch<SetStateAction<number>>]
   strictDeadlineState: [boolean, Dispatch<SetStateAction<boolean>>]
-  repeatState: [RepeatOptions, Dispatch<SetStateAction<RepeatOptions>>]
+  repeatState: [RepeatOption, Dispatch<SetStateAction<RepeatOption>>]
   repeatIntervalState: [number, Dispatch<SetStateAction<number>>]
-  repeatUnitState: [string, Dispatch<SetStateAction<string>>]
+  repeatUnitState: [string, Dispatch<SetStateAction<RepeatUnit>>]
   selectedWeekDaysState: [boolean[], Dispatch<SetStateAction<boolean[]>>]
   timeFrameState: [number, Dispatch<SetStateAction<number>>]
   subtasksState: [SubTask[], Dispatch<SetStateAction<SubTask[]>>]
@@ -207,7 +207,7 @@ const TaskForm = ({
               name='repeat'
               className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 pr-10 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
               value={repeat}
-              onChange={e => setRepeat(e.target.value as RepeatOptions)}>
+              onChange={e => setRepeat(e.target.value as RepeatOption)}>
               {repeatOptions.map(option => (
                 <option key={option}>{option}</option>
               ))}
@@ -227,12 +227,13 @@ const TaskForm = ({
                 />
                 <select
                   defaultValue={repeatUnit}
-                  onChange={e => setRepeatUnit(e.target.value)}
+                  onChange={e => setRepeatUnit(e.target.value as RepeatUnit)}
                   className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 pr-10 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'>
-                  <option value='day'>Days</option>
-                  <option value='week'>Weeks</option>
-                  <option value='month'>Months</option>
-                  <option value='year'>Years</option>
+                  {repeatUnits.map(unit => (
+                    <option key={unit} value={unit}>
+                      {unit}s
+                    </option>
+                  ))}
                 </select>
               </div>
               {repeatUnit === 'week' && selectedWeekDays && (
@@ -366,7 +367,7 @@ const TaskForm = ({
 }
 
 const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-const repeatOptions: RepeatOptions[] = [
+const repeatOptions: RepeatOption[] = [
   'No Repeat',
   'Daily',
   'Weekdays',
@@ -375,5 +376,6 @@ const repeatOptions: RepeatOptions[] = [
   'Yearly',
   'Custom',
 ]
+const repeatUnits: RepeatUnit[] = ['day', 'week', 'month', 'year']
 
 export default TaskForm

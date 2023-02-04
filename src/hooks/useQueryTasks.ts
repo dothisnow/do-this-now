@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 export const useQueryTasks = () =>
   useQuery(
     ['tasks'],
-    () => {
+    async () => {
       return API.get('tasks', '/tasks', {}).catch(console.error)
     },
     {

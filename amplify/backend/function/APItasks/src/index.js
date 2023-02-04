@@ -14,22 +14,22 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`)
+exports.handler = async event => {
+  console.log(`EVENT: ${JSON.stringify(event)}`)
 
-    const params = {
-        TableName: ENV.STORAGE_TASKS_NAME,
-    }
+  const params = {
+    TableName: ENV.STORAGE_TASKS_NAME,
+  }
 
-    const data = await docClient.scan(params).promise()
+  const data = await docClient.scan(params).promise()
 
-    return {
-        statusCode: 200,
-        //  Uncomment below to enable CORS requests
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-        },
-        body: JSON.stringify(data),
-    }
+  return {
+    statusCode: 200,
+    //  Uncomment below to enable CORS requests
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+    body: JSON.stringify(data),
+  }
 }

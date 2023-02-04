@@ -14,47 +14,45 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`)
+exports.handler = async event => {
+  console.log(`EVENT: ${JSON.stringify(event)}`)
 
-    const body = JSON.parse(event.body)
+  const body = JSON.parse(event.body)
 
-    console.log(`BODY: ${JSON.stringify(body)}`)
+  console.log(`BODY: ${JSON.stringify(body)}`)
 
-    if (!body.hasOwnProperty('title')) return error('Missing title!')
+  if (!body.hasOwnProperty('title')) return error('Missing title!')
 
-    var updateParams = {
-        TableName: ENV.STORAGE_TASKS_NAME,
-        Key: {
-            title: body.title,
-        },
-        UpdateExpression: 'set #snooze = :snooze',
-        ExpressionAttributeNames: { '#snooze': 'snooze' },
-        ExpressionAttributeValues: {
-            ':snooze': new Date(
-                new Date().getTime() + 60 * 60 * 1000
-            ).toISOString(),
-        },
-    }
+  var updateParams = {
+    TableName: ENV.STORAGE_TASKS_NAME,
+    Key: {
+      title: body.title,
+    },
+    UpdateExpression: 'set #snooze = :snooze',
+    ExpressionAttributeNames: { '#snooze': 'snooze' },
+    ExpressionAttributeValues: {
+      ':snooze': new Date(new Date().getTime() + 60 * 60 * 1000).toISOString(),
+    },
+  }
 
-    const response = await docClient.update(updateParams).promise()
+  const response = await docClient.update(updateParams).promise()
 
-    return {
-        statusCode: 200,
-        //  Uncomment below to enable CORS requests
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-        },
-        body: JSON.stringify(response),
-    }
+  return {
+    statusCode: 200,
+    //  Uncomment below to enable CORS requests
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+    body: JSON.stringify(response),
+  }
 }
 
-const error = (m) => ({
-    statusCode: 502,
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-    },
-    body: JSON.stringify('Missing title!'),
+const error = m => ({
+  statusCode: 502,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': '*',
+  },
+  body: JSON.stringify('Missing title!'),
 })

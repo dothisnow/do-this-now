@@ -1,9 +1,7 @@
 {
   "permissions": {
     "storage": {
-      "tasks": [
-        "delete"
-      ]
+      "tasks": ["delete"]
     }
   },
   "lambdaLayers": []

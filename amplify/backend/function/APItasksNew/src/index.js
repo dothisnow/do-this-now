@@ -14,38 +14,38 @@ const docClient = new AWS.DynamoDB.DocumentClient()
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-exports.handler = async (event) => {
-    console.log(`EVENT: ${JSON.stringify(event)}`)
+exports.handler = async event => {
+  console.log(`EVENT: ${JSON.stringify(event)}`)
 
-    const body = JSON.parse(event.body)
+  const body = JSON.parse(event.body)
 
-    console.log(`BODY: ${JSON.stringify(body)}`)
+  console.log(`BODY: ${JSON.stringify(body)}`)
 
-    if (!body.hasOwnProperty('title')) return error('Missing title!')
+  if (!body.hasOwnProperty('title')) return error('Missing title!')
 
-    const params = {
-        TableName: ENV.STORAGE_TASKS_NAME,
-        Item: body,
-    }
+  const params = {
+    TableName: ENV.STORAGE_TASKS_NAME,
+    Item: body,
+  }
 
-    const response = await docClient.put(params).promise()
+  const response = await docClient.put(params).promise()
 
-    return {
-        statusCode: 200,
-        //  Uncomment below to enable CORS requests
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-        },
-        body: JSON.stringify('Success'),
-    }
+  return {
+    statusCode: 200,
+    //  Uncomment below to enable CORS requests
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
+    body: JSON.stringify('Success'),
+  }
 }
 
-const error = (m) => ({
-    statusCode: 502,
-    headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': '*',
-    },
-    body: JSON.stringify('Missing title!'),
+const error = m => ({
+  statusCode: 502,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': '*',
+  },
+  body: JSON.stringify('Missing title!'),
 })

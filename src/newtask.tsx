@@ -33,13 +33,16 @@ const NewTask = () => {
     false,
     false,
   ])
-  const toggleWeekday = index =>
-    selectedWeekDaysState[1]([
-      ...selectedWeekDaysState[0].slice(0, index),
-      !selectedWeekDaysState[0][index],
-      ...selectedWeekDaysState[0].slice(index + 1),
+  const toggleWeekday = (i: 0 | 1 | 2 | 3 | 4 | 5 | 6) =>
+    selectedWeekDaysState[1](s => [
+      i === 0 ? !s[0] : s[0],
+      i === 1 ? !s[1] : s[1],
+      i === 2 ? !s[2] : s[2],
+      i === 3 ? !s[3] : s[3],
+      i === 4 ? !s[4] : s[4],
+      i === 5 ? !s[5] : s[5],
+      i === 6 ? !s[6] : s[6],
     ])
-
   const timeFrameState = useState(15)
 
   const subtasksState = useState([])
@@ -59,7 +62,7 @@ const NewTask = () => {
       due: `${dueYearState[0]}-${dueMonthState[0]}-${dueDayState[0]}`,
       strictDeadline: strictDeadlineState[0],
       repeat: repeatState[0],
-      repeatInterval: parseInt(repeatIntervalState[0]),
+      repeatInterval: repeatIntervalState[0],
       repeatUnit: repeatUnitState[0],
       repeatWeekdays: selectedWeekDaysState[0],
       timeFrame: timeFrameState[0],

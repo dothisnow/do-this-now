@@ -50,5 +50,6 @@ export type Task = {
   repeatUnit: RepeatUnit
   selectedWeekDays: SelectedWeekDays
   timeFrame: number
+  snooze?: number
   subtasks: SubTask[]
 }

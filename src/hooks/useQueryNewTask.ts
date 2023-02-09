@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 export const useQueryNewTask = () => {
   const navigate = useNavigate()
   return useMutation(
-    task => {
+    async task => {
       return API.post('tasks', '/tasks/new', { body: task }).catch(
         console.error
       )

@@ -9,7 +9,7 @@ import { FC } from 'react'
 
 import { newSafeDate } from '../helpers/dates'
 
-import { DateString, RepeatOptions } from '../types/task'
+import { DateString, RepeatOption } from '../types/task'
 
 const Tag = ({
   color,
@@ -95,7 +95,7 @@ export const Repeat = ({
   repeatInterval,
   repeatUnit,
 }: {
-  repeat: RepeatOptions
+  repeat: RepeatOption
   repeatInterval?: number
   repeatUnit?: string
 }) => {

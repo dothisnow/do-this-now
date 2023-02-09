@@ -35,35 +35,33 @@ const Home = () => {
   const { data: progress, isLoading: isLoadingProgress } =
     useQueryProgressToday()
 
-  let tasks = (data?.Items ?? []).filter(
-    (x: { snooze: number }) => !x.snooze || new Date(x.snooze) < new Date()
-  )
+  let tasks = data?.Items ?? []
 
   // if top task is strict and due, only show strict tasks that are due
   const isDue = (i: number) =>
     newSafeDate(tasks?.[i]?.due ?? '2050-01-01') <= new Date()
   const isStrictAndDue = (i: number) => tasks?.[i]?.strictDeadline && isDue(i)
-  if (isStrictAndDue(0)) {
+  if (tasks && tasks.length > 0 && isStrictAndDue(0)) {
     for (let i = 1; i < tasks.length; i++) {
       if (!isStrictAndDue(i)) tasks = tasks.slice(0, i)
     }
   }
 
   // if top task is due, only show tasks that are due
-  if (isDue(0)) {
+  if (tasks && tasks.length > 0 && isDue(0)) {
     for (let i = 1; i < tasks.length; i++) {
       if (!isDue(i)) tasks = tasks.slice(0, i)
     }
   }
 
   const topTask =
-    mainTask !== ''
+    mainTask !== '' && tasks && tasks.length > 0
       ? tasks.find(({ title }: (typeof tasks)[number]) => title === mainTask)
-      : tasks[0]
-  const leftTask = tasks.find(
+      : tasks?.[0]
+  const leftTask = tasks?.find(
     ({ title }: (typeof tasks)[number]) => title !== topTask.title
   )
-  const rightTask = tasks.find(
+  const rightTask = tasks?.find(
     ({ title }: (typeof tasks)[number]) =>
       title !== topTask.title && title !== leftTask.title
   )

@@ -10,7 +10,12 @@ import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
 import { newSafeDate } from './helpers/dates'
-import { RepeatOptions, SubTask } from './types/task'
+import {
+  RepeatOption,
+  RepeatUnit,
+  SelectedWeekDays,
+  SubTask,
+} from './types/task'
 
 const UpdateTask = () => {
   const { pathname } = useLocation()
@@ -41,10 +46,10 @@ const UpdateTask = () => {
   const dueDayState = useState(1)
   const dueYearState = useState(1998)
   const strictDeadlineState = useState(false)
-  const repeatState = useState<RepeatOptions>('No Repeat')
+  const repeatState = useState<RepeatOption>('No Repeat')
   const repeatIntervalState = useState(1)
-  const repeatUnitState = useState('day')
-  const selectedWeekDaysState = useState([
+  const repeatUnitState = useState<RepeatUnit>('day')
+  const selectedWeekDaysState = useState<SelectedWeekDays>([
     false,
     false,
     false,
@@ -85,11 +90,15 @@ const UpdateTask = () => {
     task,
   ])
 
-  const toggleWeekday = (index: 0 | 1 | 2 | 3 | 4 | 5 | 6) =>
-    selectedWeekDaysState[1]([
-      ...selectedWeekDaysState[0].slice(0, index),
-      !selectedWeekDaysState[0][index],
-      ...selectedWeekDaysState[0].slice(index + 1),
+  const toggleWeekday = (i: 0 | 1 | 2 | 3 | 4 | 5 | 6) =>
+    selectedWeekDaysState[1](s => [
+      i === 0 ? !s[0] : s[0],
+      i === 1 ? !s[1] : s[1],
+      i === 2 ? !s[2] : s[2],
+      i === 3 ? !s[3] : s[3],
+      i === 4 ? !s[4] : s[4],
+      i === 5 ? !s[5] : s[5],
+      i === 6 ? !s[6] : s[6],
     ])
 
   const { mutate } = useQueryUpdateTask()

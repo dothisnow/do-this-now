@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, MutableRefObject, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import {
@@ -18,18 +18,18 @@ import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
-import useKeyAction, { KeyboardEvent } from './hooks/useKeyAction'
+import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasks } from './hooks/useQueryTasks'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 
-import { Task } from './types/task'
+import { Task as TaskType } from './types/task'
 
 const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState(0)
   const [sort, setSort] = useState(0)
-  const taskElems = useRef([])
+  const taskElems: MutableRefObject<HTMLElement[]> = useRef([])
   const ding = useDing()
   const navigate = useNavigate()
 
@@ -37,7 +37,7 @@ const Tasks = () => {
   const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()
 
   const tasks = ((sort === 0 ? data : dataTop)?.Items ?? []).map(
-    (task: Task) => ({
+    (task: TaskType) => ({
       due: 'No Due Date',
       ...task,
     })
@@ -62,7 +62,7 @@ const Tasks = () => {
     })
   }
 
-  const keyActions = [
+  const keyActions: KeyAction[] = [
     ['d', 'Task done', completeTask],
     ['n', 'New task', () => navigate('/new-task')],
     ['o', 'Toggle order between date and top', () => setSort(s => (s + 1) % 2)],
@@ -104,7 +104,7 @@ const Tasks = () => {
   ]
   useKeyAction(keyActions)
 
-  const formatDate = date => {
+  const formatDate = (date: Date) => {
     try {
       return format(
         new Date(
@@ -124,12 +124,12 @@ const Tasks = () => {
   }
 
   if (sort === 0)
-    tasks.sort((a, b) =>
+    tasks.sort((a: (typeof tasks)[number], b: (typeof tasks)[number]) =>
       a.due === 'No Due Date'
         ? -1
         : b.due === 'No Due Date'
         ? 1
-        : newSafeDate(a.due) - newSafeDate(b.due)
+        : newSafeDate(a.due).getTime() - newSafeDate(b.due).getTime()
     )
 
   return (
@@ -161,7 +161,7 @@ const Tasks = () => {
                 <ArrowDownIcon className='ml-1 inline-block h-5 w-5' />
               </button>
             </div>
-            {tasks.map((task, i) => (
+            {tasks.map((task: (typeof tasks)[number], i: number) => (
               <Fragment key={task.title}>
                 {sort === 0 && (
                   <>
@@ -201,7 +201,7 @@ const Tasks = () => {
                   )}
                 <Task
                   isSelected={i === selectedTask}
-                  innerRef={e => (taskElems.current[i] = e)}
+                  innerRef={(e: any) => (taskElems.current[i] = e)}
                   {...task}
                   onClick={() => setSelectedTask(i)}
                   showDate={sort === 1}
@@ -252,6 +252,11 @@ const Task = ({
   timeFrame,
   title,
   onClick,
+}: TaskType & {
+  innerRef: (x: any) => void
+  isSelected: boolean
+  showDate: boolean
+  onClick: () => void
 }) => (
   <div
     ref={innerRef}
@@ -263,10 +268,14 @@ const Task = ({
     }
     onClick={onClick}>
     <span>{title}</span>
-    {showDate && <DateTag due={due} />}
+    {showDate && due !== undefined && due !== 'No Due Date' && (
+      <DateTag due={due} />
+    )}
     <TimeFrame timeFrame={timeFrame} />
     <Repeat {...{ repeat, repeatInterval, repeatUnit }} />
-    <Strict strictDeadline={strictDeadline} dueDate={due} />
+    {due !== undefined && due !== 'No Due Date' && (
+      <Strict strictDeadline={strictDeadline} dueDate={due} />
+    )}
   </div>
 )
 

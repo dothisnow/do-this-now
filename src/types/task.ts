@@ -11,13 +11,23 @@ export type RepeatOption =
 
 export type RepeatUnit = 'day' | 'week' | 'month' | 'year'
 
+export type SelectedWeekDays = [
+  boolean,
+  boolean,
+  boolean,
+  boolean,
+  boolean,
+  boolean,
+  boolean
+]
+
 export type SubTask = {
   title: string
   done: boolean
-  skipped?: boolean
+  snoozed?: boolean
 }
 
-export type Task = {
+export type TaskInput = {
   title: string
   dueMonth: number
   dueDay: number
@@ -26,16 +36,19 @@ export type Task = {
   repeat: RepeatOption
   repeatInterval: number
   repeatUnit: RepeatUnit
-  selectedWeekDays: [
-    boolean,
-    boolean,
-    boolean,
-    boolean,
-    boolean,
-    boolean,
-    boolean
-  ]
+  selectedWeekDays: SelectedWeekDays
   timeFrame: number
   subtasks: SubTask[]
-  done?: boolean
+}
+
+export type Task = {
+  title: string
+  due?: DateString | 'No Due Date'
+  strictDeadline: boolean
+  repeat: RepeatOption
+  repeatInterval: number
+  repeatUnit: RepeatUnit
+  selectedWeekDays: SelectedWeekDays
+  timeFrame: number
+  subtasks: SubTask[]
 }

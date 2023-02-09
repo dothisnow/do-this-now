@@ -2,7 +2,7 @@ import { Switch } from '@headlessui/react'
 import { format } from 'date-fns'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 
-import { RepeatOption, RepeatUnit, SubTask } from '../types/task'
+import { RepeatOption, RepeatUnit, TaskInput } from '../types/task'
 
 const TaskForm = ({
   setIsTyping,
@@ -19,25 +19,19 @@ const TaskForm = ({
   subtasksState: [subtasks, setSubtasks],
   submitForm,
 }: {
+  [K in keyof TaskInput as `${K}State`]: [
+    TaskInput[K],
+    Dispatch<SetStateAction<TaskInput[K]>>
+  ]
+} & {
   setIsTyping: Dispatch<SetStateAction<boolean>>
-  titleState: [string, Dispatch<SetStateAction<string>>]
-  dueMonthState: [number, Dispatch<SetStateAction<number>>]
-  dueDayState: [number, Dispatch<SetStateAction<number>>]
-  dueYearState: [number, Dispatch<SetStateAction<number>>]
-  strictDeadlineState: [boolean, Dispatch<SetStateAction<boolean>>]
-  repeatState: [RepeatOption, Dispatch<SetStateAction<RepeatOption>>]
-  repeatIntervalState: [number, Dispatch<SetStateAction<number>>]
-  repeatUnitState: [string, Dispatch<SetStateAction<RepeatUnit>>]
-  selectedWeekDaysState: [boolean[], Dispatch<SetStateAction<boolean[]>>]
-  timeFrameState: [number, Dispatch<SetStateAction<number>>]
-  subtasksState: [SubTask[], Dispatch<SetStateAction<SubTask[]>>]
   submitForm: () => void
 }) => {
   const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
 
   useEffect(() => {
     if (!selectedWeekDays) {
-      setSelectedWeekDays(new Array(7).fill(false))
+      setSelectedWeekDays([false, false, false, false, false, false, false])
     }
   }, [selectedWeekDays, setSelectedWeekDays])
 
@@ -241,10 +235,14 @@ const TaskForm = ({
                   {selectedWeekDays.map((_, i) => (
                     <div
                       onClick={() =>
-                        setSelectedWeekDays([
-                          ...selectedWeekDays.slice(0, i),
-                          !selectedWeekDays[i],
-                          ...selectedWeekDays.slice(i + 1),
+                        setSelectedWeekDays(s => [
+                          i === 0 ? !s[0] : s[0],
+                          i === 1 ? !s[1] : s[1],
+                          i === 2 ? !s[2] : s[2],
+                          i === 3 ? !s[3] : s[3],
+                          i === 4 ? !s[4] : s[4],
+                          i === 5 ? !s[5] : s[5],
+                          i === 6 ? !s[6] : s[6],
                         ])
                       }
                       className={

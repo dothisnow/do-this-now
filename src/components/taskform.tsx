@@ -321,6 +321,20 @@ const TaskForm = ({
             <>
               {subtasks.map((subtask, i) => (
                 <div className='mt-3 flex max-w-lg'>
+                  {i > 0 && (
+                    <button
+                      className='mr-3 inline-block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'
+                      onClick={() =>
+                        setSubtasks(s => {
+                          const newSubtasks = [...s]
+                          newSubtasks[i - 1] = s[i]
+                          newSubtasks[i] = s[i - 1]
+                          return newSubtasks
+                        })
+                      }>
+                      ↑
+                    </button>
+                  )}
                   <input
                     type='text'
                     value={subtask.title}
@@ -337,9 +351,32 @@ const TaskForm = ({
                     placeholder={`Subtask ${i + 1}`}
                     className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
                   />
+                  {i < subtasks.length - 1 && (
+                    <button
+                      className='ml-3 inline-block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'
+                      onClick={() =>
+                        setSubtasks(s => {
+                          const newSubtasks = [...s]
+                          newSubtasks[i + 1] = s[i]
+                          newSubtasks[i] = s[i + 1]
+                          return newSubtasks
+                        })
+                      }>
+                      ↓
+                    </button>
+                  )}
                 </div>
               ))}
               <div className='mt-3 flex max-w-lg'>
+                {subtasks.length > 0 && (
+                  <button
+                    onClick={() =>
+                      setSubtasks([...subtasks.slice(0, subtasks.length - 1)])
+                    }
+                    className='mr-3 block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'>
+                    Remove Last Subtask
+                  </button>
+                )}
                 <button
                   onClick={() =>
                     setSubtasks([...subtasks, { done: false, title: '' }])

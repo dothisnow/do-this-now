@@ -7,6 +7,7 @@ import {
   HomeIcon,
   PencilIcon,
   PlusCircleIcon,
+  TrashIcon,
 } from '@heroicons/react/solid'
 import { format } from 'date-fns'
 
@@ -208,24 +209,36 @@ const Tasks = () => {
                 />
                 {i === selectedTask && (
                   <div className='flex flex-row flex-wrap justify-center py-2 md:hidden'>
-                    <button
-                      onClick={completeTask}
-                      className='ml-2 block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-                      <span>Complete</span>
-                      <CheckCircleIcon className='ml-1 inline-block h-5 w-5' />
-                    </button>
-                    <button
-                      onClick={() =>
-                        navigate(
-                          `/update-task/${encodeURIComponent(
-                            tasks[selectedTask].title
-                          )}`
-                        )
-                      }
-                      className='ml-2 block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-                      <span>Update</span>
-                      <PencilIcon className='ml-1 inline-block h-5 w-5' />
-                    </button>
+                    {[
+                      {
+                        title: 'Complete',
+                        Icon: CheckCircleIcon,
+                        onClick: completeTask,
+                      },
+                      {
+                        title: 'Update',
+                        Icon: PencilIcon,
+                        onClick: () =>
+                          navigate(
+                            `/update-task/${encodeURIComponent(task.title)}`
+                          ),
+                      },
+                      {
+                        title: 'Delete',
+                        Icon: TrashIcon,
+                        onClick: () =>
+                          window.confirm(
+                            `Are you sure you want to delete '${task.title}'?`
+                          ) && mutateDelete(task),
+                      },
+                    ].map(({ title, Icon, onClick }) => (
+                      <button
+                        onClick={onClick}
+                        className='ml-2 block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
+                        <span>{title}</span>
+                        <Icon className='ml-1 inline-block h-5 w-5' />
+                      </button>
+                    ))}
                   </div>
                 )}
               </Fragment>

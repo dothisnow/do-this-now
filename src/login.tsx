@@ -1,3 +1,4 @@
+import { AuthState } from '@aws-amplify/ui-components'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Navigate, useNavigate } from 'react-router-dom'
@@ -6,13 +7,15 @@ import useKeyAction from './hooks/useKeyAction'
 
 import loginManager from './helpers/LoginManager'
 
+import { State } from './store/rootReducer'
+
 const Login = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [newPassword, setNewPassword] = useState('')
 
-  const authState = useSelector(state => state.authState)
+  const authState = useSelector((state: State) => state.authState)
 
   const navigate = useNavigate()
 
@@ -44,7 +47,7 @@ const Login = () => {
 
   useKeyAction([['Enter', 'Submit login form', login]])
 
-  if (authState === 'signedIn') return <Navigate to='/' />
+  if (authState === AuthState.SignedIn) return <Navigate to='/' />
 
   return (
     <div className='flex h-screen flex-col justify-center'>

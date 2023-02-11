@@ -10,12 +10,7 @@ import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
 import { newSafeDate } from './helpers/dates'
-import {
-  RepeatOption,
-  RepeatUnit,
-  SelectedWeekDays,
-  SubTask,
-} from './types/task'
+import { RepeatOption, RepeatUnit, RepeatWeekdays, SubTask } from './types/task'
 
 const UpdateTask = () => {
   const { pathname } = useLocation()
@@ -49,7 +44,7 @@ const UpdateTask = () => {
   const repeatState = useState<RepeatOption>('No Repeat')
   const repeatIntervalState = useState(1)
   const repeatUnitState = useState<RepeatUnit>('day')
-  const selectedWeekDaysState = useState<SelectedWeekDays>([
+  const repeatWeekdaysState = useState<RepeatWeekdays>([
     false,
     false,
     false,
@@ -70,7 +65,7 @@ const UpdateTask = () => {
       repeatState[1](task.repeat)
       repeatIntervalState[1](task.repeatInterval)
       repeatUnitState[1](task.repeatUnit)
-      selectedWeekDaysState[1](task.repeatWeekdays)
+      repeatWeekdaysState[1](task.repeatWeekdays)
       timeFrameState[1](task.timeFrame)
       subtasksState[1](task.subtasks)
       setOldTask(task)
@@ -83,7 +78,7 @@ const UpdateTask = () => {
     repeatState,
     repeatIntervalState,
     repeatUnitState,
-    selectedWeekDaysState,
+    repeatWeekdaysState,
     strictDeadlineState,
     subtasksState,
     timeFrameState,
@@ -91,7 +86,7 @@ const UpdateTask = () => {
   ])
 
   const toggleWeekday = (i: 0 | 1 | 2 | 3 | 4 | 5 | 6) =>
-    selectedWeekDaysState[1](s => [
+    repeatWeekdaysState[1](s => [
       i === 0 ? !s[0] : s[0],
       i === 1 ? !s[1] : s[1],
       i === 2 ? !s[2] : s[2],
@@ -112,7 +107,7 @@ const UpdateTask = () => {
       repeat: repeatState[0],
       repeatInterval: repeatIntervalState[0],
       repeatUnit: repeatUnitState[0],
-      repeatWeekdays: selectedWeekDaysState[0],
+      repeatWeekdays: repeatWeekdaysState[0],
       timeFrame: timeFrameState[0],
       ...((subtasksState?.[0]?.length ?? 0) > 0
         ? { subtasks: subtasksState[0] }
@@ -173,7 +168,7 @@ const UpdateTask = () => {
                   repeatState,
                   repeatIntervalState,
                   repeatUnitState,
-                  selectedWeekDaysState,
+                  repeatWeekdaysState,
                   timeFrameState,
                   subtasksState,
                   submitForm,

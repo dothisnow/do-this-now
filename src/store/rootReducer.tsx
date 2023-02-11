@@ -1,5 +1,11 @@
 import { AuthState } from '@aws-amplify/ui-components'
 
+export type State = {
+  authState: AuthState
+  user: any
+  hasLoadedUser: boolean
+}
+
 const initialState = {
   authState: AuthState.SignedOut,
   user: {},

@@ -11,7 +11,7 @@ export type RepeatOption =
 
 export type RepeatUnit = 'day' | 'week' | 'month' | 'year'
 
-export type SelectedWeekDays = [
+export type RepeatWeekdays = [
   boolean,
   boolean,
   boolean,
@@ -35,8 +35,8 @@ export type TaskInput = {
   strictDeadline: boolean
   repeat: RepeatOption
   repeatInterval: number
+  repeatWeekdays: RepeatWeekdays
   repeatUnit: RepeatUnit
-  selectedWeekDays: SelectedWeekDays
   timeFrame: number
   subtasks: SubTask[]
 }
@@ -48,7 +48,7 @@ export type Task = {
   repeat: RepeatOption
   repeatInterval: number
   repeatUnit: RepeatUnit
-  selectedWeekDays: SelectedWeekDays
+  repeatWeekdays: RepeatWeekdays
   timeFrame: number
   snooze?: number
   subtasks: SubTask[]

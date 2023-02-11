@@ -1,6 +1,6 @@
 import { Switch } from '@headlessui/react'
 import { format } from 'date-fns'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useState } from 'react'
 
 import { RepeatOption, RepeatUnit, TaskInput } from '../types/task'
 
@@ -14,7 +14,7 @@ const TaskForm = ({
   repeatState: [repeat, setRepeat],
   repeatIntervalState: [repeatInterval, setRepeatInterval],
   repeatUnitState: [repeatUnit, setRepeatUnit],
-  selectedWeekDaysState: [selectedWeekDays, setSelectedWeekDays],
+  repeatWeekdaysState: [repeatWeekdays, setRepeatWeekdays],
   timeFrameState: [timeFrame, setTimeFrame],
   subtasksState: [subtasks, setSubtasks],
   submitForm,
@@ -29,11 +29,9 @@ const TaskForm = ({
 }) => {
   const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
 
-  useEffect(() => {
-    if (!selectedWeekDays) {
-      setSelectedWeekDays([false, false, false, false, false, false, false])
+    if (!repeatWeekdays) {
+      setRepeatWeekdays([false, false, false, false, false, false, false])
     }
-  }, [selectedWeekDays, setSelectedWeekDays])
 
   const todayAtMidnight = () => {
     let date = new Date()
@@ -230,12 +228,12 @@ const TaskForm = ({
                   ))}
                 </select>
               </div>
-              {repeatUnit === 'week' && selectedWeekDays && (
+              {repeatUnit === 'week' && repeatWeekdays && (
                 <div className='pointer-events-auto mt-3 flex max-w-lg'>
-                  {selectedWeekDays.map((_, i) => (
+                  {repeatWeekdays.map((_, i) => (
                     <div
                       onClick={() =>
-                        setSelectedWeekDays(s => [
+                        setRepeatWeekdays(s => [
                           i === 0 ? !s[0] : s[0],
                           i === 1 ? !s[1] : s[1],
                           i === 2 ? !s[2] : s[2],
@@ -247,7 +245,7 @@ const TaskForm = ({
                       }
                       className={
                         (i > 0 && 'ml-2') +
-                        (selectedWeekDays[i]
+                        (repeatWeekdays[i]
                           ? ' border-gray-600 bg-gray-700 hover:border-gray-500 hover:bg-gray-600'
                           : ' border-gray-700 bg-gray-800 hover:border-gray-600 hover:bg-gray-700') +
                         ' flex-1 cursor-pointer rounded border p-2 text-center text-xs font-bold'

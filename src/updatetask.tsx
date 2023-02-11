@@ -31,7 +31,7 @@ const UpdateTask = () => {
   const titleState = useState(taskId)
 
   const [oldTask, setOldTask] = useState(null)
-  const { data, isLoading: isTaskLoading } = useQueryGetTask(taskId)
+  const { data, isFetching: isTaskLoading } = useQueryGetTask(taskId)
   const task = data?.Item ?? undefined
 
   const [loading, setLoading] = useState(false)

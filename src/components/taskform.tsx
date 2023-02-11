@@ -28,10 +28,11 @@ const TaskForm = ({
   submitForm: () => void
 }) => {
   const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
+  if ((subtasks?.length ?? 0) > 0 && !hasSubtasks) setHasSubtasks(true)
 
-    if (!repeatWeekdays) {
-      setRepeatWeekdays([false, false, false, false, false, false, false])
-    }
+  if (!repeatWeekdays) {
+    setRepeatWeekdays([false, false, false, false, false, false, false])
+  }
 
   const todayAtMidnight = () => {
     let date = new Date()

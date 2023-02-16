@@ -13,7 +13,6 @@ import { RepeatOption, RepeatUnit, RepeatWeekdays, SubTask } from './types/task'
 
 const NewTask = () => {
   const [loading, setLoading] = useState(false)
-  const [isTyping, setIsTyping] = useState(true)
 
   const titleState = useState('')
 
@@ -35,16 +34,6 @@ const NewTask = () => {
     false,
     false,
   ])
-  const toggleWeekday = (i: 0 | 1 | 2 | 3 | 4 | 5 | 6) =>
-    repeatWeekdaysState[1](s => [
-      i === 0 ? !s[0] : s[0],
-      i === 1 ? !s[1] : s[1],
-      i === 2 ? !s[2] : s[2],
-      i === 3 ? !s[3] : s[3],
-      i === 4 ? !s[4] : s[4],
-      i === 5 ? !s[5] : s[5],
-      i === 6 ? !s[6] : s[6],
-    ])
   const timeFrameState = useState(15)
 
   const subtasksState = useState<SubTask[]>([])
@@ -85,13 +74,6 @@ const NewTask = () => {
       },
     ],
     ['Escape', 'Home', () => navigate('/')],
-    ['u', 'Toggle Sunday', () => !isTyping && toggleWeekday(0)],
-    ['m', 'Toggle Monday', () => !isTyping && toggleWeekday(1)],
-    ['t', 'Toggle Tuesday', () => !isTyping && toggleWeekday(2)],
-    ['w', 'Toggle Wednesday', () => !isTyping && toggleWeekday(3)],
-    ['r', 'Toggle Thursday', () => !isTyping && toggleWeekday(4)],
-    ['f', 'Toggle Friday', () => !isTyping && toggleWeekday(5)],
-    ['s', 'Toggle Saturday', () => !isTyping && toggleWeekday(6)],
   ]
   useKeyAction(keyActions)
 
@@ -116,7 +98,6 @@ const NewTask = () => {
             </div>
             <TaskForm
               {...{
-                setIsTyping,
                 titleState,
                 dueMonthState,
                 dueDayState,

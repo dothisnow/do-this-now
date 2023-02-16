@@ -5,7 +5,6 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { RepeatOption, RepeatUnit, TaskInput } from '../types/task'
 
 const TaskForm = ({
-  setIsTyping,
   titleState: [title, setTitle],
   dueMonthState: [dueMonth, setDueMonth],
   dueDayState: [dueDay, setDueDay],
@@ -24,7 +23,6 @@ const TaskForm = ({
     Dispatch<SetStateAction<TaskInput[K]>>
   ]
 } & {
-  setIsTyping: Dispatch<SetStateAction<boolean>>
   submitForm: () => void
 }) => {
   const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
@@ -90,8 +88,6 @@ const TaskForm = ({
               placeholder='Do this thing'
               value={title}
               onChange={event => setTitle(event.target.value)}
-              onFocus={() => setIsTyping(true)}
-              onBlur={() => setIsTyping(false)}
               className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
             />
           </div>

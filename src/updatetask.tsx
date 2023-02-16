@@ -35,7 +35,6 @@ const UpdateTask = () => {
   const task = data?.Item ?? undefined
 
   const [loading, setLoading] = useState(false)
-  const [isTyping, setIsTyping] = useState(true)
 
   const dueMonthState = useState(1)
   const dueDayState = useState(1)
@@ -85,17 +84,6 @@ const UpdateTask = () => {
     task,
   ])
 
-  const toggleWeekday = (i: 0 | 1 | 2 | 3 | 4 | 5 | 6) =>
-    repeatWeekdaysState[1](s => [
-      i === 0 ? !s[0] : s[0],
-      i === 1 ? !s[1] : s[1],
-      i === 2 ? !s[2] : s[2],
-      i === 3 ? !s[3] : s[3],
-      i === 4 ? !s[4] : s[4],
-      i === 5 ? !s[5] : s[5],
-      i === 6 ? !s[6] : s[6],
-    ])
-
   const { mutate } = useQueryUpdateTask()
 
   const submitForm = () => {
@@ -128,13 +116,6 @@ const UpdateTask = () => {
       },
     ],
     ['Escape', 'Back', () => navigate(-1)],
-    ['u', 'Toggle Sunday', () => !isTyping && toggleWeekday(0)],
-    ['m', 'Toggle Monday', () => !isTyping && toggleWeekday(1)],
-    ['t', 'Toggle Tuesday', () => !isTyping && toggleWeekday(2)],
-    ['w', 'Toggle Wednesday', () => !isTyping && toggleWeekday(3)],
-    ['r', 'Toggle Thursday', () => !isTyping && toggleWeekday(4)],
-    ['f', 'Toggle Friday', () => !isTyping && toggleWeekday(5)],
-    ['s', 'Toggle Saturday', () => !isTyping && toggleWeekday(6)],
   ]
   useKeyAction(keyActions)
 
@@ -159,7 +140,6 @@ const UpdateTask = () => {
               </div>
               <TaskForm
                 {...{
-                  setIsTyping,
                   titleState,
                   dueMonthState,
                   dueDayState,

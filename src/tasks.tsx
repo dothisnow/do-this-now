@@ -14,6 +14,7 @@ import { format } from 'date-fns'
 import { newSafeDate } from './helpers/dates'
 import useDing from './helpers/useDing'
 
+import Button from './components/button'
 import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
@@ -143,24 +144,21 @@ const Tasks = () => {
         <>
           <div className='my-10 mx-5 h-screen'>
             <div className='flex flex-row flex-wrap justify-center pb-2 md:hidden'>
-              <button
+              <Button
                 onClick={() => navigate('/')}
-                className='ml-2 block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-                <span>Home</span>
-                <HomeIcon className='ml-1 inline-block h-5 w-5' />
-              </button>
-              <button
+                icon={HomeIcon}
+                text='Home'
+              />
+              <Button
                 onClick={() => navigate('/new-task')}
-                className='ml-2 block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-                <span>New task</span>
-                <PlusCircleIcon className='ml-1 inline-block h-5 w-5' />
-              </button>
-              <button
+                icon={PlusCircleIcon}
+                text='New Task'
+              />
+              <Button
                 onClick={() => setSort(s => (s + 1) % 2)}
-                className='ml-2 block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-                <span>Toggle order</span>
-                <ArrowDownIcon className='ml-1 inline-block h-5 w-5' />
-              </button>
+                icon={ArrowDownIcon}
+                text='Toggle Order'
+              />
             </div>
             {tasks.map((task: (typeof tasks)[number], i: number) => (
               <Fragment key={task.title}>
@@ -211,33 +209,28 @@ const Tasks = () => {
                   <div className='flex flex-row flex-wrap justify-center py-2 md:hidden'>
                     {[
                       {
-                        title: 'Complete',
-                        Icon: CheckCircleIcon,
+                        text: 'Complete',
+                        icon: CheckCircleIcon,
                         onClick: completeTask,
                       },
                       {
-                        title: 'Update',
-                        Icon: PencilIcon,
+                        text: 'Update',
+                        icon: PencilIcon,
                         onClick: () =>
                           navigate(
                             `/update-task/${encodeURIComponent(task.title)}`
                           ),
                       },
                       {
-                        title: 'Delete',
-                        Icon: TrashIcon,
+                        text: 'Delete',
+                        icon: TrashIcon,
                         onClick: () =>
                           window.confirm(
                             `Are you sure you want to delete '${task.title}'?`
                           ) && mutateDelete(task),
                       },
-                    ].map(({ title, Icon, onClick }) => (
-                      <button
-                        onClick={onClick}
-                        className='ml-2 block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-                        <span>{title}</span>
-                        <Icon className='ml-1 inline-block h-5 w-5' />
-                      </button>
+                    ].map(props => (
+                      <Button key={props.text} {...props} />
                     ))}
                   </div>
                 )}

@@ -25,7 +25,7 @@ const Tag = ({
     <span
       className={`${
         color ?? 'text-white'
-      } ml-2 inline-block rounded bg-white bg-opacity-20 p-1 px-1.5 text-xs`}>
+      } ml-1 inline-block rounded-full bg-white bg-opacity-20 p-1 px-2 text-xs`}>
       <IconComponent className='mr-1 inline-block h-3.5' />
       <span>{text}</span>
     </span>

@@ -80,7 +80,7 @@ const Login = () => {
       <div className='mt-2 flex justify-center'>
         <button
           onClick={login}
-          className='inline-block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
+          className='inline-block rounded-full border border-gray-700 bg-gray-800 py-2 px-2.5 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
           Submit
         </button>
       </div>

@@ -153,18 +153,15 @@ exports.handler = async event => {
     .then(oldHistory => {
       historyPutParams.Item = oldHistory.Item
       if (historyPutParams.Item?.tasks) {
-        historyPutParams.Item.tasks = [
-          ...historyPutParams.Item?.tasks,
-          task.title,
-        ]
+        historyPutParams.Item.tasks = [...historyPutParams.Item?.tasks, task]
       } else {
-        historyPutParams.Item.tasks = [task.title]
+        historyPutParams.Item.tasks = [task]
       }
     })
     .catch(() => {
       historyPutParams.Item = {
         date: dateString(now),
-        tasks: [task.title],
+        tasks: [task],
       }
     })
 

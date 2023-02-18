@@ -181,9 +181,13 @@ const Home = () => {
                   />
                 </div>
                 <div className='ml-2 text-xs font-bold leading-3 text-gray-700'>
-                  {tasksDoneToday - (progress?.todo ?? 10) > 0
-                    ? `+ ${tasksDoneToday - (progress?.todo ?? 10)}`
-                    : `${tasksDoneToday} / ${progress?.todo ?? 10}`}
+                  {tasksDoneToday - (progress?.todo ?? 0) > 0
+                    ? `+ ${minutesToHours(
+                        tasksDoneToday - (progress?.todo ?? 10)
+                      )}`
+                    : `${minutesToHours(tasksDoneToday)} / ${minutesToHours(
+                        progress?.todo ?? 10
+                      )}`}
                 </div>
               </div>
             )}
@@ -281,5 +285,8 @@ const Home = () => {
     </RequireAuth>
   )
 }
+
+const minutesToHours = (minutes: number) =>
+  `${Math.floor(minutes / 60)}h${minutes % 60 === 0 ? '' : minutes % 60}`
 
 export default Home

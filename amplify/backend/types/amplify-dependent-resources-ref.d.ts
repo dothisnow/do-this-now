@@ -1,94 +1,103 @@
 export type AmplifyDependentResourcesAttributes = {
-  storage: {
-    tasks: {
-      Name: 'string'
-      Arn: 'string'
-      StreamArn: 'string'
-      PartitionKeyName: 'string'
-      PartitionKeyType: 'string'
-      Region: 'string'
+  "api": {
+    "tasks": {
+      "ApiId": "string",
+      "ApiName": "string",
+      "RootUrl": "string"
     }
-    history: {
-      Name: 'string'
-      Arn: 'string'
-      StreamArn: 'string'
-      PartitionKeyName: 'string'
-      PartitionKeyType: 'string'
-      Region: 'string'
+  },
+  "auth": {
+    "maxlascombe": {
+      "AppClientID": "string",
+      "AppClientIDWeb": "string",
+      "IdentityPoolId": "string",
+      "IdentityPoolName": "string",
+      "UserPoolArn": "string",
+      "UserPoolId": "string",
+      "UserPoolName": "string"
     }
-  }
-  function: {
-    APItasks: {
-      Name: 'string'
-      Arn: 'string'
-      Region: 'string'
-      LambdaExecutionRole: 'string'
+  },
+  "function": {
+    "APIgetTask": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "APIprogressToday": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "APItasks": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "APItasksDelete": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "APItasksDone": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "APItasksNew": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "APItasksSnooze": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "APItasksTop": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "APItasksUpdate": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
     }
-    APItasksTop: {
-      Name: 'string'
-      Arn: 'string'
-      Region: 'string'
-      LambdaExecutionRole: 'string'
-    }
-    APItasksNew: {
-      Name: 'string'
-      Arn: 'string'
-      Region: 'string'
-      LambdaExecutionRole: 'string'
-    }
-    APItasksUpdate: {
-      Name: 'string'
-      Arn: 'string'
-      Region: 'string'
-      LambdaExecutionRole: 'string'
-    }
-    APItasksDelete: {
-      Name: 'string'
-      Arn: 'string'
-      Region: 'string'
-      LambdaExecutionRole: 'string'
-    }
-    APItasksDone: {
-      Name: 'string'
-      Arn: 'string'
-      Region: 'string'
-      LambdaExecutionRole: 'string'
-    }
-    APIgetTask: {
-      Name: 'string'
-      Arn: 'string'
-      Region: 'string'
-      LambdaExecutionRole: 'string'
-    }
-    APItasksSnooze: {
-      Name: 'string'
-      Arn: 'string'
-      Region: 'string'
-      LambdaExecutionRole: 'string'
-    }
-    APIprogressToday: {
-      Name: 'string'
-      Arn: 'string'
-      Region: 'string'
-      LambdaExecutionRole: 'string'
-    }
-  }
-  auth: {
-    maxlascombe: {
-      IdentityPoolId: 'string'
-      IdentityPoolName: 'string'
-      UserPoolId: 'string'
-      UserPoolArn: 'string'
-      UserPoolName: 'string'
-      AppClientIDWeb: 'string'
-      AppClientID: 'string'
-    }
-  }
-  api: {
-    tasks: {
-      RootUrl: 'string'
-      ApiName: 'string'
-      ApiId: 'string'
+  },
+  "storage": {
+    "history": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "StreamArn": "string"
+    },
+    "tasks": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "StreamArn": "string"
     }
   }
 }

@@ -1,200 +1,419 @@
 {
-  "storage": {
+  "api": {
     "tasks": {
-      "service": "DynamoDB",
-      "providerPlugin": "awscloudformation"
-    },
-    "history": {
-      "service": "DynamoDB",
-      "providerPlugin": "awscloudformation"
-    }
-  },
-  "function": {
-    "APItasks": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
       "dependsOn": [
         {
-          "category": "storage",
-          "resourceName": "tasks",
-          "attributes": ["Name", "Arn", "StreamArn"]
-        }
-      ]
-    },
-    "APItasksTop": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "tasks",
-          "attributes": ["Name", "Arn", "StreamArn"]
-        }
-      ]
-    },
-    "APItasksNew": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "tasks",
-          "attributes": ["Name", "Arn", "StreamArn"]
-        }
-      ]
-    },
-    "APItasksUpdate": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "tasks",
-          "attributes": ["Name", "Arn", "StreamArn"]
-        }
-      ]
-    },
-    "APItasksDelete": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "tasks",
-          "attributes": ["Name", "Arn", "StreamArn"]
-        }
-      ]
-    },
-    "APItasksDone": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "tasks",
-          "attributes": ["Name", "Arn", "StreamArn"]
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APItasks"
         },
         {
-          "category": "storage",
-          "resourceName": "history",
-          "attributes": ["Name", "Arn", "StreamArn"]
-        }
-      ]
-    },
-    "APIgetTask": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APItasksTop"
+        },
         {
-          "category": "storage",
-          "resourceName": "tasks",
-          "attributes": ["Name", "Arn", "StreamArn"]
-        }
-      ]
-    },
-    "APItasksSnooze": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APItasksNew"
+        },
         {
-          "category": "storage",
-          "resourceName": "tasks",
-          "attributes": ["Name", "Arn", "StreamArn"]
-        }
-      ]
-    },
-    "APIprogressToday": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APItasksUpdate"
+        },
         {
-          "category": "storage",
-          "resourceName": "history",
-          "attributes": ["Name", "Arn", "StreamArn"]
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APItasksDelete"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APItasksDone"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APIgetTask"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APItasksSnooze"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APIprogressToday"
         }
-      ]
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
     }
   },
   "auth": {
     "maxlascombe": {
-      "service": "Cognito",
-      "serviceType": "managed",
-      "providerPlugin": "awscloudformation",
       "dependsOn": [],
       "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
         "socialProviders": [],
         "usernameAttributes": [],
-        "signupAttributes": ["EMAIL"],
-        "passwordProtectionSettings": {
-          "passwordPolicyMinLength": 8,
-          "passwordPolicyCharacters": []
-        },
-        "mfaConfiguration": "OFF",
-        "mfaTypes": ["SMS"],
-        "verificationMechanisms": ["EMAIL"]
-      }
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "serviceType": "managed"
     }
   },
-  "api": {
-    "tasks": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
+  "function": {
+    "APIgetTask": {
+      "build": true,
       "dependsOn": [
         {
-          "category": "function",
-          "resourceName": "APItasks",
-          "attributes": ["Name", "Arn"]
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasks"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "APIprogressToday": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "history"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "APItasks": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasks"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "APItasksDelete": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasks"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "APItasksDone": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasks"
         },
         {
-          "category": "function",
-          "resourceName": "APItasksTop",
-          "attributes": ["Name", "Arn"]
-        },
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "history"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "APItasksNew": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasks"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "APItasksSnooze": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasks"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "APItasksTop": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasks"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "APItasksUpdate": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasks"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_APIgetTask_deploymentBucketName": {
+      "usedBy": [
         {
           "category": "function",
-          "resourceName": "APItasksNew",
-          "attributes": ["Name", "Arn"]
-        },
-        {
-          "category": "function",
-          "resourceName": "APItasksUpdate",
-          "attributes": ["Name", "Arn"]
-        },
-        {
-          "category": "function",
-          "resourceName": "APItasksDelete",
-          "attributes": ["Name", "Arn"]
-        },
-        {
-          "category": "function",
-          "resourceName": "APItasksDone",
-          "attributes": ["Name", "Arn"]
-        },
-        {
-          "category": "function",
-          "resourceName": "APIgetTask",
-          "attributes": ["Name", "Arn"]
-        },
-        {
-          "category": "function",
-          "resourceName": "APItasksSnooze",
-          "attributes": ["Name", "Arn"]
-        },
-        {
-          "category": "function",
-          "resourceName": "APIprogressToday",
-          "attributes": ["Name", "Arn"]
+          "resourceName": "APIgetTask"
         }
       ]
+    },
+    "AMPLIFY_function_APIgetTask_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APIgetTask"
+        }
+      ]
+    },
+    "AMPLIFY_function_APIprogressToday_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APIprogressToday"
+        }
+      ]
+    },
+    "AMPLIFY_function_APIprogressToday_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APIprogressToday"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksDelete_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksDelete"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksDelete_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksDelete"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksDone_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksDone"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksDone_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksDone"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksNew_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksNew"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksNew_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksNew"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksSnooze_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksSnooze"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksSnooze_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksSnooze"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksTop_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksTop"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksTop_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksTop"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksUpdate_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksUpdate"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksUpdate_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksUpdate"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasks_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasks"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasks_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasks"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "history": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "tasks": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }

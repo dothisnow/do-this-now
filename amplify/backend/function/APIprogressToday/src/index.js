@@ -41,7 +41,11 @@ exports.handler = async event => {
 
   let data = await docClient.get(historyGetParams).promise()
 
-  const done = data?.Item?.tasks?.reduce((acc,cur) => acc + (cur?.timeFrame ?? 30), 0) ?? 0
+  const done =
+    data?.Item?.tasks?.reduce(
+      (acc, cur) => acc + (parseInt(cur?.timeFrame) ?? 30),
+      0
+    ) ?? 0
   const doneBeforeToday = data?.Item?.doneBeforeToday ?? 0
   const todo = getTodo(today)
 
@@ -80,4 +84,3 @@ const getTodo = date => 8 * 60 // {
 
 const dateString = date =>
   `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-

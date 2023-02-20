@@ -169,7 +169,10 @@ exports.handler = async event => {
 
   const doneToday =
     (historyPutParams.Item?.doneBeforeToday ?? 0) +
-    historyPutParams.Item.tasks.length
+    (historyPutParams.Item.tasks.reduce(
+      (acc, cur) => acc + (parseInt(cur?.timeFrame) ?? 30),
+      0
+    ) ?? 0)
   const doneBeforeTomorrow = Math.max(0, doneToday - getTodo(now))
 
   const historyUpdateParams = {

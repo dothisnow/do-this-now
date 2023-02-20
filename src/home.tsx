@@ -232,7 +232,7 @@ const Home = () => {
                 'No tasks'
               )}
             </div>
-            <div className='mx-5 flex flex-row flex-wrap justify-center pt-2 pr-2 md:hidden'>
+            <div className='mx-5 flex flex-row flex-wrap justify-center pt-2 pr-2'>
               <Buttons />
             </div>
             {tasks.length > 1 && (

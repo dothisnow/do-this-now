@@ -387,7 +387,7 @@ const TaskForm = ({
       </div>
       <div
         onClick={submitForm}
-        className='pt-5 text-center sm:border-t sm:border-gray-700 md:hidden'>
+        className='pt-5 text-center sm:border-t sm:border-gray-700'>
         <button className='inline-block rounded-full border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
           Submit
         </button>

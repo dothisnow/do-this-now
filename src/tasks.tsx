@@ -143,7 +143,7 @@ const Tasks = () => {
       ) : (
         <>
           <div className='my-10 mx-5 h-screen'>
-            <div className='flex flex-row flex-wrap justify-center pb-2 md:hidden'>
+            <div className='flex flex-row flex-wrap justify-center pb-2'>
               <Button
                 onClick={() => navigate('/')}
                 icon={HomeIcon}
@@ -206,7 +206,7 @@ const Tasks = () => {
                   showDate={sort === 1}
                 />
                 {i === selectedTask && (
-                  <div className='flex flex-row flex-wrap justify-center py-2 md:hidden'>
+                  <div className='flex flex-row flex-wrap justify-center py-2'>
                     {[
                       {
                         text: 'Complete',

@@ -71,7 +71,7 @@ exports.handler = async event => {
   return res
 }
 
-const getTodo = date => 8 * 60 // {
+const getTodo = date => 6 * 60 // {
 //    switch (date.getDay()) {
 //        case 0:
 //            return 4

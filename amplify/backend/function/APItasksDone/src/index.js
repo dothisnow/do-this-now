@@ -214,7 +214,7 @@ const error = () => ({
 const dateString = date =>
   `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 
-const getTodo = date => 10 //{
+const getTodo = date => 6 * 60 //{
 //    switch (date.getDay()) {
 //        case 0:
 //            return 4

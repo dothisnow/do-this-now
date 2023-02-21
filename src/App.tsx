@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import { Route } from 'wouter'
 import loginManager from './helpers/LoginManager'
 import Home from './home'
 import Login from './login'
@@ -9,17 +9,21 @@ import UpdateTask from './updatetask'
 const App = () => {
   return (
     <div className='w-100vw h-100vh bg-gray-900'>
-      <Router>
-        <Routes>
-          <Route path='/'>
-            <Route index element={<Home />} />
-            <Route path='login' element={<Login />} />
-            <Route path='new-task' element={<NewTask />} />
-            <Route path='tasks' element={<Tasks />} />
-            <Route path='update-task/:id' element={<UpdateTask />} />
-          </Route>
-        </Routes>
-      </Router>
+      <Route path='/'>
+        <Home />
+      </Route>
+      <Route path='/login'>
+        <Login />
+      </Route>
+      <Route path='/new-task'>
+        <NewTask />
+      </Route>
+      <Route path='/tasks'>
+        <Tasks />
+      </Route>
+      <Route path='/update-task/:id'>
+        <UpdateTask />
+      </Route>
       <button
         onClick={loginManager.signOut}
         type='button'

@@ -1,7 +1,7 @@
 import { AuthState } from '@aws-amplify/ui-components'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Redirect, useLocation } from 'wouter'
 
 import useKeyAction from './hooks/useKeyAction'
 
@@ -17,13 +17,13 @@ const Login = () => {
 
   const authState = useSelector((state: State) => state.authState)
 
-  const navigate = useNavigate()
+  const navigate = useLocation()[1]
 
   const login = () => {
     if (showNewPassword) {
       loginManager
         .newPassword(user, newPassword)
-        .then(r => {
+        .then(() => {
           navigate('/')
         })
         .catch(e => {
@@ -47,7 +47,7 @@ const Login = () => {
 
   useKeyAction([['Enter', 'Submit login form', login]])
 
-  if (authState === AuthState.SignedIn) return <Navigate to='/' />
+  if (authState === AuthState.SignedIn) return <Redirect to='/' />
 
   return (
     <div className='flex h-screen flex-col justify-center'>

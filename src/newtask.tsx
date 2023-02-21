@@ -1,6 +1,4 @@
-import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
 import { useQueryNewTask } from './hooks/useQueryNewTask'
@@ -38,8 +36,6 @@ const NewTask = () => {
 
   const subtasksState = useState<SubTask[]>([])
 
-  const navigate = useNavigate()
-
   const { mutate } = useQueryNewTask()
 
   const submitForm = () => {
@@ -73,7 +69,7 @@ const NewTask = () => {
         submitForm()
       },
     ],
-    ['Escape', 'Home', () => navigate('/')],
+    ['Escape', 'Home', () => window.history.back()],
   ]
   useKeyAction(keyActions)
 
@@ -89,11 +85,6 @@ const NewTask = () => {
           <div>
             <div>
               <h3 className='text-lg font-medium leading-6 '>
-                <button
-                  onClick={() => navigate(-1)}
-                  className='ml-1 mb-1 mr-2 block inline-block rounded-full border border-gray-700 bg-gray-800 py-2 px-2.5 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-                  <ChevronLeftIcon className='inline-block h-5 w-5' />
-                </button>
                 <span>New Task</span>
               </h3>
             </div>

@@ -1,7 +1,7 @@
 import { AuthState } from '@aws-amplify/ui-components'
 import { FC, ReactElement } from 'react'
 import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router-dom'
+import { Redirect } from 'wouter'
 
 import Loading from './loading'
 
@@ -18,7 +18,7 @@ const RequireAuth = ({ children }: { children: FC | ReactElement }) => {
       </div>
     )
   if (authState === AuthState.SignedIn) return <>{children}</>
-  return <Navigate to='/login' />
+  return <Redirect to='/login' />
 }
 
 export default RequireAuth

@@ -9,7 +9,7 @@ export const useQueryNewTask = () => {
       return API.post('tasks', '/tasks/new', { body: task }).catch(
         console.error
       )
-    }
-    // { onSuccess: () => navigate('/tasks') }
+    },
+    { onSuccess: () => window.history.back() }
   )
 }

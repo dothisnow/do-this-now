@@ -1,4 +1,3 @@
-import { ChevronLeftIcon } from '@heroicons/react/solid'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'wouter'
 
@@ -19,12 +18,10 @@ const UpdateTask = () => {
     const path = location.split('/')
     let lastPathItem = path.pop()
     if (lastPathItem === '') lastPathItem = path.pop()
-    // if (lastPathItem === 'update-task') navigate(-1)
+    if (lastPathItem === 'update-task') window.history.back()
     if (!lastPathItem) return ''
     return decodeURIComponent(lastPathItem)
   })()
-
-  // if (taskId === '') navigate(-1)
 
   const titleState = useState(taskId)
 
@@ -113,7 +110,7 @@ const UpdateTask = () => {
         submitForm()
       },
     ],
-    // ['Escape', 'Back', () => navigate(-1)],
+    ['Escape', 'Back', () => window.history.back()],
   ]
   useKeyAction(keyActions)
 
@@ -129,11 +126,6 @@ const UpdateTask = () => {
             <div>
               <div>
                 <h3 className='text-lg font-medium leading-6 '>
-                  <button
-                    // onClick={() => navigate(-1)}
-                    className='ml-1 mb-1 mr-2 block inline-block rounded-full border border-gray-700 bg-gray-800 py-2 px-2.5 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-                    <ChevronLeftIcon className='inline-block h-5 w-5' />
-                  </button>
                   <span>Update Task: {taskId}</span>
                 </h3>
               </div>

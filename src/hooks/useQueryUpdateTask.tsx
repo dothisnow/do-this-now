@@ -7,7 +7,7 @@ export const useQueryUpdateTask = (): { mutate: (task: any) => void } => {
       return API.post('tasks', '/tasks/update', { body: task }).catch(
         console.error
       )
-    }
-    // { onSuccess: () => navigate(-1) }
+    },
+    { onSuccess: () => window.history.back() }
   )
 }

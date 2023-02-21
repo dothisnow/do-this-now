@@ -7,7 +7,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/solid'
 import { FC, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation } from 'wouter'
 
 import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
 import { useQueryProgressToday } from './hooks/useQueryProgressToday'
@@ -28,7 +28,7 @@ import { newSafeDate } from './helpers/dates'
 
 const Home = () => {
   const [mainTask, setMainTask] = useState('') // 0 - Math.min(2, tasks.length-1)
-  const navigate = useNavigate()
+  const navigate = useLocation()[1]
   const ding = useDing()
 
   const { data, isLoading } = useQueryTasksTop()

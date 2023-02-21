@@ -1,5 +1,5 @@
 import { Fragment, MutableRefObject, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { navigate } from 'wouter'
 
 import {
   ArrowDownIcon,
@@ -33,7 +33,6 @@ const Tasks = () => {
   const [sort, setSort] = useState(0)
   const taskElems: MutableRefObject<HTMLElement[]> = useRef([])
   const ding = useDing()
-  const navigate = useNavigate()
 
   const { data, isFetching } = useQueryTasks()
   const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()

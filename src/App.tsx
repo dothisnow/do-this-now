@@ -1,4 +1,4 @@
-import { Route } from 'wouter'
+import { Redirect, Route, Switch } from 'wouter'
 import loginManager from './helpers/LoginManager'
 import Home from './home'
 import Login from './login'
@@ -9,21 +9,26 @@ import UpdateTask from './updatetask'
 const App = () => {
   return (
     <div className='w-100vw h-100vh bg-gray-900'>
-      <Route path='/'>
-        <Home />
-      </Route>
-      <Route path='/login'>
-        <Login />
-      </Route>
-      <Route path='/new-task'>
-        <NewTask />
-      </Route>
-      <Route path='/tasks'>
-        <Tasks />
-      </Route>
-      <Route path='/update-task/:id'>
-        <UpdateTask />
-      </Route>
+      <Switch>
+        <Route path='/'>
+          <Home />
+        </Route>
+        <Route path='/login'>
+          <Login />
+        </Route>
+        <Route path='/new-task'>
+          <NewTask />
+        </Route>
+        <Route path='/tasks'>
+          <Tasks />
+        </Route>
+        <Route path='/update-task/:id'>
+          <UpdateTask />
+        </Route>
+        <Route>
+          <Redirect to='/' />
+        </Route>
+      </Switch>
       <button
         onClick={loginManager.signOut}
         type='button'

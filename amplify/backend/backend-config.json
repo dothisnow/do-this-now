@@ -132,6 +132,15 @@
             "StreamArn"
           ],
           "category": "storage",
+          "resourceName": "tasks"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
           "resourceName": "history"
         }
       ],

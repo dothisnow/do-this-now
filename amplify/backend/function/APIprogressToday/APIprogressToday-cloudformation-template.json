@@ -27,6 +27,18 @@
     "storagehistoryStreamArn": {
       "Type": "String",
       "Default": "storagehistoryStreamArn"
+    },
+    "storagetasksName": {
+      "Type": "String",
+      "Default": "storagetasksName"
+    },
+    "storagetasksArn": {
+      "Type": "String",
+      "Default": "storagetasksArn"
+    },
+    "storagetasksStreamArn": {
+      "Type": "String",
+      "Default": "storagetasksStreamArn"
     }
   },
   "Conditions": {
@@ -90,6 +102,15 @@
             },
             "STORAGE_HISTORY_STREAMARN": {
               "Ref": "storagehistoryStreamArn"
+            },
+            "STORAGE_TASKS_NAME": {
+              "Ref": "storagetasksName"
+            },
+            "STORAGE_TASKS_ARN": {
+              "Ref": "storagetasksArn"
+            },
+            "STORAGE_TASKS_STREAMARN": {
+              "Ref": "storagetasksStreamArn"
             }
           }
         },
@@ -204,6 +225,33 @@
             {
               "Effect": "Allow",
               "Action": [
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query"
+              ],
+              "Resource": [
+                {
+                  "Ref": "storagetasksArn"
+                },
+                {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      {
+                        "Ref": "storagetasksArn"
+                      },
+                      "index/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
                 "dynamodb:Put*",
                 "dynamodb:Create*",
                 "dynamodb:BatchWriteItem",
@@ -212,7 +260,9 @@
                 "dynamodb:List*",
                 "dynamodb:Describe*",
                 "dynamodb:Scan",
-                "dynamodb:Query"
+                "dynamodb:Query",
+                "dynamodb:Update*",
+                "dynamodb:RestoreTable*"
               ],
               "Resource": [
                 {

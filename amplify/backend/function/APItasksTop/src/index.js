@@ -29,7 +29,7 @@ exports.handler = async event => {
           0,
           0
         )
-  const tomorrow = new Date().setDate(today.getDate() + 1)
+  const in2Days = new Date().setDate(today.getDate() + 2)
 
   const sortFlags = [
     // strict deadline and due today or past due
@@ -50,7 +50,7 @@ exports.handler = async event => {
     t =>
       t.hasOwnProperty('due') &&
       new Date(t.due) <= today &&
-      nextDueDate(t) > tomorrow,
+      nextDueDate(t) >= in2Days,
   ]
 
   const sortProperties = [
@@ -66,6 +66,12 @@ exports.handler = async event => {
 
   // DO A BUNCH OF SORTING
   let tasks = data.Items
+
+  // flag logs
+  // for (const t of tasks)
+  //   for (let i = 0; i < sortFlags.length; i++)
+  //     console.log(`${t.title} flag ${i}: ${sortFlags[i](t)}`)
+
   tasks.sort((a, b) => {
     for (const flag of sortFlags) {
       if (flag(a) && !flag(b)) return -1
@@ -96,7 +102,7 @@ const dateString = date =>
 const nextDueDate = task => {
   let date = new Date(task.due)
   if (task.repeat === 'Daily') date.setDate(date.getDate() + 1)
-  if (task.repeat === 'Custom' && task.repeatUnit === 'day')
+  else if (task.repeat === 'Custom' && task.repeatUnit === 'day')
     date.setDate(date.getDate() + task.repeatInterval)
   else if (task.repeat === 'Weekly') date.setDate(date.getDate() + 7)
   else if (task.repeat === 'Custom' && task.repeatUnit === 'week') {
@@ -127,6 +133,7 @@ const nextDueDate = task => {
   else if (task.repeat === 'Yearly') date.setFullYear(date.getFullYear() + 1)
   else if (task.repeat === 'Custom' && task.repeatUnit === 'year')
     date.setFullYear(date.getFullYear() + task.repeatInterval)
+  else date.setFullYear(new Date().getFullYear() + 1)
   date.setHours(date.getHours() + 2)
   return new Date(dateString(date))
 }

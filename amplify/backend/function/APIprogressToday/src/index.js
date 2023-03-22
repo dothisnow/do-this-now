@@ -32,7 +32,7 @@ exports.handler = async event => {
           0,
           0
         )
-  const nextWeek = new Date().setDate(today.getDate() + 7)
+  const in2Weeks = new Date().setDate(today.getDate() + 14)
 
   console.log(`TODAY: ${today}`)
 
@@ -57,13 +57,13 @@ exports.handler = async event => {
   }
   const allTasks = (await docClient.scan(params).promise()).Items
 
-  let totalTimeInNextWeek = 0
+  let totalTimeInNext2Weeks = 0
   // let tasksToDoInNextWeek = []
   for (const task of allTasks) {
     const time = parseInt(task.timeFrame)
     let due = new Date(task.due)
-    while (due <= nextWeek) {
-      totalTimeInNextWeek += time
+    while (due <= in2Weeks) {
+      totalTimeInNext2Weeks += time
       // tasksToDoInNextWeek.push({ title: task.title, due: dateString(due) })
       if (task.repeat === 'No Repeat') break
       due = nextDueDate({
@@ -73,7 +73,7 @@ exports.handler = async event => {
     }
   }
   const todo =
-    Math.ceil((totalTimeInNextWeek + done + doneBeforeToday) / 7 / 60) * 60
+    Math.ceil((totalTimeInNext2Weeks + done + doneBeforeToday) / 14 / 60) * 60
 
   console.log(`DONE: ${done}`)
   console.log(`DONE BEFORE TODAY: ${doneBeforeToday}`)
@@ -96,7 +96,7 @@ exports.handler = async event => {
     UpdateExpression: 'set #x = :y',
     ExpressionAttributeNames: { '#x': 'doneBeforeToday' },
     ExpressionAttributeValues: {
-      ':y': Math.min(done + doneBeforeToday - todo, 0),
+      ':y': Math.max(done + doneBeforeToday - todo, 0),
     },
   }
 
@@ -113,7 +113,7 @@ exports.handler = async event => {
       doneBeforeToday,
       todo,
       allTasks,
-      totalTimeInNextWeek,
+      totalTimeInNext2Weeks,
     }),
   }
 
@@ -162,3 +162,4 @@ const nextDueDate = task => {
   date.setHours(date.getHours() + 2)
   return new Date(dateString(date))
 }
+

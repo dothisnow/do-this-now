@@ -11,6 +11,6 @@ export const useQueryGetTask = (title: string) =>
     },
     {
       refetchOnWindowFocus: false,
-      refetchOnMount: false,
+      refetchOnMount: true,
     }
   )

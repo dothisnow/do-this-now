@@ -1,17 +1,4 @@
 {
-  "staging": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-maxlascombe-staging-203306-authRole",
-      "UnauthRoleArn": "arn:aws:iam::635678236360:role/amplify-maxlascombe-staging-203306-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::635678236360:role/amplify-maxlascombe-staging-203306-authRole",
-      "Region": "us-east-1",
-      "DeploymentBucketName": "amplify-maxlascombe-staging-203306-deployment",
-      "UnauthRoleName": "amplify-maxlascombe-staging-203306-unauthRole",
-      "StackName": "amplify-maxlascombe-staging-203306",
-      "StackId": "arn:aws:cloudformation:us-east-1:635678236360:stack/amplify-maxlascombe-staging-203306/4f92c3a0-1759-11ed-9438-12cbb9c98fc1",
-      "AmplifyAppId": "d147xqrc1y8ag6"
-    }
-  },
   "prod": {
     "awscloudformation": {
       "AuthRoleName": "amplify-maxlascombe-prod-125438-authRole",
@@ -53,7 +40,7 @@
         },
         "APItasksDone": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
-          "s3Key": "amplify-builds/APItasksDone-7067474e684d6a417137-build.zip"
+          "s3Key": "amplify-builds/APItasksDone-4242636e782f5379454f-build.zip"
         },
         "APIgetTask": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
@@ -65,7 +52,7 @@
         },
         "APIprogressToday": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
-          "s3Key": "amplify-builds/APIprogressToday-4e306a4637713161314d-build.zip"
+          "s3Key": "amplify-builds/APIprogressToday-72626345434c6a6d644f-build.zip"
         }
       },
       "storage": {
@@ -75,6 +62,19 @@
       "api": {
         "tasks": {}
       }
+    }
+  },
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-maxlascombe-staging-203306-authRole",
+      "UnauthRoleArn": "arn:aws:iam::635678236360:role/amplify-maxlascombe-staging-203306-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::635678236360:role/amplify-maxlascombe-staging-203306-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-maxlascombe-staging-203306-deployment",
+      "UnauthRoleName": "amplify-maxlascombe-staging-203306-unauthRole",
+      "StackName": "amplify-maxlascombe-staging-203306",
+      "StackId": "arn:aws:cloudformation:us-east-1:635678236360:stack/amplify-maxlascombe-staging-203306/4f92c3a0-1759-11ed-9438-12cbb9c98fc1",
+      "AmplifyAppId": "d147xqrc1y8ag6"
     }
   }
 }

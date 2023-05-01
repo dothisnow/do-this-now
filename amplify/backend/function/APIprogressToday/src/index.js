@@ -32,9 +32,11 @@ exports.handler = async event => {
           0,
           0
         )
-  const in2Weeks = new Date().setDate(today.getDate() + 14)
+  const in2Weeks = new Date(today)
+in2Weeks.setDate(in2Weeks.getDate() + 14)
 
   console.log(`TODAY: ${today}`)
+  console.log(`IN 2 WEEKS: ${in2Weeks}`)
 
   const historyGetParams = {
     TableName: ENV.STORAGE_HISTORY_NAME,
@@ -58,6 +60,7 @@ exports.handler = async event => {
   const allTasks = (await docClient.scan(params).promise()).Items
 
   let totalTimeInNext2Weeks = 0
+
   // let tasksToDoInNextWeek = []
   for (const task of allTasks) {
     const time = parseInt(task.timeFrame)
@@ -78,6 +81,7 @@ exports.handler = async event => {
   console.log(`DONE: ${done}`)
   console.log(`DONE BEFORE TODAY: ${doneBeforeToday}`)
   console.log(`TODO: ${todo}`)
+  // console.log(`TASKS: ${JSON.stringify(tasksToDoInNextWeek)}`)
 
   const historyUpdateParams = {
     TableName: ENV.STORAGE_HISTORY_NAME,
@@ -162,4 +166,3 @@ const nextDueDate = task => {
   date.setHours(date.getHours() + 2)
   return new Date(dateString(date))
 }
-

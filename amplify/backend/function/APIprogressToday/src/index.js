@@ -33,7 +33,7 @@ exports.handler = async event => {
           0
         )
   const in2Weeks = new Date(today)
-in2Weeks.setDate(in2Weeks.getDate() + 14)
+  in2Weeks.setDate(in2Weeks.getDate() + 14)
 
   console.log(`TODAY: ${today}`)
   console.log(`IN 2 WEEKS: ${in2Weeks}`)
@@ -52,7 +52,6 @@ in2Weeks.setDate(in2Weeks.getDate() + 14)
       (acc, cur) => acc + (parseInt(cur?.timeFrame) ?? 30),
       0
     ) ?? 0
-  const doneBeforeToday = data?.Item?.doneBeforeToday ?? 0
 
   const params = {
     TableName: ENV.STORAGE_TASKS_NAME,
@@ -75,36 +74,11 @@ in2Weeks.setDate(in2Weeks.getDate() + 14)
       })
     }
   }
-  const todo =
-    Math.ceil((totalTimeInNext2Weeks + done + doneBeforeToday) / 14 / 60) * 60
+  const todo = Math.ceil((totalTimeInNext2Weeks + done) / 14 / 60) * 60
 
   console.log(`DONE: ${done}`)
-  console.log(`DONE BEFORE TODAY: ${doneBeforeToday}`)
   console.log(`TODO: ${todo}`)
   // console.log(`TASKS: ${JSON.stringify(tasksToDoInNextWeek)}`)
-
-  const historyUpdateParams = {
-    TableName: ENV.STORAGE_HISTORY_NAME,
-    Key: {
-      date: dateString(
-        new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate() + 1,
-          0,
-          0,
-          0
-        )
-      ),
-    },
-    UpdateExpression: 'set #x = :y',
-    ExpressionAttributeNames: { '#x': 'doneBeforeToday' },
-    ExpressionAttributeValues: {
-      ':y': Math.max(done + doneBeforeToday - todo, 0),
-    },
-  }
-
-  console.log(await docClient.update(historyUpdateParams).promise())
 
   const res = {
     statusCode: 200,
@@ -114,7 +88,6 @@ in2Weeks.setDate(in2Weeks.getDate() + 14)
     },
     body: JSON.stringify({
       done,
-      doneBeforeToday,
       todo,
       allTasks,
       totalTimeInNext2Weeks,

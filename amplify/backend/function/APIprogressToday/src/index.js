@@ -74,7 +74,7 @@ exports.handler = async event => {
       })
     }
   }
-  const todo = Math.ceil((totalTimeInNext2Weeks + done) / 14 / 60) * 60
+  const todo = Math.ceil((totalTimeInNext2Weeks + done) / 14)
 
   console.log(`DONE: ${done}`)
   console.log(`TODO: ${todo}`)

@@ -52,7 +52,7 @@
         },
         "APIprogressToday": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
-          "s3Key": "amplify-builds/APIprogressToday-4f51436c487869304545-build.zip"
+          "s3Key": "amplify-builds/APIprogressToday-5050776c4a376a636265-build.zip"
         }
       },
       "storage": {

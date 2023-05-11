@@ -287,6 +287,11 @@ const Home = () => {
 }
 
 const minutesToHours = (minutes: number) =>
-  `${Math.floor(minutes / 60)}h${minutes % 60 === 0 ? '' : minutes % 60}`
+  (minutes > 60 ? `${Math.floor(minutes / 60)}h` : '') +
+  (minutes % 60 === 0
+    ? ''
+    : `${minutes % 60 < 10 ? '0' : ''}${minutes % 60}${
+        minutes < 60 ? 'mins' : ''
+      }`)
 
 export default Home

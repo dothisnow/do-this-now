@@ -267,7 +267,7 @@ const TaskForm = ({
             <input
               type='number'
               step={15}
-              min={15}
+              min={0}
               value={timeFrame}
               onChange={e => setTimeFrame(parseInt(e.target.value))}
               className='mr-3 block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'

@@ -236,47 +236,44 @@ const Home = () => {
               <Buttons />
             </div>
             {tasks.length > 1 && (
-              <>
-                <div className='pb-2 text-center text-gray-600 md:pt-1'>or</div>
-                <div className='mx-5 flex flex-col justify-center md:flex-row'>
+              <div className='mx-5 mt-2 flex flex-col justify-center'>
+                <div
+                  onClick={() => setMainTask(leftTask.title)}
+                  title='(Shortcut: 1)'
+                  className='py-auto mb-2 cursor-pointer rounded border border-gray-700 bg-gray-800 p-4 text-center text-sm font-bold text-white opacity-20 drop-shadow-sm hover:border-gray-600 hover:bg-gray-700 md:mx-auto md:max-w-sm'>
+                  <span>{leftTask.title}</span>
+                  <DateTag due={leftTask.due} />
+                  <TimeFrame timeFrame={leftTask.timeFrame} />
+                  <Repeat
+                    repeat={leftTask.repeat}
+                    repeatInterval={leftTask.repeatInterval}
+                    repeatUnit={leftTask.repeatUnit}
+                  />
+                  <Strict
+                    strictDeadline={leftTask.strictDeadline}
+                    dueDate={leftTask.due}
+                  />
+                </div>
+                {tasks.length > 2 && (
                   <div
-                    onClick={() => setMainTask(leftTask.title)}
-                    title='(Shortcut: 1)'
-                    className='py-auto mb-2 cursor-pointer rounded border border-gray-700 bg-gray-800 p-4 text-center text-sm font-bold text-white opacity-20 drop-shadow-sm hover:border-gray-600 hover:bg-gray-700 md:mb-0'>
-                    <span>{leftTask.title}</span>
-                    <DateTag due={leftTask.due} />
-                    <TimeFrame timeFrame={leftTask.timeFrame} />
+                    onClick={() => setMainTask(rightTask.title)}
+                    title='(Shortcut: 2)'
+                    className='py-auto cursor-pointer rounded border border-gray-700 bg-gray-800 p-4 text-center text-sm font-bold text-white opacity-20 drop-shadow-sm hover:border-gray-600 hover:bg-gray-700 md:mx-auto md:max-w-sm'>
+                    <span>{rightTask.title}</span>
+                    <DateTag due={rightTask.due} />
+                    <TimeFrame timeFrame={rightTask.timeFrame} />
                     <Repeat
-                      repeat={leftTask.repeat}
-                      repeatInterval={leftTask.repeatInterval}
-                      repeatUnit={leftTask.repeatUnit}
+                      repeat={rightTask.repeat}
+                      repeatInterval={rightTask.repeatInterval}
+                      repeatUnit={rightTask.repeatUnit}
                     />
                     <Strict
-                      strictDeadline={leftTask.strictDeadline}
-                      dueDate={leftTask.due}
+                      strictDeadline={rightTask.strictDeadline}
+                      dueDate={rightTask.due}
                     />
                   </div>
-                  {tasks.length > 2 && (
-                    <div
-                      onClick={() => setMainTask(rightTask.title)}
-                      title='(Shortcut: 2)'
-                      className='py-auto cursor-pointer rounded border border-gray-700 bg-gray-800 p-4 text-center text-sm font-bold text-white opacity-20 drop-shadow-sm hover:border-gray-600 hover:bg-gray-700 md:ml-4'>
-                      <span>{rightTask.title}</span>
-                      <DateTag due={rightTask.due} />
-                      <TimeFrame timeFrame={rightTask.timeFrame} />
-                      <Repeat
-                        repeat={rightTask.repeat}
-                        repeatInterval={rightTask.repeatInterval}
-                        repeatUnit={rightTask.repeatUnit}
-                      />
-                      <Strict
-                        strictDeadline={rightTask.strictDeadline}
-                        dueDate={rightTask.due}
-                      />
-                    </div>
-                  )}
-                </div>
-              </>
+                )}
+              </div>
             )}
           </>
         )}

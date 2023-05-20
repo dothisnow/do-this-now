@@ -210,7 +210,7 @@ const Home = () => {
                       <button
                         onClick={() => setSelectedTaskIndex(i)}
                         className={
-                          'py-auto mx-5 mt-2 rounded border border-gray-700 bg-gray-800 p-6 text-center text-lg font-bold text-white drop-shadow-sm md:mx-auto md:max-w-sm' +
+                          'py-auto text-md mx-5 mt-2 rounded border border-gray-700 bg-gray-800 p-4 text-center font-bold text-white drop-shadow-sm md:mx-auto md:max-w-sm md:p-5 ' +
                           (selectedTaskIndex !== i ? ' opacity-20' : '')
                         }
                         title={`(Shortcut: ${i + 1})`}>

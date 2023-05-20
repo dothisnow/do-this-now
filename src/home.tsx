@@ -165,8 +165,17 @@ const Home = () => {
         ) : (
           <>
             {!isLoadingProgress && (
-              <div className='mb-2 flex flex-row justify-center'>
-                <div className='mt-0.5 h-2 w-36 rounded-full border border-gray-700 bg-gray-800'>
+              <div className='mb-2 flex flex-col items-center'>
+                <div className='text-xs font-bold leading-3 text-gray-700'>
+                  {tasksDoneToday - (progress?.todo ?? 0) > 0
+                    ? `+ ${minutesToHours(
+                        tasksDoneToday - (progress?.todo ?? 10)
+                      )}`
+                    : `${minutesToHours(tasksDoneToday)} / ${minutesToHours(
+                        progress?.todo ?? 10
+                      )}`}
+                </div>
+                <div className='mt-0.5 h-2 w-36 overflow-hidden rounded-full border border-gray-700 bg-gray-800'>
                   <div
                     className='h-full rounded-full bg-white'
                     style={{
@@ -177,15 +186,6 @@ const Home = () => {
                         ) + '%',
                     }}
                   />
-                </div>
-                <div className='ml-2 text-xs font-bold leading-3 text-gray-700'>
-                  {tasksDoneToday - (progress?.todo ?? 0) > 0
-                    ? `+ ${minutesToHours(
-                        tasksDoneToday - (progress?.todo ?? 10)
-                      )}`
-                    : `${minutesToHours(tasksDoneToday)} / ${minutesToHours(
-                        progress?.todo ?? 10
-                      )}`}
                 </div>
               </div>
             )}
@@ -267,12 +267,11 @@ const Home = () => {
   )
 }
 
-const minutesToHours = (minutes: number) =>
-  (minutes > 60 ? `${Math.floor(minutes / 60)}h` : '') +
-  (minutes % 60 === 0
-    ? ''
-    : `${minutes % 60 < 10 ? '0' : ''}${minutes % 60}${
-        minutes < 60 ? 'mins' : ''
-      }`)
+const minutesToHours = (minutes: number) => {
+  const twoDigitNumberString = (n: number) => (n < 10 ? '0' : '') + n
+  const hours = Math.floor(minutes / 60)
+  const minutesLeft = minutes % 60
+  return `${twoDigitNumberString(hours)}h${twoDigitNumberString(minutesLeft)}`
+}
 
 export default Home

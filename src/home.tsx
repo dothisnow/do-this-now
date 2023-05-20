@@ -216,7 +216,8 @@ const Home = () => {
                         title={`(Shortcut: ${i + 1})`}>
                         <div>
                           <span>
-                            {task.hasOwnProperty('subtasks') &&
+                            {selectedTaskIndex === i &&
+                            task.hasOwnProperty('subtasks') &&
                             task.subtasks.length > 0 &&
                             task.subtasks.some(
                               (s: (typeof task.subtasks)[number]) => !s.done
@@ -227,7 +228,8 @@ const Home = () => {
                               : task.title}
                           </span>
                         </div>
-                        {task.hasOwnProperty('subtasks') &&
+                        {selectedTaskIndex === i &&
+                          task.hasOwnProperty('subtasks') &&
                           task.subtasks.length > 0 && (
                             <div className='py-1 text-xs font-normal'>
                               {task.title} ({subtasksDone}/

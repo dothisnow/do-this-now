@@ -27,7 +27,6 @@ import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 import { newSafeDate } from './helpers/dates'
 
 const Home = () => {
-  const [mainTask, setMainTask] = useState('') // 0 - Math.min(2, tasks.length-1)
   const navigate = useLocation()[1]
   const ding = useDing()
 
@@ -54,17 +53,12 @@ const Home = () => {
     }
   }
 
-  const topTask =
-    mainTask !== '' && tasks && tasks.length > 0
-      ? tasks.find(({ title }: (typeof tasks)[number]) => title === mainTask)
-      : tasks?.[0]
-  const leftTask = tasks?.find(
-    ({ title }: (typeof tasks)[number]) => title !== topTask.title
-  )
-  const rightTask = tasks?.find(
-    ({ title }: (typeof tasks)[number]) =>
-      title !== topTask.title && title !== leftTask.title
-  )
+  const [selectedTaskIndex, setSelectedTaskIndex] = useState<0 | 1 | 2>(0)
+  const selectedTask = !tasks
+    ? null
+    : tasks.length > selectedTaskIndex
+    ? tasks[selectedTaskIndex]
+    : tasks[-1]
 
   const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
   const { mutate: mutateDelete, isLoading: deleteIsLoading } =
@@ -73,11 +67,11 @@ const Home = () => {
     useQuerySnoozeTask()
 
   const subtasksDone =
-    topTask &&
-    topTask.hasOwnProperty('subtasks') &&
-    Array.isArray(topTask.subtasks)
-      ? topTask.subtasks.reduce(
-          (acc: number, cur: (typeof topTask.subtasks)[number]) =>
+    selectedTask &&
+    selectedTask.hasOwnProperty('subtasks') &&
+    Array.isArray(selectedTask.subtasks)
+      ? selectedTask.subtasks.reduce(
+          (acc: number, cur: (typeof selectedTask.subtasks)[number]) =>
             acc + (cur.done ? 1 : 0),
           0
         )
@@ -85,24 +79,28 @@ const Home = () => {
 
   const completeTask = () => {
     ding()
-    mutate(topTask)
+    mutate(selectedTask)
     if (
-      !topTask.hasOwnProperty('subtasks') ||
-      subtasksDone + 1 >= topTask.subtasks.length
+      !selectedTask.hasOwnProperty('subtasks') ||
+      subtasksDone + 1 >= selectedTask.subtasks.length
     )
-      setMainTask('')
+      setSelectedTaskIndex(0)
   }
 
   const snoozeTask = () => {
-    mutateSnooze(topTask)
-    setMainTask('')
+    mutateSnooze(selectedTask)
+    setSelectedTaskIndex(0)
   }
 
   const deleteTask = () => {
-    if (!window.confirm(`Are you sure you want to delete '${topTask.title}'?`))
+    if (
+      !window.confirm(
+        `Are you sure you want to delete '${selectedTask.title}'?`
+      )
+    )
       return
-    mutateDelete(topTask)
-    setMainTask('')
+    mutateDelete(selectedTask)
+    setSelectedTaskIndex(0)
   }
 
   const keyActions: KeyAction[] = [
@@ -125,23 +123,23 @@ const Home = () => {
     [
       'u',
       'Update task',
-      () => navigate(`/update-task/${encodeURIComponent(topTask.title)}`),
+      () => navigate(`/update-task/${encodeURIComponent(selectedTask.title)}`),
     ],
-    ['1', 'Do left task', () => setMainTask(leftTask.title)],
-    ['2', 'Do right task', () => setMainTask(rightTask.title)],
+    ['1', 'Select first task', () => setSelectedTaskIndex(0)],
+    ['2', 'Select second task', () => setSelectedTaskIndex(1)],
+    ['3', 'Select third task', () => setSelectedTaskIndex(2)],
     ['Backspace', 'Delete current task', () => deleteTask()],
-    ['Escape', 'Reset selected task', () => setMainTask('')],
+    ['Escape', 'Reset selected task', () => setSelectedTaskIndex(0)],
   ]
   useKeyAction(keyActions)
 
   const Buttons = () => {
     const info: [() => void, string, FC][] = [
       [completeTask, 'Complete', CheckCircleIcon],
-      [() => navigate('/tasks'), 'All tasks', MenuIcon],
-      [() => navigate('/new-task'), 'New task', PlusCircleIcon],
       [snoozeTask, 'Snooze', BellIcon],
       [
-        () => navigate(`/update-task/${encodeURIComponent(topTask.title)}`),
+        () =>
+          navigate(`/update-task/${encodeURIComponent(selectedTask.title)}`),
         'Update',
         PencilIcon,
       ],
@@ -191,89 +189,75 @@ const Home = () => {
                 </div>
               </div>
             )}
-            <div className='py-auto mx-5 rounded border border-gray-700 bg-gray-800 p-6 text-center text-lg font-bold text-white drop-shadow-sm md:mx-auto md:max-w-sm'>
-              {tasks.length > 0 ? (
-                <>
-                  <div>
-                    <span>
-                      {topTask.hasOwnProperty('subtasks') &&
-                      topTask.subtasks.length > 0 &&
-                      topTask.subtasks.some(
-                        (s: (typeof topTask.subtasks)[number]) => !s.done
-                      )
-                        ? topTask.subtasks.find(
-                            (s: (typeof topTask.subtasks)[number]) => !s.done
-                          ).title
-                        : topTask.title}
-                    </span>
-                  </div>
-                  {topTask.hasOwnProperty('subtasks') &&
-                    topTask.subtasks.length > 0 && (
-                      <div className='py-1 text-xs font-normal'>
-                        {topTask.title} ({subtasksDone}/
-                        {topTask.subtasks.length})
-                      </div>
-                    )}
-                  <div>
-                    <DateTag due={topTask.due} />
-                    <TimeFrame timeFrame={topTask.timeFrame} />
-                    <Repeat
-                      repeat={topTask.repeat}
-                      repeatInterval={topTask.repeatInterval}
-                      repeatUnit={topTask.repeatUnit}
-                    />
-                    <Strict
-                      strictDeadline={topTask.strictDeadline}
-                      dueDate={topTask.due}
-                    />
-                  </div>
-                </>
-              ) : (
-                'No tasks'
-              )}
+            <div className='mx-5 flex flex-row flex-wrap justify-center pr-2'>
+              <Button
+                onClick={() => navigate('/tasks')}
+                text={'All tasks'}
+                icon={MenuIcon}
+              />
+              <Button
+                onClick={() => navigate('/new-task')}
+                text={'New task'}
+                icon={PlusCircleIcon}
+              />
             </div>
-            <div className='mx-5 flex flex-row flex-wrap justify-center pt-2 pr-2'>
-              <Buttons />
-            </div>
-            {tasks.length > 1 && (
-              <div className='mx-5 mt-2 flex flex-col justify-center'>
-                <div
-                  onClick={() => setMainTask(leftTask.title)}
-                  title='(Shortcut: 1)'
-                  className='py-auto mb-2 cursor-pointer rounded border border-gray-700 bg-gray-800 p-4 text-center text-sm font-bold text-white opacity-20 drop-shadow-sm hover:border-gray-600 hover:bg-gray-700 md:mx-auto md:max-w-sm'>
-                  <span>{leftTask.title}</span>
-                  <DateTag due={leftTask.due} />
-                  <TimeFrame timeFrame={leftTask.timeFrame} />
-                  <Repeat
-                    repeat={leftTask.repeat}
-                    repeatInterval={leftTask.repeatInterval}
-                    repeatUnit={leftTask.repeatUnit}
-                  />
-                  <Strict
-                    strictDeadline={leftTask.strictDeadline}
-                    dueDate={leftTask.due}
-                  />
-                </div>
-                {tasks.length > 2 && (
-                  <div
-                    onClick={() => setMainTask(rightTask.title)}
-                    title='(Shortcut: 2)'
-                    className='py-auto cursor-pointer rounded border border-gray-700 bg-gray-800 p-4 text-center text-sm font-bold text-white opacity-20 drop-shadow-sm hover:border-gray-600 hover:bg-gray-700 md:mx-auto md:max-w-sm'>
-                    <span>{rightTask.title}</span>
-                    <DateTag due={rightTask.due} />
-                    <TimeFrame timeFrame={rightTask.timeFrame} />
-                    <Repeat
-                      repeat={rightTask.repeat}
-                      repeatInterval={rightTask.repeatInterval}
-                      repeatUnit={rightTask.repeatUnit}
-                    />
-                    <Strict
-                      strictDeadline={rightTask.strictDeadline}
-                      dueDate={rightTask.due}
-                    />
-                  </div>
-                )}
-              </div>
+            {tasks.length > 0 ? (
+              <>
+                {tasks
+                  .slice(0, 3)
+                  .map((task: (typeof tasks)[number], i: 0 | 1 | 2) => (
+                    <>
+                      <button
+                        onClick={() => setSelectedTaskIndex(i)}
+                        className={
+                          'py-auto mx-5 mt-2 rounded border border-gray-700 bg-gray-800 p-6 text-center text-lg font-bold text-white drop-shadow-sm md:mx-auto md:max-w-sm' +
+                          (selectedTaskIndex !== i ? ' opacity-20' : '')
+                        }
+                        title={`(Shortcut: ${i + 1})`}>
+                        <div>
+                          <span>
+                            {task.hasOwnProperty('subtasks') &&
+                            task.subtasks.length > 0 &&
+                            task.subtasks.some(
+                              (s: (typeof task.subtasks)[number]) => !s.done
+                            )
+                              ? task.subtasks.find(
+                                  (s: (typeof task.subtasks)[number]) => !s.done
+                                ).title
+                              : task.title}
+                          </span>
+                        </div>
+                        {task.hasOwnProperty('subtasks') &&
+                          task.subtasks.length > 0 && (
+                            <div className='py-1 text-xs font-normal'>
+                              {task.title} ({subtasksDone}/
+                              {task.subtasks.length})
+                            </div>
+                          )}
+                        <div>
+                          <DateTag due={task.due} />
+                          <TimeFrame timeFrame={task.timeFrame} />
+                          <Repeat
+                            repeat={task.repeat}
+                            repeatInterval={task.repeatInterval}
+                            repeatUnit={task.repeatUnit}
+                          />
+                          <Strict
+                            strictDeadline={task.strictDeadline}
+                            dueDate={task.due}
+                          />
+                        </div>
+                      </button>
+                      {selectedTaskIndex === i && (
+                        <div className='mx-5 flex flex-row flex-wrap justify-center pt-2 pr-2'>
+                          <Buttons />
+                        </div>
+                      )}
+                    </>
+                  ))}
+              </>
+            ) : (
+              'No tasks'
             )}
           </>
         )}

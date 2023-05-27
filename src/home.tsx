@@ -60,6 +60,9 @@ const Home = () => {
     ? tasks[selectedTaskIndex]
     : tasks[-1]
 
+  if (tasks && tasks.length > 0 && tasks.length <= selectedTaskIndex)
+    setSelectedTaskIndex(tasks.length === 2 ? 1 : 0)
+
   const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
   const { mutate: mutateDelete, isLoading: deleteIsLoading } =
     useQueryTaskDelete()

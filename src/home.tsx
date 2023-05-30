@@ -137,16 +137,16 @@ const Home = () => {
   useKeyAction(keyActions)
 
   const Buttons = () => {
-    const info: [() => void, string, FC][] = [
+    const info: [() => void, string | undefined, FC][] = [
       [completeTask, 'Complete', CheckCircleIcon],
       [snoozeTask, 'Snooze', BellIcon],
       [
         () =>
           navigate(`/update-task/${encodeURIComponent(selectedTask.title)}`),
-        'Update',
+        undefined,
         PencilIcon,
       ],
-      [deleteTask, 'Delete', TrashIcon],
+      [deleteTask, undefined, TrashIcon],
     ]
     return (
       <>

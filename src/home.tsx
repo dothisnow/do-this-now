@@ -276,7 +276,7 @@ const minutesToHours = (minutes: number) => {
   const twoDigitNumberString = (n: number) => (n < 10 ? '0' : '') + n
   const hours = Math.floor(minutes / 60)
   const minutesLeft = minutes % 60
-  return `${twoDigitNumberString(hours)}h${twoDigitNumberString(minutesLeft)}`
+  return `${hours}h${twoDigitNumberString(minutesLeft)}`
 }
 
 export default Home

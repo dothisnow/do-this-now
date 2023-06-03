@@ -16,7 +16,9 @@ import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 
+import { newSafeDate } from './helpers/dates'
 import loginManager from './helpers/LoginManager'
+import { minutesToHours, useCurrentTime } from './helpers/time'
 import useDing from './helpers/useDing'
 
 import Button from './components/button'
@@ -24,12 +26,11 @@ import Hints from './components/hints'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
-import { newSafeDate } from './helpers/dates'
-import { minutesToHours } from './helpers/time'
 
 const Home = () => {
   const navigate = useLocation()[1]
   const ding = useDing()
+  const currentTime = useCurrentTime()
 
   const { data, isLoading } = useQueryTasksTop()
   const { data: progress, isLoading: isLoadingProgress } =
@@ -177,6 +178,12 @@ const Home = () => {
                       )}`
                     : `${minutesToHours(tasksDoneToday)} / ${minutesToHours(
                         progress?.todo ?? 10
+                      )} - end: ${minutesToHours(
+                        (currentTime.getHours() * 60 +
+                          currentTime.getMinutes() +
+                          (progress?.todo ?? 10) -
+                          tasksDoneToday) %
+                          (12 * 60)
                       )}`}
                 </div>
                 <div className='mt-0.5 h-2 w-36 overflow-hidden rounded-full border border-gray-700 bg-gray-800'>

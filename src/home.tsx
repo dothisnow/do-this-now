@@ -25,6 +25,7 @@ import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 import { newSafeDate } from './helpers/dates'
+import { minutesToHours } from './helpers/time'
 
 const Home = () => {
   const navigate = useLocation()[1]
@@ -270,13 +271,6 @@ const Home = () => {
       </div>
     </RequireAuth>
   )
-}
-
-const minutesToHours = (minutes: number) => {
-  const twoDigitNumberString = (n: number) => (n < 10 ? '0' : '') + n
-  const hours = Math.floor(minutes / 60)
-  const minutesLeft = minutes % 60
-  return `${hours}h${twoDigitNumberString(minutesLeft)}`
 }
 
 export default Home

@@ -8,6 +8,7 @@ import { format } from 'date-fns'
 import { FC } from 'react'
 
 import { newSafeDate } from '../helpers/dates'
+import { minutesToHours } from '../helpers/time'
 
 import { DateString, RepeatOption } from '../types/task'
 
@@ -81,13 +82,7 @@ export const DateTag = ({ due }: { due: DateString }) => {
 
 export const TimeFrame = ({ timeFrame }: { timeFrame?: number }) => {
   if (!timeFrame) return <></>
-  const text =
-    timeFrame < 60
-      ? `${timeFrame} mins`
-      : timeFrame / 60 === 1
-      ? '1 hr'
-      : `${timeFrame / 60} hrs`
-  return <Tag icon={ClockIcon} text={text} />
+  return <Tag icon={ClockIcon} text={minutesToHours(timeFrame)} />
 }
 
 export const Repeat = ({

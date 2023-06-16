@@ -28,7 +28,7 @@ import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 
 import { Task as TaskType } from './types/task'
 
-const Tasks = () => {
+const History = () => {
   const [selectedTask, setSelectedTask] = useState(0)
   const [sort, setSort] = useState(0)
   const taskElems: MutableRefObject<HTMLElement[]> = useRef([])
@@ -285,4 +285,4 @@ const Task = ({
   </div>
 )
 
-export default Tasks
+export default History 

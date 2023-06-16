@@ -1,5 +1,6 @@
 import { Redirect, Route, Switch } from 'wouter'
 import loginManager from './helpers/LoginManager'
+import History from './history'
 import Home from './home'
 import Login from './login'
 import NewTask from './newtask'
@@ -24,6 +25,9 @@ const App = () => {
         </Route>
         <Route path='/update-task/:id'>
           <UpdateTask />
+        </Route>
+        <Route path='/history'>
+          <History />
         </Route>
         <Route>
           <Redirect to='/' />

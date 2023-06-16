@@ -1,11 +1,11 @@
-import { FC } from 'react'
+import { AcademicCapIcon } from '@heroicons/react/20/solid'
 
 const Button = ({
   icon,
   onClick,
   text,
 }: {
-  icon: FC<{ className: string }>
+  icon: typeof AcademicCapIcon
   onClick: () => void
   text?: string
 }) => {
@@ -13,9 +13,9 @@ const Button = ({
   return (
     <button
       onClick={onClick}
-      className='ml-1 mb-1 block rounded-full border border-gray-700 bg-gray-800 py-2 px-2.5 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-      {!!text && <span className='mr-1'>{text}</span>}
-      <Icon className='inline-block h-5 w-5' />
+      className='ml-1 mb-1 block flex rounded-full border border-gray-700 bg-gray-800 py-2 px-2.5 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
+      {!!text && <div className='mr-1'>{text}</div>}
+      <Icon className='block h-5 w-5' />
     </button>
   )
 }

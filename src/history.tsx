@@ -3,28 +3,20 @@ import { useLocation } from 'wouter'
 
 import {
   ArrowDownIcon,
-  CheckCircleIcon,
   HomeIcon,
-  PencilIcon,
   PlusCircleIcon,
-  TrashIcon,
 } from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
 
 import { newSafeDate } from './helpers/dates'
-import useDing from './helpers/useDing'
 
 import Button from './components/button'
 import Hints from './components/hints'
-import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
+import { useHistory } from './hooks/useHistory'
 import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
-import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
-import { useQueryTaskDone } from './hooks/useQueryTaskDone'
-import { useQueryTasks } from './hooks/useQueryTasks'
-import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 
 import { Task as TaskType } from './types/task'
 
@@ -32,27 +24,13 @@ const History = () => {
   const [selectedTask, setSelectedTask] = useState(0)
   const [sort, setSort] = useState(0)
   const taskElems: MutableRefObject<HTMLElement[]> = useRef([])
-  const ding = useDing()
   const navigate = useLocation()[1]
 
-  const { data, isFetching } = useQueryTasks()
-  const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()
+  const { data, isFetching } = useHistory()
 
-  const tasks = ((sort === 0 ? data : dataTop)?.Items ?? []).map(
-    (task: TaskType) => ({
-      due: 'No Due Date',
-      ...task,
-    })
-  )
+  console.log({ data })
 
-  const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
-  const { mutate: mutateDelete, isLoading: deleteIsLoading } =
-    useQueryTaskDelete()
-
-  const completeTask = () => {
-    ding()
-    mutate(tasks[selectedTask])
-  }
+  const tasks = data?.Item?.tasks || []
 
   const scrollIntoView = (elem: HTMLElement) => {
     window.scrollTo({
@@ -65,17 +43,6 @@ const History = () => {
   }
 
   const keyActions: KeyAction[] = [
-    ['d', 'Task done', completeTask],
-    ['n', 'New task', () => navigate('/new-task')],
-    ['o', 'Toggle order between date and top', () => setSort(s => (s + 1) % 2)],
-    [
-      'u',
-      'Update task',
-      () =>
-        navigate(
-          `/update-task/${encodeURIComponent(tasks[selectedTask].title)}`
-        ),
-    ],
     [
       'ArrowUp',
       'Select previous task',
@@ -95,14 +62,6 @@ const History = () => {
       },
     ],
     ['Escape', 'Home', () => navigate('/')],
-    [
-      'Backspace',
-      'Delete current task',
-      () =>
-        window.confirm(
-          `Are you sure you want to delete '${tasks[selectedTask].title}'?`
-        ) && mutateDelete(tasks[selectedTask]),
-    ],
   ]
   useKeyAction(keyActions)
 
@@ -136,112 +95,69 @@ const History = () => {
 
   return (
     <RequireAuth>
-      {doneIsLoading || deleteIsLoading ? (
-        <div className='flex h-screen flex-col justify-center'>
-          <Loading />
+      <div className='my-10 mx-5 h-screen'>
+        <div className='flex flex-row flex-wrap justify-center pb-2'>
+          <Button onClick={() => navigate('/')} icon={HomeIcon} text='Home' />
+          <Button
+            onClick={() => navigate('/new-task')}
+            icon={PlusCircleIcon}
+            text='New Task'
+          />
+          <Button
+            onClick={() => setSort(s => (s + 1) % 2)}
+            icon={ArrowDownIcon}
+            text='Toggle Order'
+          />
         </div>
-      ) : (
-        <>
-          <div className='my-10 mx-5 h-screen'>
-            <div className='flex flex-row flex-wrap justify-center pb-2'>
-              <Button
-                onClick={() => navigate('/')}
-                icon={HomeIcon}
-                text='Home'
-              />
-              <Button
-                onClick={() => navigate('/new-task')}
-                icon={PlusCircleIcon}
-                text='New Task'
-              />
-              <Button
-                onClick={() => setSort(s => (s + 1) % 2)}
-                icon={ArrowDownIcon}
-                text='Toggle Order'
-              />
-            </div>
-            {tasks.map((task: (typeof tasks)[number], i: number) => (
-              <Fragment key={task.title}>
-                {sort === 0 && (
-                  <>
-                    {(i === 0 ||
-                      formatDate(newSafeDate(tasks[i - 1].due)) !==
-                        formatDate(newSafeDate(task.due))) && (
-                      <div
-                        className={
-                          (newSafeDate(task.due) <
-                          new Date(
-                            new Date().getFullYear(),
-                            new Date().getMonth(),
-                            new Date().getDate(),
-                            0,
-                            0,
-                            0
-                          )
-                            ? 'text-orange-300'
-                            : 'text-white') +
-                          ' max-w-96 mx-auto text-center text-sm md:max-w-sm'
-                        }>
-                        {newSafeDate(task.due).toDateString()}
-                      </div>
-                    )}
-                  </>
-                )}
-                {sort === 1 &&
-                  i > 0 &&
-                  newSafeDate(task.due) > new Date() &&
-                  newSafeDate(tasks[i - 1].due) <= new Date() && (
-                    <div
-                      className={
-                        'max-w-96 mx-auto text-center text-sm text-white md:max-w-sm'
-                      }>
-                      Due after today
-                    </div>
-                  )}
-                <Task
-                  isSelected={i === selectedTask}
-                  innerRef={(e: any) => (taskElems.current[i] = e)}
-                  {...task}
-                  onClick={() => setSelectedTask(i)}
-                  showDate={sort === 1}
-                />
-                {i === selectedTask && (
-                  <div className='flex flex-row flex-wrap justify-center py-2'>
-                    {[
-                      {
-                        text: 'Complete',
-                        icon: CheckCircleIcon,
-                        onClick: completeTask,
-                      },
-                      {
-                        text: 'Update',
-                        icon: PencilIcon,
-                        onClick: () =>
-                          navigate(
-                            `/update-task/${encodeURIComponent(task.title)}`
-                          ),
-                      },
-                      {
-                        text: 'Delete',
-                        icon: TrashIcon,
-                        onClick: () =>
-                          window.confirm(
-                            `Are you sure you want to delete '${task.title}'?`
-                          ) && mutateDelete(task),
-                      },
-                    ].map(props => (
-                      <Button key={props.text} {...props} />
-                    ))}
+        {tasks.map((task: (typeof tasks)[number], i: number) => (
+          <Fragment key={task.title}>
+            {sort === 0 && (
+              <>
+                {(i === 0 ||
+                  formatDate(newSafeDate(tasks[i - 1].due)) !==
+                    formatDate(newSafeDate(task.due))) && (
+                  <div
+                    className={
+                      (newSafeDate(task.due) <
+                      new Date(
+                        new Date().getFullYear(),
+                        new Date().getMonth(),
+                        new Date().getDate(),
+                        0,
+                        0,
+                        0
+                      )
+                        ? 'text-orange-300'
+                        : 'text-white') +
+                      ' max-w-96 mx-auto text-center text-sm md:max-w-sm'
+                    }>
+                    {newSafeDate(task.due).toDateString()}
                   </div>
                 )}
-              </Fragment>
-            ))}
-            {(sort === 0 && isFetching) ||
-              (sort === 1 && isFetchingTop && <Loading />)}
-          </div>
-          <Hints keyActions={keyActions} />
-        </>
-      )}
+              </>
+            )}
+            {sort === 1 &&
+              i > 0 &&
+              newSafeDate(task.due) > new Date() &&
+              newSafeDate(tasks[i - 1].due) <= new Date() && (
+                <div
+                  className={
+                    'max-w-96 mx-auto text-center text-sm text-white md:max-w-sm'
+                  }>
+                  Due after today
+                </div>
+              )}
+            <Task
+              isSelected={i === selectedTask}
+              innerRef={(e: any) => (taskElems.current[i] = e)}
+              {...task}
+              onClick={() => setSelectedTask(i)}
+              showDate={sort === 1}
+            />
+          </Fragment>
+        ))}
+      </div>
+      <Hints keyActions={keyActions} />
     </RequireAuth>
   )
 }
@@ -285,4 +201,4 @@ const Task = ({
   </div>
 )
 
-export default History 
+export default History

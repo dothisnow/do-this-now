@@ -53,3 +53,24 @@ export type Task = {
   snooze?: number
   subtasks: SubTask[]
 }
+
+export type DynamoDBTask = {
+  title: { S: string }
+  due?: { S: DateString } | 'No Due Date'
+  strictDeadline: { BOOL: boolean }
+  repeat: { S: RepeatOption }
+  repeatInterval: { N: number }
+  repeatUnit: { S: RepeatUnit }
+  repeatWeekdays: { L: RepeatWeekdays }
+  timeFrame: { N: number }
+  snooze?: { S: number }
+  subtasks: {
+    L: {
+      M: {
+        title: { S: string }
+        done: { BOOL: boolean }
+        snoozed?: { BOOL: boolean }
+      }[]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { MutableRefObject, useRef, useState } from 'react'
+import { MutableRefObject, useRef } from 'react'
 import { useLocation } from 'wouter'
 
 import { HomeIcon } from '@heroicons/react/20/solid'
@@ -9,50 +9,51 @@ import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
 import { useHistory } from './hooks/useHistory'
-import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
+import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 
+import Loading from './components/loading'
 import { DynamoDBTask, Task as TaskType } from './types/task'
 
 const History = () => {
-  const [selectedTask, setSelectedTask] = useState(0)
+  // const [selectedTask, setSelectedTask] = useState(0)
   const taskElems: MutableRefObject<HTMLElement[]> = useRef([])
   const navigate = useLocation()[1]
 
-  const { data, isFetching } = useHistory()
+  const { data, isLoading } = useHistory()
 
   const tasks = (data?.Item?.tasks?.L || []) as { M: DynamoDBTask }[]
 
   console.log({ tasks })
 
-  const scrollIntoView = (elem: HTMLElement) => {
-    window.scrollTo({
-      behavior: 'smooth',
-      top:
-        elem.getBoundingClientRect().top -
-        document.body.getBoundingClientRect().top -
-        200,
-    })
-  }
+  // const scrollIntoView = (elem: HTMLElement) => {
+  //   window.scrollTo({
+  //     behavior: 'smooth',
+  //     top:
+  //       elem.getBoundingClientRect().top -
+  //       document.body.getBoundingClientRect().top -
+  //       200,
+  //   })
+  // }
 
   const keyActions: KeyAction[] = [
-    [
-      'ArrowUp',
-      'Select previous task',
-      (e: KeyboardEvent) => {
-        e.preventDefault()
-        setSelectedTask(Math.max(selectedTask - 1, 0))
-        scrollIntoView(taskElems.current[selectedTask - 1])
-      },
-    ],
-    [
-      'ArrowDown',
-      'Select next task',
-      (e: KeyboardEvent) => {
-        e.preventDefault()
-        setSelectedTask(Math.min(selectedTask + 1, tasks.length - 1))
-        scrollIntoView(taskElems.current[selectedTask + 1])
-      },
-    ],
+    // [
+    //   'ArrowUp',
+    //   'Select previous task',
+    //   (e: KeyboardEvent) => {
+    //     e.preventDefault()
+    //     setSelectedTask(Math.max(selectedTask - 1, 0))
+    //     scrollIntoView(taskElems.current[selectedTask - 1])
+    //   },
+    // ],
+    // [
+    //   'ArrowDown',
+    //   'Select next task',
+    //   (e: KeyboardEvent) => {
+    //     e.preventDefault()
+    //     setSelectedTask(Math.min(selectedTask + 1, tasks.length - 1))
+    //     scrollIntoView(taskElems.current[selectedTask + 1])
+    //   },
+    // ],
     ['Escape', 'Home', () => navigate('/')],
   ]
   useKeyAction(keyActions)
@@ -63,17 +64,33 @@ const History = () => {
         <div className='flex flex-row flex-wrap justify-center pb-2'>
           <Button onClick={() => navigate('/')} icon={HomeIcon} text='Home' />
         </div>
-        {tasks.map((task: (typeof tasks)[number], i: number) => (
-          <Task
-            key={i}
-            isSelected={i === selectedTask}
-            innerRef={(e: any) => (taskElems.current[i] = e)}
-            {...Object.entries(task.M)
-              .map(([key, value]) => [key, Object.values(value)[0]])
-              .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {})}
-            onClick={() => setSelectedTask(i)}
-          />
-        ))}
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <div className='max-w-96 mx-auto text-center text-sm text-white md:max-w-sm'>
+              Done Today
+            </div>
+            {tasks.map((task: (typeof tasks)[number], i: number) => (
+              <Task
+                key={i}
+                isSelected={false}
+                innerRef={(e: any) => (taskElems.current[i] = e)}
+                onClick={() => {}}
+                due={task.M.due === 'No Due Date' ? task.M.due : task.M.due?.S}
+                repeat={task.M.repeat?.S}
+                repeatInterval={task.M.repeatInterval?.N}
+                repeatUnit={task.M.repeatUnit?.S}
+                showDate={true}
+                strictDeadline={task.M.strictDeadline?.BOOL}
+                timeFrame={task.M.timeFrame?.N}
+                title={task.M.title?.S}
+                repeatWeekdays={task.M.repeatWeekdays?.L}
+                subtasks={[]}
+              />
+            ))}
+          </>
+        )}
       </div>
       <Hints keyActions={keyActions} />
     </RequireAuth>
@@ -114,7 +131,7 @@ const Task = ({
     <TimeFrame timeFrame={timeFrame} />
     <Repeat {...{ repeat, repeatInterval, repeatUnit }} />
     {due !== undefined && due !== 'No Due Date' && (
-      <Strict strictDeadline={strictDeadline} dueDate={due} />
+      <Strict strictDeadline={strictDeadline} dueDate={due} highlight={false} />
     )}
   </div>
 )

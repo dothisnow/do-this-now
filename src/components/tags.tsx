@@ -109,9 +109,11 @@ export const Repeat = ({
 export const Strict = ({
   dueDate,
   strictDeadline,
+  highlight = true,
 }: {
   dueDate: DateString
   strictDeadline?: boolean
+  highlight?: boolean
 }) => {
   if (!strictDeadline) return <></>
   try {
@@ -120,25 +122,27 @@ export const Strict = ({
         icon={ExclamationCircleIcon}
         text='strict'
         color={
+          highlight &&
           newSafeDate(dueDate) <
-          new Date(
-            new Date().getFullYear(),
-            new Date().getMonth(),
-            new Date().getDate(),
-            0,
-            0,
-            0
-          )
+            new Date(
+              new Date().getFullYear(),
+              new Date().getMonth(),
+              new Date().getDate(),
+              0,
+              0,
+              0
+            )
             ? 'text-red-300'
-            : newSafeDate(dueDate) <=
-              new Date(
-                new Date().getFullYear(),
-                new Date().getMonth(),
-                new Date().getDate(),
-                0,
-                0,
-                0
-              )
+            : highlight &&
+              newSafeDate(dueDate) <=
+                new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth(),
+                  new Date().getDate(),
+                  0,
+                  0,
+                  0
+                )
             ? 'text-orange-300'
             : 'text-white'
         }

@@ -5,6 +5,7 @@ import { HomeIcon } from '@heroicons/react/20/solid'
 
 import Button from './components/button'
 import Hints from './components/hints'
+import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
@@ -61,6 +62,7 @@ const History = () => {
   return (
     <RequireAuth>
       <div className='my-10 mx-5 h-screen'>
+        <Progress />
         <div className='flex flex-row flex-wrap justify-center pb-2'>
           <Button onClick={() => navigate('/')} icon={HomeIcon} text='Home' />
         </div>

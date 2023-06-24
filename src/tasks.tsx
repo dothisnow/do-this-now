@@ -17,6 +17,7 @@ import useDing from './helpers/useDing'
 import Button from './components/button'
 import Hints from './components/hints'
 import Loading from './components/loading'
+import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
@@ -143,6 +144,7 @@ const Tasks = () => {
       ) : (
         <>
           <div className='my-10 mx-5 h-screen'>
+            <Progress />
             <div className='flex flex-row flex-wrap justify-center pb-2'>
               <Button
                 onClick={() => navigate('/')}

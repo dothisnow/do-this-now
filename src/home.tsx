@@ -1,12 +1,13 @@
 import {
+  BackwardIcon,
+  Bars3Icon,
   BellIcon,
   CheckCircleIcon,
-  MenuIcon,
-  PencilIcon,
+  PencilSquareIcon,
   PlusCircleIcon,
   TrashIcon,
-} from '@heroicons/react/solid'
-import { FC, useState } from 'react'
+} from '@heroicons/react/20/solid'
+import { useState } from 'react'
 import { useLocation } from 'wouter'
 
 import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
@@ -139,14 +140,14 @@ const Home = () => {
   useKeyAction(keyActions)
 
   const Buttons = () => {
-    const info: [() => void, string | undefined, FC][] = [
+    const info: [() => void, string | undefined, typeof CheckCircleIcon][] = [
       [completeTask, 'Complete', CheckCircleIcon],
       [snoozeTask, 'Snooze', BellIcon],
       [
         () =>
           navigate(`/update-task/${encodeURIComponent(selectedTask.title)}`),
         undefined,
-        PencilIcon,
+        PencilSquareIcon,
       ],
       [deleteTask, undefined, TrashIcon],
     ]
@@ -205,12 +206,17 @@ const Home = () => {
               <Button
                 onClick={() => navigate('/tasks')}
                 text={'All tasks'}
-                icon={MenuIcon}
+                icon={Bars3Icon}
               />
               <Button
                 onClick={() => navigate('/new-task')}
                 text={'New task'}
                 icon={PlusCircleIcon}
+              />
+              <Button
+                onClick={() => navigate('/history')}
+                text={'History'}
+                icon={BackwardIcon}
               />
             </div>
             {tasks.length > 0 ? (

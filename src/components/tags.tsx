@@ -1,11 +1,10 @@
 import {
+  ArrowPathIcon,
   CalendarIcon,
   ClockIcon,
   ExclamationCircleIcon,
-  RefreshIcon,
-} from '@heroicons/react/solid'
+} from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
-import { FC } from 'react'
 
 import { newSafeDate } from '../helpers/dates'
 import { minutesToHours } from '../helpers/time'
@@ -18,7 +17,7 @@ const Tag = ({
   text,
 }: {
   color?: `text-${string}`
-  icon: FC<{ className: string }>
+  icon: typeof CalendarIcon
   text: string
 }) => {
   const IconComponent = icon
@@ -27,8 +26,10 @@ const Tag = ({
       className={`${
         color ?? 'text-white'
       } ml-1 inline-block rounded-full bg-white bg-opacity-20 p-1 px-2 text-xs`}>
-      <IconComponent className='mr-1 inline-block h-3.5' />
-      <span>{text}</span>
+      <div className='flex'>
+        <IconComponent className='mt-0.5 mr-1 block h-3.5' />
+        <div>{text}</div>
+      </div>
     </span>
   )
 }
@@ -98,19 +99,21 @@ export const Repeat = ({
   if (repeat === 'Custom')
     return (
       <Tag
-        icon={RefreshIcon}
+        icon={ArrowPathIcon}
         text={`${repeatInterval} ${repeatUnit}${repeatInterval !== 0 && 's'}`}
       />
     )
-  return <Tag icon={RefreshIcon} text={repeat.toLowerCase()} />
+  return <Tag icon={ArrowPathIcon} text={repeat.toLowerCase()} />
 }
 
 export const Strict = ({
   dueDate,
   strictDeadline,
+  highlight = true,
 }: {
   dueDate: DateString
   strictDeadline?: boolean
+  highlight?: boolean
 }) => {
   if (!strictDeadline) return <></>
   try {
@@ -119,25 +122,27 @@ export const Strict = ({
         icon={ExclamationCircleIcon}
         text='strict'
         color={
+          highlight &&
           newSafeDate(dueDate) <
-          new Date(
-            new Date().getFullYear(),
-            new Date().getMonth(),
-            new Date().getDate(),
-            0,
-            0,
-            0
-          )
+            new Date(
+              new Date().getFullYear(),
+              new Date().getMonth(),
+              new Date().getDate(),
+              0,
+              0,
+              0
+            )
             ? 'text-red-300'
-            : newSafeDate(dueDate) <=
-              new Date(
-                new Date().getFullYear(),
-                new Date().getMonth(),
-                new Date().getDate(),
-                0,
-                0,
-                0
-              )
+            : highlight &&
+              newSafeDate(dueDate) <=
+                new Date(
+                  new Date().getFullYear(),
+                  new Date().getMonth(),
+                  new Date().getDate(),
+                  0,
+                  0,
+                  0
+                )
             ? 'text-orange-300'
             : 'text-white'
         }

@@ -5,7 +5,7 @@
   "dependencies": {
     "@aws-amplify/ui-components": "^1.9.6",
     "@headlessui/react": "^1.6.6",
-    "@heroicons/react": "^1.0.6",
+    "@heroicons/react": "^2.0.18",
     "@tanstack/react-query": "^4.24.4",
     "@types/jest": "^29.2.5",
     "@types/node": "^18.11.18",

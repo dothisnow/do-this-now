@@ -1,11 +1,11 @@
 import { AuthState } from '@aws-amplify/ui-components'
-import { FC, ReactElement } from 'react'
+import { ReactNode } from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'wouter'
 
 import Loading from './loading'
 
-const RequireAuth = ({ children }: { children: FC | ReactElement }) => {
+const RequireAuth = ({ children }: { children: ReactNode }) => {
   const hasLoadedUser = useSelector(
     (s: { hasLoadedUser?: boolean }) => s?.hasLoadedUser
   )

@@ -8,7 +8,7 @@ import {
   PencilIcon,
   PlusCircleIcon,
   TrashIcon,
-} from '@heroicons/react/solid'
+} from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
 
 import { newSafeDate } from './helpers/dates'

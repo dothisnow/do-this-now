@@ -73,6 +73,14 @@
           ],
           "category": "function",
           "resourceName": "APIprogressToday"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "APItasksHistory"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -191,6 +199,22 @@
           "category": "storage",
           "resourceName": "tasks"
         },
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "history"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "APItasksHistory": {
+      "build": true,
+      "dependsOn": [
         {
           "attributes": [
             "Name",
@@ -331,6 +355,22 @@
         {
           "category": "function",
           "resourceName": "APItasksDone"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksHistory_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksHistory"
+        }
+      ]
+    },
+    "AMPLIFY_function_APItasksHistory_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "APItasksHistory"
         }
       ]
     },

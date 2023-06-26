@@ -261,6 +261,7 @@ const Task = ({
   timeFrame,
   title,
   onClick,
+  subtasks,
 }: TaskType & {
   innerRef: (x: any) => void
   isSelected: boolean
@@ -277,6 +278,11 @@ const Task = ({
     }
     onClick={onClick}>
     <span>{title}</span>
+    {subtasks && subtasks.length > 0 && subtasks.some(s => !s.done) && (
+      <span className='ml-1 text-sm'>
+        (next subtask: {subtasks.find(s => !s.done)?.title})
+      </span>
+    )}
     {showDate && due !== undefined && due !== 'No Due Date' && (
       <DateTag due={due} />
     )}

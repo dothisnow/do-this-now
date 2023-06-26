@@ -25,7 +25,9 @@ const Progress = () => {
                       //     (12 * 60)
                       // )}`}**/}
       </div>
-      <div className='mt-0.5 h-2 w-36 overflow-hidden rounded-full border border-gray-700 bg-gray-800'>
+      <div
+        style={{ width: Math.round((144 * (progress?.todo ?? 600)) / 600) }}
+        className='mt-0.5 h-2 overflow-hidden rounded-full border border-gray-700 bg-gray-800'>
         <div
           className='h-full rounded-full bg-white'
           style={{

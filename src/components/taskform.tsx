@@ -1,5 +1,9 @@
 import { Switch } from '@headlessui/react'
-import { CheckCircleIcon } from '@heroicons/react/20/solid'
+import {
+  CheckCircleIcon,
+  PlusCircleIcon,
+  TrashIcon,
+} from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
 import { Dispatch, SetStateAction, useState } from 'react'
 
@@ -363,6 +367,13 @@ const TaskForm = ({
                     </button>
                   )}
                   <button
+                    className='ml-3 inline-block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'
+                    onClick={() =>
+                      setSubtasks(s => [...s.slice(0, i), ...s.slice(i + 1)])
+                    }>
+                    <TrashIcon className='block h-5 w-5' />
+                  </button>
+                  <button
                     className={
                       'ml-3 inline-block rounded border p-2 text-sm text-white' +
                       (subtask.done
@@ -384,21 +395,12 @@ const TaskForm = ({
                 </div>
               ))}
               <div className='mt-3 flex max-w-lg'>
-                {subtasks.length > 0 && (
-                  <button
-                    onClick={() =>
-                      setSubtasks([...subtasks.slice(0, subtasks.length - 1)])
-                    }
-                    className='mr-3 block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'>
-                    Remove Last Subtask
-                  </button>
-                )}
                 <button
                   onClick={() =>
                     setSubtasks([...subtasks, { done: false, title: '' }])
                   }
-                  className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'>
-                  Add Subtask
+                  className='block flex w-full w-full min-w-0 flex-1 justify-center rounded border border-gray-700 bg-gray-800 p-2.5 focus:border-blue-500 focus:ring-blue-500'>
+                  <PlusCircleIcon className='block h-5 w-5' />
                 </button>
               </div>
             </>

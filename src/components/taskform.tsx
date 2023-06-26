@@ -1,4 +1,5 @@
 import { Switch } from '@headlessui/react'
+import { CheckCircleIcon } from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
 import { Dispatch, SetStateAction, useState } from 'react'
 
@@ -345,7 +346,7 @@ const TaskForm = ({
                       ])
                     }}
                     placeholder={`Subtask ${i + 1}`}
-                    className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+                    className='block w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
                   />
                   {i < subtasks.length - 1 && (
                     <button
@@ -361,6 +362,25 @@ const TaskForm = ({
                       ↓
                     </button>
                   )}
+                  <button
+                    className={
+                      'ml-3 inline-block rounded border p-2 text-sm text-white' +
+                      (subtask.done
+                        ? ' border-gray-500 bg-gray-600 hover:border-gray-400 hover:bg-gray-500'
+                        : ' border-gray-700 bg-gray-800 hover:border-gray-600 hover:bg-gray-700')
+                    }
+                    onClick={() =>
+                      setSubtasks(s => [
+                        ...s.slice(0, i),
+                        {
+                          ...s[i],
+                          done: !s[i].done,
+                        },
+                        ...s.slice(i + 1),
+                      ])
+                    }>
+                    <CheckCircleIcon className='block h-5 w-5' />
+                  </button>
                 </div>
               ))}
               <div className='mt-3 flex max-w-lg'>

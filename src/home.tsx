@@ -224,6 +224,7 @@ const Home = () => {
                             repeat={task.repeat}
                             repeatInterval={task.repeatInterval}
                             repeatUnit={task.repeatUnit}
+                            repeatWeekdays={task.repeatWeekdays}
                           />
                           <Strict
                             strictDeadline={task.strictDeadline}

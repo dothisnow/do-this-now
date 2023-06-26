@@ -9,7 +9,7 @@ import { format } from 'date-fns'
 import { newSafeDate } from '../helpers/dates'
 import { minutesToHours } from '../helpers/time'
 
-import { DateString, RepeatOption } from '../types/task'
+import { DateString, RepeatOption, RepeatWeekdays } from '../types/task'
 
 const Tag = ({
   color,
@@ -90,19 +90,34 @@ export const Repeat = ({
   repeat,
   repeatInterval,
   repeatUnit,
+  repeatWeekdays,
 }: {
   repeat: RepeatOption
-  repeatInterval?: number
-  repeatUnit?: string
+  repeatInterval: number
+  repeatUnit: string
+  repeatWeekdays: RepeatWeekdays
 }) => {
   if (repeat === 'No Repeat') return <></>
-  if (repeat === 'Custom')
-    return (
-      <Tag
-        icon={ArrowPathIcon}
-        text={`${repeatInterval} ${repeatUnit}${repeatInterval !== 0 && 's'}`}
-      />
-    )
+
+  if (repeat === 'Custom') {
+    let text = ''
+    if (repeatUnit === 'week' && repeatWeekdays.some(x => x)) {
+      text =
+        ': ' +
+        repeatWeekdays
+          .map((x, i) =>
+            x ? ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'][i] : ''
+          )
+          .filter(x => x)
+          .join(', ')
+    }
+    text =
+      (repeatInterval > 1
+        ? `${repeatInterval} ${repeatUnit}s`
+        : `${repeatUnit}ly`) + text
+    return <Tag icon={ArrowPathIcon} text={text.toLowerCase()} />
+  }
+
   return <Tag icon={ArrowPathIcon} text={repeat.toLowerCase()} />
 }
 

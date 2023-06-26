@@ -106,6 +106,7 @@ const Task = ({
   repeat,
   repeatInterval,
   repeatUnit,
+  repeatWeekdays,
   showDate,
   strictDeadline,
   timeFrame,
@@ -131,7 +132,7 @@ const Task = ({
       <DateTag due={due} />
     )}
     <TimeFrame timeFrame={timeFrame} />
-    <Repeat {...{ repeat, repeatInterval, repeatUnit }} />
+    <Repeat {...{ repeat, repeatInterval, repeatUnit, repeatWeekdays }} />
     {due !== undefined && due !== 'No Due Date' && (
       <Strict strictDeadline={strictDeadline} dueDate={due} highlight={false} />
     )}

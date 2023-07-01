@@ -279,9 +279,9 @@ const Task = ({
     onClick={onClick}>
     <span>{title}</span>
     {subtasks && subtasks.length > 0 && subtasks.some(s => !s.done) && (
-      <span className='ml-1 text-sm'>
-        (next subtask: {subtasks.find(s => !s.done)?.title})
-      </span>
+      <div className='my-1 text-sm'>
+        Current subtask: {subtasks.find(s => !s.done)?.title}
+      </div>
     )}
     {showDate && due !== undefined && due !== 'No Due Date' && (
       <DateTag due={due} />

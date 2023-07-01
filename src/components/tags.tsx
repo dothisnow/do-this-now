@@ -106,7 +106,7 @@ export const Repeat = ({
         ': ' +
         repeatWeekdays
           .map((x, i) =>
-            x ? ['mo', 'tu', 'we', 'th', 'fr', 'sa', 'su'][i] : ''
+            x ? ['su', 'mo', 'tu', 'we', 'th', 'fr', 'sa'][i] : ''
           )
           .filter(x => x)
           .join(', ')

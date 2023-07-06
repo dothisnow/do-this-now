@@ -20,7 +20,8 @@
     "redux": "^4.2.0",
     "typescript": "^4.9.4",
     "use-sound": "^4.0.1",
-    "wouter": "^2.10.0"
+    "wouter": "^2.10.0",
+    "zod": "^3.21.4"
   },
   "scripts": {
     "start": "react-scripts start",

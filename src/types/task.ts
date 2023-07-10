@@ -1,31 +1,44 @@
-export type DateString = `${number}-${number}-${number}`
+import { z } from 'zod'
 
-export type RepeatOption =
-  | 'No Repeat'
-  | 'Daily'
-  | 'Weekdays'
-  | 'Weekly'
-  | 'Monthly'
-  | 'Yearly'
-  | 'Custom'
+const dateStringSchema = z.string().regex(/^\d{4}-\d{1,2}-\d{1,2}$/)
+export type DateString = z.infer<typeof dateStringSchema>
 
-export type RepeatUnit = 'day' | 'week' | 'month' | 'year'
+const repeatOptionSchema = z.union([
+  z.literal('No Repeat'),
+  z.literal('Daily'),
+  z.literal('Weekdays'),
+  z.literal('Weekly'),
+  z.literal('Monthly'),
+  z.literal('Yearly'),
+  z.literal('Custom'),
+])
+export type RepeatOption = z.infer<typeof repeatOptionSchema>
 
-export type RepeatWeekdays = [
-  boolean,
-  boolean,
-  boolean,
-  boolean,
-  boolean,
-  boolean,
-  boolean
-]
+const repeatUnitSchema = z.union([
+  z.literal('day'),
+  z.literal('week'),
+  z.literal('month'),
+  z.literal('year'),
+])
+export type RepeatUnit = z.infer<typeof repeatUnitSchema>
 
-export type SubTask = {
-  title: string
-  done: boolean
-  snoozed?: boolean
-}
+export const repeatWeekdaysSchema = z.tuple([
+  z.boolean(),
+  z.boolean(),
+  z.boolean(),
+  z.boolean(),
+  z.boolean(),
+  z.boolean(),
+  z.boolean(),
+])
+export type RepeatWeekdays = z.infer<typeof repeatWeekdaysSchema>
+
+const subTaskSchema = z.object({
+  title: z.string(),
+  done: z.boolean(),
+  snoozed: z.boolean().optional(),
+})
+export type SubTask = z.infer<typeof subTaskSchema>
 
 export type TaskInput = {
   title: string
@@ -54,23 +67,45 @@ export type Task = {
   subtasks: SubTask[]
 }
 
-export type DynamoDBTask = {
-  title: { S: string }
-  due?: { S: DateString } | 'No Due Date'
-  strictDeadline: { BOOL: boolean }
-  repeat: { S: RepeatOption }
-  repeatInterval: { N: number }
-  repeatUnit: { S: RepeatUnit }
-  repeatWeekdays: { L: RepeatWeekdays }
-  timeFrame: { N: number }
-  snooze?: { S: number }
-  subtasks: {
-    L: {
-      M: {
-        title: { S: string }
-        done: { BOOL: boolean }
-        snoozed?: { BOOL: boolean }
-      }[]
-    }
-  }
-}
+export const dynamoDBTaskSchema = z.object({
+  title: z.object({ S: z.string() }),
+  due: z
+    .union([z.object({ S: dateStringSchema }), z.literal('No Due Date')])
+    .optional(),
+  strictDeadline: z.object({ BOOL: z.boolean() }),
+  repeat: z.object({ S: repeatOptionSchema }),
+  repeatInterval: z.object({ N: z.string().transform(x => parseInt(x)) }),
+  repeatUnit: z.object({ S: repeatUnitSchema }),
+  repeatWeekdays: z
+    .object({
+      L: z.tuple([
+        z.object({ BOOL: z.boolean() }),
+        z.object({ BOOL: z.boolean() }),
+        z.object({ BOOL: z.boolean() }),
+        z.object({ BOOL: z.boolean() }),
+        z.object({ BOOL: z.boolean() }),
+        z.object({ BOOL: z.boolean() }),
+        z.object({ BOOL: z.boolean() }),
+      ]),
+    })
+    .optional(),
+  timeFrame: z.union([
+    z.object({ N: z.string().transform(x => parseInt(x)) }),
+    z.object({ S: z.string() }).transform(x => ({ N: parseInt(x.S) })),
+  ]),
+  snooze: z.object({ S: z.string() }).optional(),
+  subtasks: z
+    .object({
+      L: z.array(
+        z.object({
+          M: z.object({
+            title: z.object({ S: z.string() }),
+            done: z.object({ BOOL: z.boolean() }),
+            snoozed: z.object({ BOOL: z.boolean() }).optional(),
+          }),
+        })
+      ),
+    })
+    .optional(),
+})
+export type DynamoDBTask = z.infer<typeof dynamoDBTaskSchema>

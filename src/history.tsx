@@ -13,7 +13,7 @@ import { useHistory } from './hooks/useHistory'
 import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 
 import Loading from './components/loading'
-import { DynamoDBTask, Task as TaskType } from './types/task'
+import { repeatWeekdaysSchema, Task as TaskType } from './types/task'
 
 const History = () => {
   // const [selectedTask, setSelectedTask] = useState(0)
@@ -22,7 +22,7 @@ const History = () => {
 
   const { data, isLoading } = useHistory()
 
-  const tasks = (data?.Item?.tasks?.L || []) as { M: DynamoDBTask }[]
+  const tasks = data?.tasks?.L || []
 
   console.log({ tasks })
 
@@ -87,7 +87,9 @@ const History = () => {
                 strictDeadline={task.M.strictDeadline?.BOOL}
                 timeFrame={task.M.timeFrame?.N}
                 title={task.M.title?.S}
-                repeatWeekdays={task.M.repeatWeekdays?.L}
+                repeatWeekdays={repeatWeekdaysSchema
+                  .catch([false, false, false, false, false, false, false])
+                  .parse(task.M.repeatWeekdays?.L?.map(x => x.BOOL))}
                 subtasks={[]}
               />
             ))}

@@ -13,12 +13,10 @@ const Progress = () => {
       {streak > 0 && (
         <div className='text-xs font-bold leading-3 text-gray-300'>
           Streak:{' '}
-          {streakIsActive ? (
-            (streak > 0 && streak <= 3 ? '🔥'.repeat(streak) : streak) +
-            (streak > 3 ? '🔥' : '')
-          ) : (
-            <span className='grayscale'>🔥</span>
-          )}
+          <span className={streakIsActive ? '' : 'grayscale'}>
+            {(streak > 0 && streak <= 3 ? '🔥'.repeat(streak) : streak) +
+              (streak > 3 ? '🔥' : '')}
+          </span>
         </div>
       )}
       <div className='text-xs font-bold leading-3 text-gray-300'>

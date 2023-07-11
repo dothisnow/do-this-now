@@ -22,9 +22,9 @@ export const useHistory = () => {
   return useQuery(
     ['get-task', date],
     async () => {
-      const res = await API.get('tasks', `/tasks/history/${date}`, {})
-      console.log(res)
-      return historySchema.parse(res)
+      return historySchema.parse(
+        await API.get('tasks', `/tasks/history/${date}`, {})
+      )
     },
     {
       refetchOnWindowFocus: false,

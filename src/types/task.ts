@@ -54,24 +54,23 @@ export type TaskInput = {
   subtasks: SubTask[]
 }
 
-export type Task = {
-  title: string
-  due?: DateString | 'No Due Date'
-  strictDeadline: boolean
-  repeat: RepeatOption
-  repeatInterval: number
-  repeatUnit: RepeatUnit
-  repeatWeekdays: RepeatWeekdays
-  timeFrame: number
-  snooze?: number
-  subtasks: SubTask[]
-}
+export const taskSchema = z.object({
+  title: z.string(),
+  due: z.union([dateStringSchema, z.literal('No Due Date')]),
+  strictDeadline: z.boolean(),
+  repeat: repeatOptionSchema,
+  repeatInterval: z.number(),
+  repeatUnit: repeatUnitSchema,
+  repeatWeekdays: repeatWeekdaysSchema,
+  timeFrame: z.number(),
+  snooze: z.string().optional(),
+  subtasks: z.array(subTaskSchema),
+})
+export type Task = z.infer<typeof taskSchema>
 
 export const dynamoDBTaskSchema = z.object({
   title: z.object({ S: z.string() }),
-  due: z
-    .union([z.object({ S: dateStringSchema }), z.literal('No Due Date')])
-    .optional(),
+  due: z.union([z.object({ S: dateStringSchema }), z.literal('No Due Date')]),
   strictDeadline: z.object({ BOOL: z.boolean() }),
   repeat: z.object({ S: repeatOptionSchema }),
   repeatInterval: z.object({ N: z.string().transform(x => parseInt(x)) }),

@@ -9,7 +9,13 @@ import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
 import { newSafeDate } from './helpers/dates'
-import { RepeatOption, RepeatUnit, RepeatWeekdays, SubTask } from './types/task'
+import {
+  RepeatOption,
+  RepeatUnit,
+  RepeatWeekdays,
+  SubTask,
+  Task,
+} from './types/task'
 
 const UpdateTask = () => {
   const [location] = useLocation()
@@ -25,9 +31,9 @@ const UpdateTask = () => {
 
   const titleState = useState(taskId)
 
-  const [oldTask, setOldTask] = useState(null)
+  const [oldTask, setOldTask] = useState<Task>()
   const { data, isFetching: isTaskLoading } = useQueryGetTask(taskId)
-  const task = data?.Item ?? undefined
+  const task = data ?? undefined
 
   const [loading, setLoading] = useState(false)
 

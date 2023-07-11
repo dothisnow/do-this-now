@@ -47,10 +47,11 @@ exports.handler = async event => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(data?.Item),
   }
 }
 
 const dateString = date =>
   `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+
 

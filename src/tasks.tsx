@@ -39,12 +39,7 @@ const Tasks = () => {
   const { data, isFetching } = useQueryTasks()
   const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()
 
-  const tasks = ((sort === 0 ? data : dataTop)?.Items ?? []).map(
-    (task: TaskType) => ({
-      due: 'No Due Date',
-      ...task,
-    })
-  )
+  const tasks = (sort === 0 ? data : dataTop)?.Items ?? []
 
   const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
   const { mutate: mutateDelete, isLoading: deleteIsLoading } =

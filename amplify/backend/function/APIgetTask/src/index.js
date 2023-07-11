@@ -37,6 +37,6 @@ exports.handler = async event => {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
     },
-    body: JSON.stringify(data),
+    body: JSON.stringify(data?.Item),
   }
 }

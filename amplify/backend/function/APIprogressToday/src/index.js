@@ -90,7 +90,7 @@ exports.handler = async event => {
     streakIsActive = true
     
     const tomorrow = new Date(today)
-    tomorrow.setDate(tomorrow.getDate() + 14)
+    tomorrow.setDate(tomorrow.getDate() + 1)
     
     const tomorrowHistoryUpdateParams = {
     TableName: ENV.STORAGE_HISTORY_NAME,

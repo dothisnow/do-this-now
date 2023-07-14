@@ -16,7 +16,6 @@ import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 
-import { newSafeDate } from './helpers/dates'
 import loginManager from './helpers/LoginManager'
 import useDing from './helpers/useDing'
 
@@ -33,28 +32,10 @@ import { Task } from './types/task'
 const Home = () => {
   const navigate = useLocation()[1]
   const ding = useDing()
-  // const currentTime = useCurrentTime()
 
   const { data, isLoading } = useQueryTasksTop()
 
   let tasks = data?.Items ?? []
-
-  // if top task is strict and due, only show strict tasks that are due
-  const isDue = (i: number) =>
-    newSafeDate(tasks?.[i]?.due ?? '2050-01-01') <= new Date()
-  const isStrictAndDue = (i: number) => tasks?.[i]?.strictDeadline && isDue(i)
-  if (tasks && tasks.length > 0 && isStrictAndDue(0)) {
-    for (let i = 1; i < tasks.length; i++) {
-      if (!isStrictAndDue(i)) tasks = tasks.slice(0, i)
-    }
-  }
-
-  // if top task is due, only show tasks that are due
-  if (tasks && tasks.length > 0 && isDue(0)) {
-    for (let i = 1; i < tasks.length; i++) {
-      if (!isDue(i)) tasks = tasks.slice(0, i)
-    }
-  }
 
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<0 | 1 | 2>(0)
   const selectedTask = !tasks

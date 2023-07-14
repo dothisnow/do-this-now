@@ -61,10 +61,18 @@ export const taskSchema = z.object({
   repeat: repeatOptionSchema,
   repeatInterval: z.number(),
   repeatUnit: repeatUnitSchema,
-  repeatWeekdays: repeatWeekdaysSchema,
-  timeFrame: z.number(),
+  repeatWeekdays: repeatWeekdaysSchema.catch([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]),
+  timeFrame: z.union([z.number(), z.string().transform(x => parseInt(x))]),
   snooze: z.string().optional(),
-  subtasks: z.array(subTaskSchema),
+  subtasks: z.array(subTaskSchema).catch([]),
 })
 export type Task = z.infer<typeof taskSchema>
 

@@ -32,6 +32,9 @@ exports.handler = async event => {
   const in2Days = new Date().setDate(today.getDate() + 2)
 
   const sortFlags = [
+    // due today or past due
+    t => t.hasOwnProperty('due') && new Date(t.due) <= today,
+
     // strict deadline and due today or past due
     t =>
       t.hasOwnProperty('due') &&
@@ -39,12 +42,10 @@ exports.handler = async event => {
       new Date(t.due) <= today &&
       t.strictDeadline,
 
-    // has not been done today and is due today or past due
+    // has not been done today
     t =>
-      t.hasOwnProperty('due') &&
-      new Date(t.due) <= today &&
-      (!t.hasOwnProperty('history') ||
-        t.history.filter(d => d === dateString(today)).length === 0),
+      !t.hasOwnProperty('history') ||
+      t.history.filter(d => d === dateString(today)).length === 0,
 
     // if I do this today, I won't have to do it tomorrow
     t =>
@@ -55,7 +56,7 @@ exports.handler = async event => {
 
   const sortProperties = [
     ['due', x => new Date(x)],
-    ['timeFrame', x => x],
+    ['timeFrame', x => (x === 0 ? Infinity : x)],
   ]
 
   const params = {

@@ -48,7 +48,7 @@
         },
         "APItasksSnooze": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
-          "s3Key": "amplify-builds/APItasksSnooze-422f4438413861436535-build.zip"
+          "s3Key": "amplify-builds/APItasksSnooze-2f4d5a6d415475576b72-build.zip"
         },
         "APIprogressToday": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",

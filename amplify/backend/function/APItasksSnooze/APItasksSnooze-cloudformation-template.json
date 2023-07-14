@@ -204,6 +204,12 @@
             {
               "Effect": "Allow",
               "Action": [
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query",
                 "dynamodb:Update*",
                 "dynamodb:RestoreTable*"
               ],

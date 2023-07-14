@@ -23,19 +23,71 @@ exports.handler = async event => {
 
   if (!body.hasOwnProperty('title')) return error('Missing title!')
 
-  var updateParams = {
+  const params = {
     TableName: ENV.STORAGE_TASKS_NAME,
-    Key: {
-      title: body.title,
-    },
-    UpdateExpression: 'set #snooze = :snooze',
-    ExpressionAttributeNames: { '#snooze': 'snooze' },
-    ExpressionAttributeValues: {
-      ':snooze': new Date(new Date().getTime() + 60 * 60 * 1000).toISOString(),
-    },
+    Key: { title: body.title },
   }
 
-  const response = await docClient.update(updateParams).promise()
+  const task = (await docClient.get(params).promise())?.Item
+
+  if (!task) return error('No task corresponding to title')
+
+  let response
+
+  if (
+    task.hasOwnProperty('subtasks') &&
+    task.subtasks.some(
+      st =>
+        !st.done &&
+        (!st.hasOwnProperty('snooze') || new Date(st.snooze) <= new Date())
+    )
+  ) {
+    // has an unsnoozed subtask
+
+    const i = task.subtasks.findIndex(
+      st =>
+        !st.done &&
+        (!st.hasOwnProperty('snooze') || new Date(st.snooze) <= new Date())
+    )
+    const newSubtasks = [
+      ...task.subtasks.slice(0, i),
+      {
+        ...task.subtasks[i],
+        snooze: new Date(new Date().getTime() + 60 * 60 * 1000).toISOString(),
+      },
+      ...task.subtasks.slice(i + 1),
+    ]
+
+    let updateParams = {
+      TableName: ENV.STORAGE_TASKS_NAME,
+      Key: {
+        title: task.title,
+      },
+      UpdateExpression: 'set #subtasks = :newsubtasks',
+      ExpressionAttributeNames: { '#subtasks': 'subtasks' },
+      ExpressionAttributeValues: {
+        ':newsubtasks': newSubtasks,
+      },
+    }
+
+    response = await docClient.update(updateParams).promise()
+  } else {
+    var updateParams = {
+      TableName: ENV.STORAGE_TASKS_NAME,
+      Key: {
+        title: body.title,
+      },
+      UpdateExpression: 'set #snooze = :snooze',
+      ExpressionAttributeNames: { '#snooze': 'snooze' },
+      ExpressionAttributeValues: {
+        ':snooze': new Date(
+          new Date().getTime() + 60 * 60 * 1000
+        ).toISOString(),
+      },
+    }
+
+    response = await docClient.update(updateParams).promise()
+  }
 
   return {
     statusCode: 200,
@@ -56,3 +108,4 @@ const error = m => ({
   },
   body: JSON.stringify('Missing title!'),
 })
+

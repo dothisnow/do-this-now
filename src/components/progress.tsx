@@ -1,3 +1,4 @@
+import { ExclamationCircleIcon, FireIcon } from '@heroicons/react/20/solid'
 import { minutesToHours } from '../helpers/time'
 import { useQueryProgressToday } from '../hooks/useQueryProgressToday'
 
@@ -11,15 +12,16 @@ const Progress = () => {
   return (
     <div className='mb-2 flex flex-col items-center'>
       {streak > 0 && (
-        <div className='text-xs font-bold leading-3 text-gray-300'>
-          Streak:{' '}
-          <span className={streakIsActive ? '' : 'grayscale'}>
-            {(streak > 0 && streak <= 3 ? '🔥'.repeat(streak) : streak) +
-              (streak > 3 ? '🔥' : '')}
-          </span>
+        <div className='flex text-xs font-bold leading-6 text-gray-300'>
+          Streak: {streak}
+          {streakIsActive ? (
+            <FireIcon className='mt-1 block h-4 w-4' />
+          ) : (
+            <ExclamationCircleIcon className='mt-1 block h-4 w-4' />
+          )}
         </div>
       )}
-      <div className='text-xs font-bold leading-3 text-gray-300'>
+      <div className='text-xs font-bold leading-6 text-gray-300'>
         {done - todo > 0
           ? `+ ${minutesToHours(done - todo)}`
           : `${minutesToHours(done)} / ${minutesToHours(todo)}`}

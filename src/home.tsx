@@ -192,10 +192,14 @@ const Home = () => {
                           task.hasOwnProperty('subtasks') &&
                           task.subtasks.length > 0 &&
                           task.subtasks.some(
-                            (s: (typeof task.subtasks)[number]) => !s.done
+                            (s: (typeof task.subtasks)[number]) =>
+                              !s.done &&
+                              (!s.snooze || new Date(s.snooze) < new Date())
                           )
                             ? task.subtasks.find(
-                                (s: (typeof task.subtasks)[number]) => !s.done
+                                (s: (typeof task.subtasks)[number]) =>
+                                  !s.done &&
+                                  (!s.snooze || new Date(s.snooze) < new Date())
                               )?.title ?? task.title
                             : task.title}
                         </span>

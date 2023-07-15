@@ -26,9 +26,17 @@ export const useQueryTasksTop = () => {
         })
       )
       tasks.Items.sort((a, b) =>
-        a.snooze && new Date(a.snooze) >= new Date()
+        (a.snooze && new Date(a.snooze) >= new Date()) ||
+        (a.subtasks &&
+          !a.subtasks.some(
+            s => !s.done && (!s.snooze || new Date(s.snooze) < new Date())
+          ))
           ? 1
-          : b.snooze && new Date(b.snooze) >= new Date()
+          : (b.snooze && new Date(b.snooze) >= new Date()) ||
+            (b.subtasks &&
+              !b.subtasks.some(
+                s => !s.done && (!s.snooze || new Date(s.snooze) < new Date())
+              ))
           ? -1
           : 0
       )

@@ -36,7 +36,7 @@ export type RepeatWeekdays = z.infer<typeof repeatWeekdaysSchema>
 const subTaskSchema = z.object({
   title: z.string(),
   done: z.boolean(),
-  snoozed: z.boolean().optional(),
+  snooze: z.string().optional(),
 })
 export type SubTask = z.infer<typeof subTaskSchema>
 
@@ -108,7 +108,7 @@ export const dynamoDBTaskSchema = z.object({
           M: z.object({
             title: z.object({ S: z.string() }),
             done: z.object({ BOOL: z.boolean() }),
-            snoozed: z.object({ BOOL: z.boolean() }).optional(),
+            snooze: z.object({ S: z.string() }).optional(),
           }),
         })
       ),

@@ -34,7 +34,12 @@ exports.handler = async event => {
 
   let response
 
+  const allSubtasks = body.hasOwnProperty('allSubtasks')
+    ? body.allSubtasks
+    : false
+
   if (
+    !allSubtasks &&
     task.hasOwnProperty('subtasks') &&
     task.subtasks.some(
       st =>
@@ -108,4 +113,3 @@ const error = m => ({
   },
   body: JSON.stringify('Missing title!'),
 })
-

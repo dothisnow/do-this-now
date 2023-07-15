@@ -88,12 +88,18 @@ const Home = () => {
 
   const snoozeTask = () => {
     if (!selectedTask) return
-    mutateSnooze(selectedTask)
+    mutateSnooze({ task: selectedTask })
     if (
       !selectedTask.hasOwnProperty('subtasks') ||
       subtasksSnoozed + 1 >= selectedTask.subtasks.length
     )
       setSelectedTaskIndex(0)
+  }
+
+  const snoozeAllSubtasks = () => {
+    if (!selectedTask) return
+    mutateSnooze({ task: selectedTask, allSubtasks: true })
+    setSelectedTaskIndex(0)
   }
 
   const deleteTask = () => {
@@ -140,8 +146,9 @@ const Home = () => {
   ]
   useKeyAction(keyActions)
 
+  type ButtonTuple = [() => void, string | undefined, typeof CheckCircleIcon]
   const Buttons = () => {
-    const info: [() => void, string | undefined, typeof CheckCircleIcon][] = [
+    const info: ButtonTuple[] = [
       [completeTask, 'Complete', CheckCircleIcon],
       [snoozeTask, 'Snooze', BellIcon],
       [
@@ -153,6 +160,10 @@ const Home = () => {
       ],
       [deleteTask, undefined, TrashIcon],
     ]
+
+    if (selectedTask && selectedTask.subtasks.length > 0)
+      info.splice(2, 0, [snoozeAllSubtasks, 'Snooze all subtasks', BellIcon])
+
     return (
       <>
         {info.map(([func, text, icon]) => (

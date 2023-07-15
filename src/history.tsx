@@ -1,7 +1,13 @@
-import { MutableRefObject, useRef } from 'react'
+import {
+  Dispatch,
+  MutableRefObject,
+  SetStateAction,
+  useRef,
+  useState,
+} from 'react'
 import { useLocation } from 'wouter'
 
-import { HomeIcon } from '@heroicons/react/20/solid'
+import { BackwardIcon, ForwardIcon, HomeIcon } from '@heroicons/react/20/solid'
 
 import Button from './components/button'
 import Hints from './components/hints'
@@ -15,10 +21,27 @@ import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import Loading from './components/loading'
 import { repeatWeekdaysSchema, Task as TaskType } from './types/task'
 
+const DateNavigator = ({
+  daysAgoState: [daysAgo, setDaysAgo],
+}: {
+  daysAgoState: [number, Dispatch<SetStateAction<number>>]
+}) => (
+  <div className='flex flex-row justify-center'>
+    <Button icon={BackwardIcon} onClick={() => setDaysAgo(da => da + 1)} />
+    <div className='mx-2'>{daysAgo} days ago</div>
+    <Button
+      icon={ForwardIcon}
+      onClick={() => setDaysAgo(da => Math.max(0, da - 1))}
+    />
+  </div>
+)
+
 const History = () => {
   // const [selectedTask, setSelectedTask] = useState(0)
   const taskElems: MutableRefObject<HTMLElement[]> = useRef([])
   const navigate = useLocation()[1]
+
+  const daysAgoState = useState(0)
 
   const { data, isLoading } = useHistory()
 
@@ -66,6 +89,7 @@ const History = () => {
         <div className='flex flex-row flex-wrap justify-center pb-2'>
           <Button onClick={() => navigate('/')} icon={HomeIcon} text='Home' />
         </div>
+        <DateNavigator {...{ daysAgoState }} />
         {isLoading ? (
           <Loading />
         ) : (

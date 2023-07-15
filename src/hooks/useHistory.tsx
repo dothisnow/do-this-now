@@ -16,8 +16,15 @@ const historySchema = z.object({
   }),
 })
 
-export const useHistory = () => {
-  const date = dateString(new Date())
+export const useHistory = (daysAgo: number = 0) => {
+  // daysAgo is 0 for today, 1 for yesterday, etc.
+  const date = dateString(
+    new Date(
+      new Date().getFullYear(),
+      new Date().getMonth(),
+      new Date().getDate() - daysAgo
+    )
+  )
   return useQuery(
     ['get-task', date],
     async () => {

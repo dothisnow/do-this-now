@@ -14,7 +14,6 @@ const historySchema = z.object({
       })
     ),
   }),
-  streakBeforeToday: z.object({ N: z.number() }).optional(),
 })
 
 export const useHistory = () => {

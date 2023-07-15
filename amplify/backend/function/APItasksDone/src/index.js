@@ -43,10 +43,15 @@ exports.handler = async event => {
 
   if (
     newItem.hasOwnProperty('subtasks') &&
-    newItem.subtasks.filter(st => st.done === false).length > 0
+    newItem.subtasks.some(st => !st.done)
   ) {
     for (let i = 0; i < newItem.subtasks.length; i++) {
-      if (newItem.subtasks[i].done) continue
+      if (
+        newItem.subtasks[i].done ||
+        (newItem.subtasks[i].snooze &&
+          new Date(newItem.subtasks[i].snooze) >= new Date())
+      )
+        continue
       newItem.subtasks[i].done = true
       break
     }

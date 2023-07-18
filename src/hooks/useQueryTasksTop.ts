@@ -5,13 +5,22 @@ import { z } from 'zod'
 import { dateString } from '../helpers/dates'
 
 // types
-import { taskSchema } from '../types/task'
+import { SubTask, Task, taskSchema } from '../types/task'
 
 export const tasksSchema = z.object({
   Items: z.array(taskSchema),
   Count: z.number(),
   ScannedCount: z.number(),
 })
+
+const subtaskIsSnoozed = (s: SubTask) =>
+  s.snooze && new Date(s.snooze) >= new Date()
+
+const isSnoozed = (t: Task) =>
+  (t.snooze && new Date(t.snooze) >= new Date()) ||
+  (t.subtasks &&
+    t.subtasks.length > 0 &&
+    !t.subtasks.some(s => !s.done && !subtaskIsSnoozed(s)))
 
 export const useQueryTasksTop = () => {
   const date = dateString(new Date())
@@ -25,21 +34,7 @@ export const useQueryTasksTop = () => {
           },
         })
       )
-      tasks.Items.sort((a, b) =>
-        (a.snooze && new Date(a.snooze) >= new Date()) ||
-        (a.subtasks &&
-          !a.subtasks.some(
-            s => !s.done && (!s.snooze || new Date(s.snooze) < new Date())
-          ))
-          ? 1
-          : (b.snooze && new Date(b.snooze) >= new Date()) ||
-            (b.subtasks &&
-              !b.subtasks.some(
-                s => !s.done && (!s.snooze || new Date(s.snooze) < new Date())
-              ))
-          ? -1
-          : 0
-      )
+      tasks.Items.sort((a, b) => (isSnoozed(a) ? 1 : isSnoozed(b) ? -1 : 0))
       return tasks
     },
     {

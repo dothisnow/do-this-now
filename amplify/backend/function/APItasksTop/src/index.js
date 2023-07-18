@@ -43,9 +43,9 @@ exports.handler = async event => {
       t.strictDeadline,
 
     // has not been done today
-    t =>
-      !t.hasOwnProperty('history') ||
-      t.history.filter(d => d === dateString(today)).length === 0,
+    // t =>
+    //   !t.hasOwnProperty('history') ||
+    //   t.history.filter(d => d === dateString(today)).length === 0,
 
     // if I do this today, I won't have to do it tomorrow
     t =>
@@ -138,3 +138,4 @@ const nextDueDate = task => {
   date.setHours(date.getHours() + 2)
   return new Date(dateString(date))
 }
+

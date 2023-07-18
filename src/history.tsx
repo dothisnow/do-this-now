@@ -28,7 +28,12 @@ const DateNavigator = ({
 }) => (
   <div className='flex flex-row justify-center'>
     <Button icon={BackwardIcon} onClick={() => setDaysAgo(da => da + 1)} />
-    <div className='mx-2'>{daysAgo} days ago</div>
+    {/* display date of daysAgo days ago */}
+    <div className='ml-2 mr-1 pt-2.5 text-xs text-white'>
+      {new Date(
+        new Date().setDate(new Date().getDate() - daysAgo)
+      ).toLocaleDateString()}
+    </div>
     <Button
       icon={ForwardIcon}
       onClick={() => setDaysAgo(da => Math.max(0, da - 1))}
@@ -43,7 +48,7 @@ const History = () => {
 
   const daysAgoState = useState(0)
 
-  const { data, isLoading } = useHistory()
+  const { data, isLoading } = useHistory(daysAgoState[0])
 
   const tasks = data?.tasks?.L || []
 
@@ -94,9 +99,6 @@ const History = () => {
           <Loading />
         ) : (
           <>
-            <div className='max-w-96 mx-auto text-center text-sm text-white md:max-w-sm'>
-              Done Today
-            </div>
             {tasks.map((task: (typeof tasks)[number], i: number) => (
               <Task
                 key={i}

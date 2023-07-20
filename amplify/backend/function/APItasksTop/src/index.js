@@ -29,7 +29,11 @@ exports.handler = async event => {
           0,
           0
         )
-  const in2Days = new Date().setDate(today.getDate() + 2)
+  const in2Days = new Date(today)
+  in2Days.setDate(in2Days.getDate() + 2)
+
+  console.log(`TODAY: ${today}`)
+  console.log(`IN 2 DAYS: ${in2Days}`)
 
   const sortFlags = [
     // due today or past due
@@ -138,4 +142,3 @@ const nextDueDate = task => {
   date.setHours(date.getHours() + 2)
   return new Date(dateString(date))
 }
-

@@ -263,7 +263,7 @@ const Task = ({
   showDate: boolean
   onClick: () => void
 }) => (
-  <div
+  <button
     ref={innerRef}
     className={
       (isSelected
@@ -286,7 +286,7 @@ const Task = ({
     {due !== undefined && due !== 'No Due Date' && (
       <Strict strictDeadline={strictDeadline} dueDate={due} />
     )}
-  </div>
+  </button>
 )
 
 export default Tasks

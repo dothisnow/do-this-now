@@ -5,7 +5,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { ComponentProps, Dispatch, SetStateAction, useState } from 'react'
 
 import { RepeatOption, RepeatUnit, TaskInput } from '../types/task'
 
@@ -87,13 +87,12 @@ const TaskForm = ({
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg rounded-md shadow-sm'>
-            <input
+            <FormInput
               type='text'
               id='title'
               placeholder='Do this thing'
               value={title}
               onChange={event => setTitle(event.target.value)}
-              className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
             />
           </div>
         </div>
@@ -107,12 +106,10 @@ const TaskForm = ({
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg rounded-md shadow-sm'>
-            <button
-              className='mr-3 inline-block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'
-              onClick={decrementDate}>
+            <FormButton className='mr-3' onClick={decrementDate}>
               -
-            </button>
-            <input
+            </FormButton>
+            <FormInput
               type='number'
               max={12}
               min={1}
@@ -122,9 +119,9 @@ const TaskForm = ({
               placeholder='MM'
               value={dueMonth}
               onChange={e => setDueMonth(parseInt(e.target.value))}
-              className='mr-3 block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+              className='mr-3'
             />
-            <input
+            <FormInput
               type='number'
               max={31}
               min={1}
@@ -134,9 +131,9 @@ const TaskForm = ({
               placeholder='DD'
               value={dueDay}
               onChange={e => setDueDay(parseInt(e.target.value))}
-              className='mr-3 block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+              className='mr-3'
             />
-            <input
+            <FormInput
               type='number'
               step={1}
               name='due-year'
@@ -144,13 +141,9 @@ const TaskForm = ({
               placeholder='YYYY'
               value={dueYear}
               onChange={e => setDueYear(parseInt(e.target.value))}
-              className='mr-3 block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+              className='mr-3'
             />
-            <button
-              className='inline-block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'
-              onClick={incrementDate}>
-              +
-            </button>
+            <FormButton onClick={incrementDate}>+</FormButton>
           </div>
           <div className='mt-1 max-w-lg text-center text-gray-600'>
             {format(
@@ -174,7 +167,7 @@ const TaskForm = ({
             onChange={setStrictDeadline}
             className={
               (strictDeadline ? 'bg-blue-600' : 'bg-gray-200') +
-              ' relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
+              ' relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent outline-none ring-white ring-offset-0 ring-offset-black transition-colors duration-200 ease-in-out focus:z-10 focus:outline-none focus:ring-2 focus:ring focus:ring-blue-500 focus:ring-offset-2'
             }>
             <span className='sr-only'>Use setting</span>
             <span
@@ -199,7 +192,7 @@ const TaskForm = ({
             <select
               id='repeat'
               name='repeat'
-              className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 pr-10 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+              className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 pr-10 text-white placeholder-gray-400 outline-none ring-white ring-offset-0 ring-offset-black focus:z-10 focus:border-blue-500 focus:ring focus:ring-blue-500 sm:text-sm'
               value={repeat}
               onChange={e => setRepeat(e.target.value as RepeatOption)}>
               {repeatOptions.map(option => (
@@ -211,13 +204,13 @@ const TaskForm = ({
             <>
               <div className='mt-3 flex max-w-lg'>
                 <div className='flex-1 py-2.5 text-sm'>Every:</div>
-                <input
+                <FormInput
                   type='number'
                   step={1}
                   min={1}
                   value={repeatInterval}
                   onChange={e => setRepeatInterval(parseInt(e.target.value))}
-                  className='mr-3 block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+                  className='mr-3'
                 />
                 <select
                   defaultValue={repeatUnit}
@@ -233,7 +226,7 @@ const TaskForm = ({
               {repeatUnit === 'week' && repeatWeekdays && (
                 <div className='pointer-events-auto mt-3 flex max-w-lg'>
                   {repeatWeekdays.map((_, i) => (
-                    <div
+                    <FormButton
                       onClick={() =>
                         setRepeatWeekdays(s => [
                           i === 0 ? !s[0] : s[0],
@@ -248,12 +241,12 @@ const TaskForm = ({
                       className={
                         (i > 0 && 'ml-2') +
                         (repeatWeekdays[i]
-                          ? ' border-gray-600 bg-gray-700 hover:border-gray-500 hover:bg-gray-600'
-                          : ' border-gray-700 bg-gray-800 hover:border-gray-600 hover:bg-gray-700') +
+                          ? ' border-white bg-gray-200 text-gray-800 hover:border-gray-200 hover:bg-gray-400'
+                          : ' border-gray-700 bg-gray-800 hover:border-gray-500  hover:bg-gray-600') +
                         ' flex-1 cursor-pointer rounded border p-2 text-center text-xs font-bold'
                       }>
                       {days[i]}
-                    </div>
+                    </FormButton>
                   ))}
                 </div>
               )}
@@ -269,13 +262,13 @@ const TaskForm = ({
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg'>
-            <input
+            <FormInput
               type='number'
               step={15}
               min={0}
               value={timeFrame}
               onChange={e => setTimeFrame(parseInt(e.target.value))}
-              className='mr-3 block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
+              className='mr-3'
             />
             <div className='py-2.5 text-sm'>mins</div>
           </div>
@@ -323,8 +316,8 @@ const TaskForm = ({
               {subtasks.map((subtask, i) => (
                 <div className='mt-3 flex max-w-lg'>
                   {i > 0 && (
-                    <button
-                      className='mr-3 inline-block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'
+                    <FormButton
+                      className='mr-3'
                       onClick={() =>
                         setSubtasks(s => {
                           const newSubtasks = [...s]
@@ -334,9 +327,9 @@ const TaskForm = ({
                         })
                       }>
                       ↑
-                    </button>
+                    </FormButton>
                   )}
-                  <input
+                  <FormInput
                     type='text'
                     value={subtask.title}
                     onChange={e => {
@@ -350,11 +343,10 @@ const TaskForm = ({
                       ])
                     }}
                     placeholder={`Subtask ${i + 1}`}
-                    className='block w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
                   />
                   {i < subtasks.length - 1 && (
-                    <button
-                      className='ml-3 inline-block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'
+                    <FormButton
+                      className='ml-3'
                       onClick={() =>
                         setSubtasks(s => {
                           const newSubtasks = [...s]
@@ -364,21 +356,21 @@ const TaskForm = ({
                         })
                       }>
                       ↓
-                    </button>
+                    </FormButton>
                   )}
-                  <button
-                    className='ml-3 inline-block rounded border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'
+                  <FormButton
+                    className='ml-3'
                     onClick={() =>
                       setSubtasks(s => [...s.slice(0, i), ...s.slice(i + 1)])
                     }>
                     <TrashIcon className='block h-5 w-5' />
-                  </button>
-                  <button
+                  </FormButton>
+                  <FormButton
                     className={
-                      'ml-3 inline-block rounded border p-2 text-sm text-white' +
+                      'ml-3' +
                       (subtask.done
-                        ? ' border-gray-500 bg-gray-600 hover:border-gray-400 hover:bg-gray-500'
-                        : ' border-gray-700 bg-gray-800 hover:border-gray-600 hover:bg-gray-700')
+                        ? ' border-white bg-gray-200 text-gray-800 hover:border-gray-200 hover:bg-gray-400'
+                        : ' border-gray-700 bg-gray-800 hover:border-gray-500  hover:bg-gray-600')
                     }
                     onClick={() =>
                       setSubtasks(s => [
@@ -391,32 +383,53 @@ const TaskForm = ({
                       ])
                     }>
                     <CheckCircleIcon className='block h-5 w-5' />
-                  </button>
+                  </FormButton>
                 </div>
               ))}
               <div className='mt-3 flex max-w-lg'>
-                <button
+                <FormButton
                   onClick={() =>
                     setSubtasks([...subtasks, { done: false, title: '' }])
                   }
-                  className='block flex w-full w-full min-w-0 flex-1 justify-center rounded border border-gray-700 bg-gray-800 p-2.5 focus:border-blue-500 focus:ring-blue-500'>
+                  className={'block flex w-full justify-center'}>
                   <PlusCircleIcon className='block h-5 w-5' />
-                </button>
+                </FormButton>
               </div>
             </>
           )}
         </div>
       </div>
-      <div
-        onClick={submitForm}
-        className='pt-5 text-center sm:border-t sm:border-gray-700'>
-        <button className='inline-block rounded-full border border-gray-700 bg-gray-800 p-2 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
+      <div className='pt-5 text-center sm:border-t sm:border-gray-700'>
+        <FormButton
+          className='rounded-full p-3 px-4 text-sm'
+          onClick={submitForm}>
           Submit
-        </button>
+        </FormButton>
       </div>
     </div>
   )
 }
+
+const FormButton = (props: ComponentProps<'button'>) => (
+  <button
+    {...props}
+    className={
+      props.className +
+      ' inline-block rounded border border-gray-700 bg-gray-800 p-2 text-white placeholder-gray-400 outline-none ring-white ring-offset-0 ring-offset-black focus:z-10 focus:ring'
+    }>
+    {props.children}
+  </button>
+)
+
+const FormInput = (props: ComponentProps<'input'>) => (
+  <input
+    {...props}
+    className={
+      'block w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 outline-none ring-white ring-offset-0 ring-offset-black focus:z-10 focus:ring sm:text-sm ' +
+      props.className
+    }
+  />
+)
 
 const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 const repeatOptions: RepeatOption[] = [

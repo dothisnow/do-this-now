@@ -45,7 +45,7 @@ const Hints = ({ keyActions }: { keyActions: KeyAction[] }) => {
       )}
       <button
         onClick={() => setShow(x => !x)}
-        className='fixed top-0 right-0 rounded p-2 text-sm text-gray-400 outline-none ring-white ring-offset-2 ring-offset-black focus:z-10 focus:ring'>
+        className='fixed top-0 right-0 rounded p-2 text-sm text-gray-400 outline-none ring-white ring-offset-1 ring-offset-black focus:z-10 focus:ring'>
         (<i>h</i> for hint)
       </button>
     </>

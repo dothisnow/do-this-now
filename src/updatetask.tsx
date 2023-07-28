@@ -5,6 +5,8 @@ import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
 import { useQueryGetTask } from './hooks/useQueryGetTask'
 import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
 
+import { ArrowLeftIcon } from '@heroicons/react/20/solid'
+import Button from './components/button'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
@@ -130,9 +132,13 @@ const UpdateTask = () => {
         <div className='space-y-8 divide-y divide-gray-700 p-10 text-white'>
           <div className='space-y-8 divide-y divide-gray-700 sm:space-y-5'>
             <div>
-              <div>
-                <h3 className='text-lg font-medium leading-6 '>
-                  <span>Update Task: {taskId}</span>
+              <div className='flex'>
+                <Button
+                  onClick={() => window.history.back()}
+                  icon={ArrowLeftIcon}
+                />
+                <h3 className='ml-2 pt-1 text-lg font-medium'>
+                  Update Task: {taskId}
                 </h3>
               </div>
               <TaskForm

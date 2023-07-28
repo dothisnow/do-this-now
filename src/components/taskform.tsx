@@ -162,13 +162,7 @@ const TaskForm = ({
           Strict Deadline?
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
-          <Switch
-            checked={strictDeadline}
-            onChange={setStrictDeadline}
-            className={
-              'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent outline-none ring-white ring-offset-0 ring-offset-black transition-colors duration-200 ease-in-out focus:z-10 focus:outline-none focus:ring-2 focus:ring focus:ring-blue-500 focus:ring-offset-2'
-            }
-          />
+          <Switch checked={strictDeadline} onChange={setStrictDeadline} />
         </div>
       </div>
 
@@ -180,16 +174,15 @@ const TaskForm = ({
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg rounded-md shadow-sm'>
-            <select
+            <FormSelect
               id='repeat'
               name='repeat'
-              className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 pr-10 text-white placeholder-gray-400 outline-none ring-white ring-offset-0 ring-offset-black focus:z-10 focus:border-blue-500 focus:ring focus:ring-blue-500 sm:text-sm'
               value={repeat}
               onChange={e => setRepeat(e.target.value as RepeatOption)}>
               {repeatOptions.map(option => (
                 <option key={option}>{option}</option>
               ))}
-            </select>
+            </FormSelect>
           </div>
           {repeat === 'Custom' && (
             <>
@@ -203,16 +196,15 @@ const TaskForm = ({
                   onChange={e => setRepeatInterval(parseInt(e.target.value))}
                   className='mr-3'
                 />
-                <select
+                <FormSelect
                   defaultValue={repeatUnit}
-                  onChange={e => setRepeatUnit(e.target.value as RepeatUnit)}
-                  className='block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 pr-10 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'>
+                  onChange={e => setRepeatUnit(e.target.value as RepeatUnit)}>
                   {repeatUnits.map(unit => (
                     <option key={unit} value={unit}>
                       {unit}s
                     </option>
                   ))}
-                </select>
+                </FormSelect>
               </div>
               {repeatUnit === 'week' && repeatWeekdays && (
                 <div className='pointer-events-auto mt-3 flex max-w-lg'>
@@ -288,9 +280,6 @@ const TaskForm = ({
                 else setSubtasks([{ done: false, title: '' }])
                 setHasSubtasks(e)
               }}
-              className={
-                'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
-              }
             />
           </div>
           {hasSubtasks && (
@@ -411,6 +400,17 @@ const FormInput = (props: ComponentProps<'input'>) => (
       props.className
     }
   />
+)
+
+const FormSelect = (props: ComponentProps<'select'>) => (
+  <select
+    {...props}
+    className={
+      'block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 pr-10 text-white placeholder-gray-400 outline-none ring-white ring-offset-0 ring-offset-black focus:z-10 focus:ring sm:text-sm ' +
+      props.className
+    }>
+    {props.children}
+  </select>
 )
 
 const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']

@@ -263,13 +263,13 @@ const Task = ({
   showDate: boolean
   onClick: () => void
 }) => (
-  <div
+  <button
     ref={innerRef}
     className={
       (isSelected
         ? 'border-gray-600 bg-gray-700'
         : 'border-gray-700 bg-gray-800') +
-      ' max-w-96 text-md mx-auto my-1 block rounded border p-4 text-center font-bold text-white drop-shadow-sm md:max-w-sm'
+      ' max-w-96 text-md mx-auto my-1 block w-full rounded border p-4 text-center font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black drop-shadow-sm focus:z-10 focus:ring md:max-w-sm'
     }
     onClick={onClick}>
     <span>{title}</span>
@@ -286,7 +286,7 @@ const Task = ({
     {due !== undefined && due !== 'No Due Date' && (
       <Strict strictDeadline={strictDeadline} dueDate={due} />
     )}
-  </div>
+  </button>
 )
 
 export default Tasks

@@ -208,7 +208,7 @@ const Home = () => {
                         setSelectedTaskIndex(i)
                       }
                       className={
-                        'py-auto text-md mx-5 mt-2 rounded border border-gray-700 bg-gray-800 p-4 text-center font-bold text-white drop-shadow-sm md:mx-auto md:max-w-sm md:p-5 ' +
+                        'py-auto text-md mx-5 mt-2 rounded border border-gray-700 bg-gray-800 p-4 text-center font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black drop-shadow-sm focus:z-10 focus:ring md:mx-auto md:max-w-sm md:p-5 ' +
                         (selectedTaskIndex !== i ? ' opacity-20' : '')
                       }
                       title={`(Shortcut: ${i + 1})`}>

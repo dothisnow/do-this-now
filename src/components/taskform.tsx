@@ -245,6 +245,12 @@ const TaskForm = ({
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg'>
+            <FormButton
+              onClick={() => setTimeFrame(t => Math.max(0, t - 15))}
+              className='mr-3'
+              disabled={timeFrame === 0}>
+              -
+            </FormButton>
             <FormInput
               type='number'
               step={15}
@@ -253,6 +259,11 @@ const TaskForm = ({
               onChange={e => setTimeFrame(parseInt(e.target.value))}
               className='mr-3'
             />
+            <FormButton
+              onClick={() => setTimeFrame(t => t + 15)}
+              className='mr-3'>
+              +
+            </FormButton>
             <div className='py-2.5 text-sm'>mins</div>
           </div>
         </div>

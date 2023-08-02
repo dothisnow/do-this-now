@@ -1,16 +1,12 @@
+import keycode from 'keycode'
 import { useCallback, useEffect } from 'react'
 
-export type KeyboardEvent = {
+export type KeyAction = {
   key: string
-  preventDefault: () => void
-  stopPropagation: () => void
+  description: string
+  action: ((e: KeyboardEvent) => void) | (() => void)
+  altKey?: boolean
 }
-
-export type KeyAction = [
-  string,
-  string,
-  ((e: KeyboardEvent) => void) | (() => void)
-]
 
 const useKeyAction = (
   keyActions: KeyAction[],
@@ -18,7 +14,12 @@ const useKeyAction = (
 ) => {
   const callback = useCallback(
     (e: KeyboardEvent) => {
-      for (const kA of keyActions) if (kA[0] === e.key) kA[2](e)
+      console.log(e)
+      for (const kA of keyActions)
+        if ((!kA?.altKey || e.altKey) && keycode(kA.key) === e.which) {
+          e.preventDefault()
+          kA.action(e)
+        }
     },
     [keyActions]
   )

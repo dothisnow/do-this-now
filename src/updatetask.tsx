@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'wouter'
 
-import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
+import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQueryGetTask } from './hooks/useQueryGetTask'
 import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
 
@@ -109,16 +109,18 @@ const UpdateTask = () => {
   }
 
   const keyActions: KeyAction[] = [
-    [
-      'Enter',
-      'Submit form',
-      (e: KeyboardEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
+    {
+      key: 'Enter',
+      description: 'Submit form',
+      action: () => {
         submitForm()
       },
-    ],
-    ['Escape', 'Back', () => window.history.back()],
+    },
+    {
+      key: 'Escape',
+      description: 'Back',
+      action: () => window.history.back(),
+    },
   ]
   useKeyAction(keyActions)
 

@@ -83,7 +83,7 @@ const History = () => {
     //     scrollIntoView(taskElems.current[selectedTask + 1])
     //   },
     // ],
-    ['Escape', 'Home', () => navigate('/')],
+    { key: 'escape', description: 'Home', action: () => navigate('/') },
   ]
   useKeyAction(keyActions)
 

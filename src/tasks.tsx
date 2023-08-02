@@ -21,7 +21,7 @@ import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
 import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
-import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
+import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasks } from './hooks/useQueryTasks'
@@ -61,44 +61,63 @@ const Tasks = () => {
   }
 
   const keyActions: KeyAction[] = [
-    ['d', 'Task done', completeTask],
-    ['n', 'New task', () => navigate('/new-task')],
-    ['o', 'Toggle order between date and top', () => setSort(s => (s + 1) % 2)],
-    [
-      'u',
-      'Update task',
-      () =>
+    {
+      key: 'd',
+      description: 'Mark task as done',
+      action: completeTask,
+      altKey: true,
+    },
+    {
+      key: 'n',
+      description: 'New task',
+      action: () => navigate('/new-task'),
+      altKey: true,
+    },
+    {
+      key: 'o',
+      description: 'Toggle order between date and top',
+      action: () => setSort(s => (s + 1) % 2),
+      altKey: true,
+    },
+    {
+      key: 'u',
+      description: 'Update task',
+      action: () =>
         navigate(
           `/update-task/${encodeURIComponent(tasks[selectedTask].title)}`
         ),
-    ],
-    [
-      'ArrowUp',
-      'Select previous task',
-      (e: KeyboardEvent) => {
-        e.preventDefault()
+      altKey: true,
+    },
+    {
+      key: 'up',
+      description: 'Select previous task',
+      action: () => {
         setSelectedTask(Math.max(selectedTask - 1, 0))
         scrollIntoView(taskElems.current[selectedTask - 1])
       },
-    ],
-    [
-      'ArrowDown',
-      'Select next task',
-      (e: KeyboardEvent) => {
-        e.preventDefault()
+    },
+    {
+      key: 'down',
+      description: 'Select next task',
+      action: () => {
         setSelectedTask(Math.min(selectedTask + 1, tasks.length - 1))
         scrollIntoView(taskElems.current[selectedTask + 1])
       },
-    ],
-    ['Escape', 'Home', () => navigate('/')],
-    [
-      'Backspace',
-      'Delete current task',
-      () =>
+    },
+    {
+      key: 'Escape',
+      description: 'Home',
+      action: () => navigate('/'),
+    },
+    {
+      key: 'Backspace',
+      description: 'Delete current task',
+      action: () =>
         window.confirm(
           `Are you sure you want to delete '${tasks[selectedTask].title}'?`
         ) && mutateDelete(tasks[selectedTask]),
-    ],
+      altKey: true,
+    },
   ]
   useKeyAction(keyActions)
 

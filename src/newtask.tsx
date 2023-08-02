@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import useKeyAction, { KeyAction, KeyboardEvent } from './hooks/useKeyAction'
+import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQueryNewTask } from './hooks/useQueryNewTask'
 
 import Loading from './components/loading'
@@ -62,16 +62,20 @@ const NewTask = () => {
   }
 
   const keyActions: KeyAction[] = [
-    [
-      'Enter',
-      'Submit form',
-      (e: KeyboardEvent) => {
+    {
+      key: 'enter',
+      description: 'Submit form',
+      action: (e: KeyboardEvent) => {
         e.preventDefault()
         e.stopPropagation()
         submitForm()
       },
-    ],
-    ['Escape', 'Home', () => window.history.back()],
+    },
+    {
+      key: 'escape',
+      description: 'Home',
+      action: () => window.history.back(),
+    },
   ]
   useKeyAction(keyActions)
 

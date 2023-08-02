@@ -1,30 +1,22 @@
 import { useState } from 'react'
-import useKeyAction, { KeyAction } from '../hooks/useKeyAction'
+import { KeyAction } from '../hooks/useKeyAction'
 
 type HintProps = {
-  letter: string
-  text: string
+  keyLetter: string
+  description: string
 }
 
-const Hint = ({ letter, text }: HintProps) => (
+const Hint = ({ keyLetter, description }: HintProps) => (
   <li>
     <kbd className='mr-2 mb-1 inline-block rounded-full bg-gray-700 px-3 py-1 text-sm font-medium leading-5 text-white text-white'>
-      {letter}
+      {keyLetter}
     </kbd>
-    {text}
+    {description}
   </li>
 )
 
 const Hints = ({ keyActions }: { keyActions: KeyAction[] }) => {
   const [show, setShow] = useState(false)
-
-  const hintKeyActions: KeyAction[] = [['h', 'Show hints', () => setShow(true)]]
-  useKeyAction(hintKeyActions)
-  const hintKeyUpActions: KeyAction[] = [
-    ['h', 'Show hints', () => setShow(false)],
-  ]
-  useKeyAction(hintKeyUpActions, 'keyup')
-
   return (
     <>
       {show && (
@@ -34,8 +26,8 @@ const Hints = ({ keyActions }: { keyActions: KeyAction[] }) => {
             <div>
               <div className='text-left'>
                 <ul className='list-inside list-disc pt-1'>
-                  {keyActions.map(([letter, text]) => (
-                    <Hint key={letter} {...{ letter, text }} />
+                  {keyActions.map(({ key: keyLetter, description }) => (
+                    <Hint key={keyLetter} {...{ keyLetter, description }} />
                   ))}
                 </ul>
               </div>
@@ -44,9 +36,12 @@ const Hints = ({ keyActions }: { keyActions: KeyAction[] }) => {
         </>
       )}
       <button
-        onClick={() => setShow(x => !x)}
+        onMouseDown={() => setShow(true)}
+        onMouseUp={() => setShow(false)}
+        onFocus={() => setShow(true)}
+        onBlur={() => setShow(false)}
         className='fixed top-0 right-0 rounded p-2 text-sm text-gray-400 outline-none ring-white ring-offset-1 ring-offset-black focus:z-10 focus:ring'>
-        (<i>h</i> for hint)
+        (click for shortcut hints)
       </button>
     </>
   )

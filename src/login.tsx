@@ -45,7 +45,13 @@ const Login = () => {
     }
   }
 
-  useKeyAction([['Enter', 'Submit login form', login]])
+  useKeyAction([
+    {
+      key: 'Enter',
+      description: 'Submit login form',
+      action: login,
+    },
+  ])
 
   if (authState === AuthState.SignedIn) return <Redirect to='/' />
 

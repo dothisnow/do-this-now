@@ -4,32 +4,57 @@ import {
   TrashIcon,
 } from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
-import { ComponentProps, Dispatch, SetStateAction, useState } from 'react'
+import { ComponentProps, useRef, useState } from 'react'
 
-import { RepeatOption, RepeatUnit, TaskInput } from '../types/task'
+import {
+  RepeatOption,
+  RepeatUnit,
+  RepeatWeekdays,
+  SubTask,
+  TaskInput,
+} from '../types/task'
 import { Switch } from './switch'
 
 const TaskForm = ({
-  titleState: [title, setTitle],
-  dueMonthState: [dueMonth, setDueMonth],
-  dueDayState: [dueDay, setDueDay],
-  dueYearState: [dueYear, setDueYear],
-  strictDeadlineState: [strictDeadline, setStrictDeadline],
-  repeatState: [repeat, setRepeat],
-  repeatIntervalState: [repeatInterval, setRepeatInterval],
-  repeatUnitState: [repeatUnit, setRepeatUnit],
-  repeatWeekdaysState: [repeatWeekdays, setRepeatWeekdays],
-  timeFrameState: [timeFrame, setTimeFrame],
-  subtasksState: [subtasks, setSubtasks],
+  title: initialTitle,
+  dueMonth: initialDueMonth,
+  dueDay: initialDueDay,
+  dueYear: initialDueYear,
+  strictDeadline: initialStrictDeadline,
+  repeat: initialRepeat,
+  repeatInterval: initialRepeatInterval,
+  repeatUnit: initialRepeatUnit,
+  repeatWeekdays: initialRepeatWeekdays,
+  timeFrame: initialTimeFrame,
+  subtasks: initialSubtasks,
   submitForm,
-}: {
-  [K in keyof TaskInput as `${K}State`]: [
-    TaskInput[K],
-    Dispatch<SetStateAction<TaskInput[K]>>
-  ]
-} & {
-  submitForm: () => void
+}: Partial<TaskInput> & {
+  submitForm: (input: TaskInput) => void
 }) => {
+  const titleRef = useRef<HTMLInputElement>(null)
+  const [dueMonth, setDueMonth] = useState(
+    initialDueMonth ?? new Date().getMonth() + 1
+  )
+  const [dueDay, setDueDay] = useState(initialDueDay ?? new Date().getDate())
+  const [dueYear, setDueYear] = useState(
+    initialDueYear ?? new Date().getFullYear()
+  )
+  const [strictDeadline, setStrictDeadline] = useState(
+    initialStrictDeadline ?? false
+  )
+  const [repeat, setRepeat] = useState<RepeatOption>(
+    initialRepeat ?? 'No Repeat'
+  )
+  const repeatIntervalRef = useRef<HTMLInputElement>(null)
+  const [repeatUnit, setRepeatUnit] = useState<RepeatUnit>(
+    initialRepeatUnit ?? 'day'
+  )
+  const [repeatWeekdays, setRepeatWeekdays] = useState<RepeatWeekdays>(
+    initialRepeatWeekdays ?? [false, false, false, false, false, false, false]
+  )
+  const [timeFrame, setTimeFrame] = useState(initialTimeFrame ?? 0)
+  const [subtasks, setSubtasks] = useState<SubTask[]>(initialSubtasks ?? [])
+
   const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
   if ((subtasks?.length ?? 0) > 0 && !hasSubtasks) setHasSubtasks(true)
 
@@ -89,10 +114,9 @@ const TaskForm = ({
           <div className='flex max-w-lg rounded-md shadow-sm'>
             <FormInput
               type='text'
-              id='title'
+              ref={titleRef}
               placeholder='Do this thing'
-              value={title}
-              onChange={event => setTitle(event.target.value)}
+              defaultValue={initialTitle ?? ''}
             />
           </div>
         </div>
@@ -192,9 +216,8 @@ const TaskForm = ({
                   type='number'
                   step={1}
                   min={1}
-                  value={repeatInterval}
-                  onChange={e => setRepeatInterval(parseInt(e.target.value))}
                   className='mr-3'
+                  defaultValue={initialRepeatInterval ?? 1}
                 />
                 <FormSelect
                   defaultValue={repeatUnit}
@@ -384,7 +407,21 @@ const TaskForm = ({
       <div className='pt-5 text-center sm:border-t sm:border-gray-700'>
         <FormButton
           className='rounded-full p-3 px-4 text-sm'
-          onClick={submitForm}>
+          onClick={() => {
+            submitForm({
+              title: titleRef.current?.value ?? '',
+              dueMonth,
+              dueDay,
+              dueYear,
+              strictDeadline,
+              repeat,
+              repeatInterval: parseInt(repeatIntervalRef.current?.value ?? '1'),
+              repeatUnit,
+              repeatWeekdays,
+              timeFrame,
+              subtasks,
+            })
+          }}>
           Submit
         </FormButton>
       </div>

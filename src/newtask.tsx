@@ -9,68 +9,13 @@ import TaskForm from './components/taskform'
 
 import { ArrowLeftIcon } from '@heroicons/react/20/solid'
 import Button from './components/button'
-import { RepeatOption, RepeatUnit, RepeatWeekdays, SubTask } from './types/task'
+import { Task, TaskInput } from './types/task'
 
 const NewTask = () => {
   const [loading, setLoading] = useState(false)
-
-  const titleState = useState('')
-
-  const dueMonthState = useState(new Date().getMonth() + 1)
-  const dueDayState = useState(new Date().getDate())
-  const dueYearState = useState(new Date().getFullYear())
-
-  const strictDeadlineState = useState(false)
-
-  const repeatState = useState<RepeatOption>('No Repeat')
-  const repeatIntervalState = useState(1)
-  const repeatUnitState = useState<RepeatUnit>('day')
-  const repeatWeekdaysState = useState<RepeatWeekdays>([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ])
-  const timeFrameState = useState(15)
-
-  const subtasksState = useState<SubTask[]>([])
-
   const { mutate } = useQueryNewTask()
 
-  const submitForm = () => {
-    setLoading(true)
-    if (titleState[0] === '') {
-      alert('Add a title dumbass.')
-      return setLoading(false)
-    }
-    const dueString: `${number}-${number}-${number}` = `${dueYearState[0]}-${dueMonthState[0]}-${dueDayState[0]}`
-    const task = {
-      title: titleState[0],
-      due: dueString,
-      strictDeadline: strictDeadlineState[0],
-      repeat: repeatState[0],
-      repeatInterval: repeatIntervalState[0],
-      repeatUnit: repeatUnitState[0],
-      repeatWeekdays: repeatWeekdaysState[0],
-      timeFrame: timeFrameState[0],
-      subtasks: subtasksState[0],
-    }
-    mutate(task)
-  }
-
   const keyActions: KeyAction[] = [
-    {
-      key: 'enter',
-      description: 'Submit form',
-      action: (e: KeyboardEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
-        submitForm()
-      },
-    },
     {
       key: 'escape',
       description: 'Home',
@@ -97,19 +42,17 @@ const NewTask = () => {
               <h3 className='ml-2 pt-1 text-lg font-medium'>New Task</h3>
             </div>
             <TaskForm
-              {...{
-                titleState,
-                dueMonthState,
-                dueDayState,
-                dueYearState,
-                strictDeadlineState,
-                repeatState,
-                repeatIntervalState,
-                repeatUnitState,
-                repeatWeekdaysState,
-                timeFrameState,
-                subtasksState,
-                submitForm,
+              submitForm={(input: TaskInput) => {
+                setLoading(true)
+                if (input.title === '') {
+                  alert('Add a title dumbass.')
+                  return setLoading(false)
+                }
+                const task: Task = {
+                  ...input,
+                  due: `${input.dueYear}-${input.dueMonth}-${input.dueDay}`,
+                }
+                mutate(task)
               }}
             />
           </div>

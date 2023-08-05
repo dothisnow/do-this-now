@@ -4,7 +4,7 @@ import {
   TrashIcon,
 } from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
-import { ComponentProps, useRef, useState } from 'react'
+import { ComponentProps, useState } from 'react'
 
 import {
   RepeatOption,
@@ -31,7 +31,7 @@ const TaskForm = ({
 }: Partial<TaskInput> & {
   submitForm: (input: TaskInput) => void
 }) => {
-  const titleRef = useRef<HTMLInputElement>(null)
+  const [title, setTitle] = useState(initialTitle ?? '')
   const [dueMonth, setDueMonth] = useState(
     initialDueMonth ?? new Date().getMonth() + 1
   )
@@ -45,7 +45,9 @@ const TaskForm = ({
   const [repeat, setRepeat] = useState<RepeatOption>(
     initialRepeat ?? 'No Repeat'
   )
-  const repeatIntervalRef = useRef<HTMLInputElement>(null)
+  const [repeatInterval, setRepeatInterval] = useState(
+    initialRepeatInterval ?? 1
+  )
   const [repeatUnit, setRepeatUnit] = useState<RepeatUnit>(
     initialRepeatUnit ?? 'day'
   )
@@ -114,9 +116,9 @@ const TaskForm = ({
           <div className='flex max-w-lg rounded-md shadow-sm'>
             <FormInput
               type='text'
-              ref={titleRef}
+              value={title}
+              onChange={e => setTitle(e.target.value)}
               placeholder='Do this thing'
-              defaultValue={initialTitle ?? ''}
             />
           </div>
         </div>
@@ -217,7 +219,8 @@ const TaskForm = ({
                   step={1}
                   min={1}
                   className='mr-3'
-                  defaultValue={initialRepeatInterval ?? 1}
+                  value={repeatInterval}
+                  onChange={e => setRepeatInterval(parseInt(e.target.value))}
                 />
                 <FormSelect
                   defaultValue={repeatUnit}
@@ -409,13 +412,13 @@ const TaskForm = ({
           className='rounded-full p-3 px-4 text-sm'
           onClick={() => {
             submitForm({
-              title: titleRef.current?.value ?? '',
+              title,
               dueMonth,
               dueDay,
               dueYear,
               strictDeadline,
               repeat,
-              repeatInterval: parseInt(repeatIntervalRef.current?.value ?? '1'),
+              repeatInterval,
               repeatUnit,
               repeatWeekdays,
               timeFrame,

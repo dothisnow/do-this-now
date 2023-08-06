@@ -40,19 +40,26 @@ const subTaskSchema = z.object({
 })
 export type SubTask = z.infer<typeof subTaskSchema>
 
-export type TaskInput = {
-  title: string
-  dueMonth: number
-  dueDay: number
-  dueYear: number
-  strictDeadline: boolean
-  repeat: RepeatOption
-  repeatInterval: number
-  repeatWeekdays: RepeatWeekdays
-  repeatUnit: RepeatUnit
-  timeFrame: number
-  subtasks: SubTask[]
-}
+export const taskInputSchema = z.object({
+  title: z
+    .string({
+      required_error: 'Title is required',
+    })
+    .min(1, {
+      message: 'Title is required',
+    }),
+  dueMonth: z.number(),
+  dueDay: z.number(),
+  dueYear: z.number(),
+  strictDeadline: z.boolean(),
+  repeat: repeatOptionSchema,
+  repeatInterval: z.number(),
+  repeatWeekdays: repeatWeekdaysSchema,
+  repeatUnit: repeatUnitSchema,
+  timeFrame: z.union([z.number(), z.string().transform(x => parseInt(x))]),
+  subtasks: z.array(subTaskSchema),
+})
+export type TaskInput = z.infer<typeof taskInputSchema>
 
 export const taskSchema = z.object({
   title: z.string(),

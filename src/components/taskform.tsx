@@ -5,6 +5,7 @@ import {
 } from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
 import { ComponentProps, useState } from 'react'
+import { ZodError } from 'zod'
 
 import {
   RepeatOption,
@@ -12,6 +13,7 @@ import {
   RepeatWeekdays,
   SubTask,
   TaskInput,
+  taskInputSchema,
 } from '../types/task'
 import { Switch } from './switch'
 
@@ -31,6 +33,8 @@ const TaskForm = ({
 }: Partial<TaskInput> & {
   submitForm: (input: TaskInput) => void
 }) => {
+  const [formError, setFormError] = useState<ZodError>()
+
   const [title, setTitle] = useState(initialTitle ?? '')
   const [dueMonth, setDueMonth] = useState(
     initialDueMonth ?? new Date().getMonth() + 1
@@ -104,6 +108,14 @@ const TaskForm = ({
     updateDate(newDate)
   }
 
+  console.log(formError?.errors)
+
+  const errors =
+    Object.fromEntries(
+      formError?.errors.map(error => [error.path[0], error.message]) ?? []
+    ) ?? {}
+  console.log(errors)
+
   return (
     <div className='mt-6 space-y-6 sm:mt-5 sm:space-y-5'>
       <div className='sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-700 sm:pt-5'>
@@ -112,15 +124,19 @@ const TaskForm = ({
           className='block text-sm font-medium sm:mt-px sm:pt-2'>
           Title
         </label>
-        <div className='mt-1 sm:col-span-2 sm:mt-0'>
+        <div className='mt-1 flex flex-col gap-2 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg rounded-md shadow-sm'>
             <FormInput
+              id='titleInput'
               type='text'
               value={title}
               onChange={e => setTitle(e.target.value)}
               placeholder='Do this thing'
             />
           </div>
+          {errors.title && (
+            <div className='text-sm text-red-500'>{errors.title}</div>
+          )}
         </div>
       </div>
 
@@ -411,7 +427,7 @@ const TaskForm = ({
         <FormButton
           className='rounded-full p-3 px-4 text-sm'
           onClick={() => {
-            submitForm({
+            const input = taskInputSchema.safeParse({
               title,
               dueMonth,
               dueDay,
@@ -424,6 +440,8 @@ const TaskForm = ({
               timeFrame,
               subtasks,
             })
+            if (!input.success) return setFormError(input.error)
+            submitForm(input.data)
           }}>
           Submit
         </FormButton>

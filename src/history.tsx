@@ -42,7 +42,6 @@ const DateNavigator = ({
 )
 
 const History = () => {
-  // const [selectedTask, setSelectedTask] = useState(0)
   const taskElems: MutableRefObject<HTMLElement[]> = useRef([])
   const navigate = useLocation()[1]
 
@@ -54,35 +53,7 @@ const History = () => {
 
   console.log({ tasks })
 
-  // const scrollIntoView = (elem: HTMLElement) => {
-  //   window.scrollTo({
-  //     behavior: 'smooth',
-  //     top:
-  //       elem.getBoundingClientRect().top -
-  //       document.body.getBoundingClientRect().top -
-  //       200,
-  //   })
-  // }
-
   const keyActions: KeyAction[] = [
-    // [
-    //   'ArrowUp',
-    //   'Select previous task',
-    //   (e: KeyboardEvent) => {
-    //     e.preventDefault()
-    //     setSelectedTask(Math.max(selectedTask - 1, 0))
-    //     scrollIntoView(taskElems.current[selectedTask - 1])
-    //   },
-    // ],
-    // [
-    //   'ArrowDown',
-    //   'Select next task',
-    //   (e: KeyboardEvent) => {
-    //     e.preventDefault()
-    //     setSelectedTask(Math.min(selectedTask + 1, tasks.length - 1))
-    //     scrollIntoView(taskElems.current[selectedTask + 1])
-    //   },
-    // ],
     { key: 'escape', description: 'Home', action: () => navigate('/') },
   ]
   useKeyAction(keyActions)
@@ -98,7 +69,7 @@ const History = () => {
         {isLoading ? (
           <Loading />
         ) : (
-          <>
+          <div className='mt-2 flex flex-col gap-1'>
             {tasks.map((task: (typeof tasks)[number], i: number) => (
               <Task
                 key={i}
@@ -119,7 +90,7 @@ const History = () => {
                 subtasks={[]}
               />
             ))}
-          </>
+          </div>
         )}
       </div>
       <Hints keyActions={keyActions} />
@@ -152,7 +123,7 @@ const Task = ({
       (isSelected
         ? 'border-gray-600 bg-gray-700'
         : 'border-gray-700 bg-gray-800') +
-      ' max-w-96 text-md mx-auto my-1 block rounded border p-4 text-center font-bold text-white drop-shadow-sm md:max-w-sm'
+      ' max-w-96 text-md mx-auto block rounded border p-4 text-center font-bold text-white drop-shadow-sm md:max-w-sm'
     }
     onClick={onClick}>
     <span>{title}</span>

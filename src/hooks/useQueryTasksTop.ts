@@ -16,7 +16,7 @@ export const tasksSchema = z.object({
 const subtaskIsSnoozed = (s: SubTask) =>
   s.snooze && new Date(s.snooze) >= new Date()
 
-const isSnoozed = (t: Task) =>
+export const isSnoozed = (t: Task) =>
   (t.snooze && new Date(t.snooze) >= new Date()) ||
   (t.subtasks &&
     t.subtasks.length > 0 &&

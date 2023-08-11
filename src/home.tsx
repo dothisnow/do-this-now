@@ -14,7 +14,7 @@ import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQuerySnoozeTask } from './hooks/useQuerySnoozeTask'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
-import { useQueryTasksTop } from './hooks/useQueryTasksTop'
+import { isSnoozed, useQueryTasksTop } from './hooks/useQueryTasksTop'
 
 import loginManager from './helpers/LoginManager'
 import useDing from './helpers/useDing'
@@ -35,7 +35,8 @@ const Home = () => {
 
   const { data, isLoading } = useQueryTasksTop()
 
-  let tasks = data?.Items ?? []
+  let tasks = (data?.Items ?? []).filter(t => !isSnoozed(t))
+  console.log(tasks)
 
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<0 | 1 | 2>(0)
   const selectedTask = !tasks
@@ -122,10 +123,10 @@ const Home = () => {
       altKey: true,
     },
     {
-            key: 'h',
-        description: 'History',
-        action: () => navigate('/history'),
-        altKey: true,
+      key: 'h',
+      description: 'History',
+      action: () => navigate('/history'),
+      altKey: true,
     },
     {
       key: 'l',

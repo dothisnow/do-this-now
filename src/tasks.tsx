@@ -65,19 +65,16 @@ const Tasks = () => {
       key: 'd',
       description: 'Mark task as done',
       action: completeTask,
-      altKey: true,
     },
     {
       key: 'n',
       description: 'New task',
       action: () => navigate('/new-task'),
-      altKey: true,
     },
     {
       key: 'o',
       description: 'Toggle order between date and top',
       action: () => setSort(s => (s + 1) % 2),
-      altKey: true,
     },
     {
       key: 'u',
@@ -86,7 +83,6 @@ const Tasks = () => {
         navigate(
           `/update-task/${encodeURIComponent(tasks[selectedTask].title)}`
         ),
-      altKey: true,
     },
     {
       key: 'up',
@@ -116,7 +112,6 @@ const Tasks = () => {
         window.confirm(
           `Are you sure you want to delete '${tasks[selectedTask].title}'?`
         ) && mutateDelete(tasks[selectedTask]),
-      altKey: true,
     },
   ]
   useKeyAction(keyActions)

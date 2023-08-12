@@ -120,37 +120,31 @@ const Home = () => {
       key: 'd',
       description: 'Task done',
       action: completeTask,
-      altKey: true,
     },
     {
       key: 'h',
       description: 'History',
       action: () => navigate('/history'),
-      altKey: true,
     },
     {
       key: 'l',
       description: 'Logout',
       action: loginManager.signOut,
-      altKey: true,
     },
     {
       key: 'n',
       description: 'New task',
       action: () => navigate('/new-task'),
-      altKey: true,
     },
     {
       key: 's',
       description: 'Snooze task',
       action: snoozeTask,
-      altKey: true,
     },
     {
       key: 't',
       description: 'Tasks',
       action: () => navigate('/tasks'),
-      altKey: true,
     },
     {
       key: 'u',
@@ -158,31 +152,26 @@ const Home = () => {
       action: () =>
         selectedTask &&
         navigate(`/update-task/${encodeURIComponent(selectedTask.title)}`),
-      altKey: true,
     },
     {
       key: '1',
       description: 'Select first task',
       action: () => setSelectedTaskIndex(0),
-      altKey: true,
     },
     {
       key: '2',
       description: 'Select second task',
       action: () => setSelectedTaskIndex(1),
-      altKey: true,
     },
     {
       key: '3',
       description: 'Select third task',
       action: () => setSelectedTaskIndex(2),
-      altKey: true,
     },
     {
       key: 'backspace',
       description: 'Delete current task',
       action: deleteTask,
-      altKey: true,
     },
   ]
   useKeyAction(keyActions)

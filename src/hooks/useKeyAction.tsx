@@ -5,7 +5,6 @@ export type KeyAction = {
   key: string
   description: string
   action: ((e: KeyboardEvent) => void) | (() => void)
-  altKey?: boolean
 }
 
 const useKeyAction = (
@@ -15,8 +14,18 @@ const useKeyAction = (
   const callback = useCallback(
     (e: KeyboardEvent) => {
       console.log(e)
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      )
+        return
       for (const kA of keyActions)
-        if ((!kA?.altKey || e.altKey) && keycode(kA.key) === e.which) {
+        if (
+          !e.altKey &&
+          !e.ctrlKey &&
+          !e.metaKey &&
+          keycode(kA.key) === e.which
+        ) {
           e.preventDefault()
           kA.action(e)
         }

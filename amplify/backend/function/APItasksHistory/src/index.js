@@ -6,10 +6,12 @@
 	STORAGE_HISTORY_STREAMARN
 Amplify Params - DO NOT EDIT */
 
-const ENV = require('process').env
-const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+const { dateString } = require('/opt/nodejs/helpers')
 
-const client = new DynamoDBClient({ region: ENV.REGION });
+const ENV = require('process').env
+const { DynamoDBClient, GetItemCommand } = require('@aws-sdk/client-dynamodb')
+
+const client = new DynamoDBClient({ region: ENV.REGION })
 
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
@@ -33,7 +35,7 @@ exports.handler = async event => {
   const historyGetParams = {
     TableName: ENV.STORAGE_HISTORY_NAME,
     Key: {
-      date: { "S": dateString(today) },
+      date: { S: dateString(today) },
     },
   }
 
@@ -50,8 +52,3 @@ exports.handler = async event => {
     body: JSON.stringify(data?.Item),
   }
 }
-
-const dateString = date =>
-  `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-
-

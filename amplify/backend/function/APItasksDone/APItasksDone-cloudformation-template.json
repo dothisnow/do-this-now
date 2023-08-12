@@ -121,7 +121,9 @@
           ]
         },
         "Runtime": "nodejs14.x",
-        "Layers": [],
+        "Layers": [
+          "arn:aws:lambda:us-east-1:635678236360:layer:dothisnowhelpers:2"
+        ],
         "Timeout": 25
       }
     },

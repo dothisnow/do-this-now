@@ -19,7 +19,7 @@ const Progress = () => {
             title={`${
               streakIsActive ? 'Active' : 'Inactive'
             } ${streak} day streak`}
-            className='flex font-bold text-gray-300'>
+            className='flex text-gray-300'>
             <FireIcon
               className={
                 'block h-4 w-4 ' + (streakIsActive ? 'text-orange-400' : '')
@@ -28,14 +28,20 @@ const Progress = () => {
             {streak}
           </div>
 
-          <div className='flex font-bold text-gray-300'>
-            <HeartIcon className='block h-4 w-4' />{' '}
+          <div className='flex text-gray-300'>
+            <HeartIcon
+              className={
+                'block h-4 w-4 ' + (done >= todo ? 'text-red-400' : '')
+              }
+            />{' '}
             {minutesToHours(lives - livesUsed)}{' '}
           </div>
 
-          <div className='font-bold text-gray-300'>
-            {minutesToHours(Math.max(todo - done - livesUsed, 0))} left
-          </div>
+          {todo - done - livesUsed > 0 && (
+            <div className='text-gray-300'>
+              {minutesToHours(todo - done - livesUsed)} left
+            </div>
+          )}
         </div>
 
         <div

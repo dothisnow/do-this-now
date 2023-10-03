@@ -84,10 +84,11 @@ exports.handler = async event => {
   // console.log(`TASKS: ${JSON.stringify(tasksToDoInNextWeek)}`)
 
   const streakBeforeToday = data?.Item?.streakBeforeToday ?? 0
+  const lives = data?.Item?.lives ?? 0
   let streak = streakBeforeToday
   let streakIsActive = false
 
-  if (done >= todo) {
+  if (done + lives >= todo) {
     // done with today's tasks
     streak++
     streakIsActive = true
@@ -100,10 +101,11 @@ exports.handler = async event => {
       Key: {
         date: dateString(tomorrow),
       },
-      UpdateExpression: 'set #x = :y',
-      ExpressionAttributeNames: { '#x': 'streakBeforeToday' },
+      UpdateExpression: 'set #x = :y, #x2 = :y2',
+      ExpressionAttributeNames: { '#x': 'streakBeforeToday', '#x2': 'lives' },
       ExpressionAttributeValues: {
         ':y': streak,
+        ':y2': done + lives - todo
       },
     }
 
@@ -118,6 +120,7 @@ exports.handler = async event => {
     },
     body: JSON.stringify({
       done,
+      lives,
       todo,
       streak,
       streakIsActive,
@@ -128,4 +131,5 @@ exports.handler = async event => {
 
   return res
 }
+
 

@@ -27,6 +27,18 @@
     "storagetasksStreamArn": {
       "Type": "String",
       "Default": "storagetasksStreamArn"
+    },
+    "storagetasksv2Name": {
+      "Type": "String",
+      "Default": "storagetasksv2Name"
+    },
+    "storagetasksv2Arn": {
+      "Type": "String",
+      "Default": "storagetasksv2Arn"
+    },
+    "storagetasksv2StreamArn": {
+      "Type": "String",
+      "Default": "storagetasksv2StreamArn"
     }
   },
   "Conditions": {
@@ -90,6 +102,15 @@
             },
             "STORAGE_TASKS_STREAMARN": {
               "Ref": "storagetasksStreamArn"
+            },
+            "STORAGE_TASKSV2_NAME": {
+              "Ref": "storagetasksv2Name"
+            },
+            "STORAGE_TASKSV2_ARN": {
+              "Ref": "storagetasksv2Arn"
+            },
+            "STORAGE_TASKSV2_STREAMARN": {
+              "Ref": "storagetasksv2StreamArn"
             }
           }
         },
@@ -100,7 +121,9 @@
           ]
         },
         "Runtime": "nodejs14.x",
-        "Layers": [],
+        "Layers": [
+          "arn:aws:lambda:us-east-1:635678236360:layer:dothisnowhelpers:3"
+        ],
         "Timeout": 25
       }
     },
@@ -218,6 +241,30 @@
                     [
                       {
                         "Ref": "storagetasksArn"
+                      },
+                      "index/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Put*",
+                "dynamodb:Create*",
+                "dynamodb:BatchWriteItem"
+              ],
+              "Resource": [
+                {
+                  "Ref": "storagetasksv2Arn"
+                },
+                {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      {
+                        "Ref": "storagetasksv2Arn"
                       },
                       "index/*"
                     ]

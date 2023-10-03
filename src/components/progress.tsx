@@ -13,7 +13,7 @@ const Progress = () => {
 
   return (
     <div className='flex justify-center'>
-      <div className='mb-2 flex flex-col items-center rounded border border-gray-700 bg-gray-800 p-2 text-xs drop-shadow-sm'>
+      <div className='mb-2 flex flex-col items-center gap-1 text-xs'>
         <div className='flex w-full justify-around gap-2'>
           <div
             title={`${

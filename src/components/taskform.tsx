@@ -141,6 +141,11 @@ const TaskForm = ({
       description: 'Home',
       action: () => window.history.back(),
     },
+    {
+      key: 'enter',
+      description: 'Submit',
+      action: submit,
+    },
   ]
   useKeyAction(keyActions)
 

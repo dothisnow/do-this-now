@@ -6,6 +6,7 @@ import { dateString } from '../helpers/dates'
 
 export const progressTodaySchema = z.object({
   done: z.number(),
+  lives: z.number(),
   todo: z.number(),
   streak: z.number(),
   streakIsActive: z.boolean(),

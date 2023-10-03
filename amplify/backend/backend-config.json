@@ -182,6 +182,15 @@
           ],
           "category": "storage",
           "resourceName": "tasks"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasksv2"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -239,6 +248,15 @@
           ],
           "category": "storage",
           "resourceName": "tasks"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "tasksv2"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -461,6 +479,10 @@
       "service": "DynamoDB"
     },
     "tasks": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
+    },
+    "tasksv2": {
       "providerPlugin": "awscloudformation",
       "service": "DynamoDB"
     }

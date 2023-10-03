@@ -27,6 +27,18 @@
     "storagetasksStreamArn": {
       "Type": "String",
       "Default": "storagetasksStreamArn"
+    },
+    "storagetasksv2Name": {
+      "Type": "String",
+      "Default": "storagetasksv2Name"
+    },
+    "storagetasksv2Arn": {
+      "Type": "String",
+      "Default": "storagetasksv2Arn"
+    },
+    "storagetasksv2StreamArn": {
+      "Type": "String",
+      "Default": "storagetasksv2StreamArn"
     }
   },
   "Conditions": {
@@ -90,6 +102,15 @@
             },
             "STORAGE_TASKS_STREAMARN": {
               "Ref": "storagetasksStreamArn"
+            },
+            "STORAGE_TASKSV2_NAME": {
+              "Ref": "storagetasksv2Name"
+            },
+            "STORAGE_TASKSV2_ARN": {
+              "Ref": "storagetasksv2Arn"
+            },
+            "STORAGE_TASKSV2_STREAMARN": {
+              "Ref": "storagetasksv2StreamArn"
             }
           }
         },
@@ -216,6 +237,34 @@
                     [
                       {
                         "Ref": "storagetasksArn"
+                      },
+                      "index/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:Delete*"
+              ],
+              "Resource": [
+                {
+                  "Ref": "storagetasksv2Arn"
+                },
+                {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      {
+                        "Ref": "storagetasksv2Arn"
                       },
                       "index/*"
                     ]

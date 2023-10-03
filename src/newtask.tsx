@@ -1,6 +1,5 @@
 import { useState } from 'react'
 
-import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQueryNewTask } from './hooks/useQueryNewTask'
 
 import Loading from './components/loading'
@@ -14,15 +13,6 @@ import { Task, TaskInput } from './types/task'
 const NewTask = () => {
   const [loading, setLoading] = useState(false)
   const { mutate } = useQueryNewTask()
-
-  const keyActions: KeyAction[] = [
-    {
-      key: 'escape',
-      description: 'Home',
-      action: () => window.history.back(),
-    },
-  ]
-  useKeyAction(keyActions)
 
   return (
     <RequireAuth>

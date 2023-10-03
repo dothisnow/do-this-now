@@ -7,6 +7,7 @@ import { format } from 'date-fns'
 import { ComponentProps, useState } from 'react'
 import { ZodError } from 'zod'
 
+import useKeyAction, { KeyAction } from '../hooks/useKeyAction'
 import {
   RepeatOption,
   RepeatUnit,
@@ -115,6 +116,33 @@ const TaskForm = ({
       formError?.errors.map(error => [error.path[0], error.message]) ?? []
     ) ?? {}
   console.log(errors)
+
+  const submit = () => {
+    const input = taskInputSchema.safeParse({
+      title,
+      dueMonth,
+      dueDay,
+      dueYear,
+      strictDeadline,
+      repeat,
+      repeatInterval,
+      repeatUnit,
+      repeatWeekdays,
+      timeFrame,
+      subtasks,
+    })
+    if (!input.success) return setFormError(input.error)
+    submitForm(input.data)
+  }
+
+  const keyActions: KeyAction[] = [
+    {
+      key: 'escape',
+      description: 'Home',
+      action: () => window.history.back(),
+    },
+  ]
+  useKeyAction(keyActions)
 
   return (
     <div className='mt-6 space-y-6 sm:mt-5 sm:space-y-5'>
@@ -424,25 +452,7 @@ const TaskForm = ({
         </div>
       </div>
       <div className='pt-5 text-center sm:border-t sm:border-gray-700'>
-        <FormButton
-          className='rounded-full p-3 px-4 text-sm'
-          onClick={() => {
-            const input = taskInputSchema.safeParse({
-              title,
-              dueMonth,
-              dueDay,
-              dueYear,
-              strictDeadline,
-              repeat,
-              repeatInterval,
-              repeatUnit,
-              repeatWeekdays,
-              timeFrame,
-              subtasks,
-            })
-            if (!input.success) return setFormError(input.error)
-            submitForm(input.data)
-          }}>
+        <FormButton className='rounded-full p-3 px-4 text-sm' onClick={submit}>
           Submit
         </FormButton>
       </div>

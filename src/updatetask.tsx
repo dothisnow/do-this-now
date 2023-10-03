@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useLocation } from 'wouter'
 
-import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQueryGetTask } from './hooks/useQueryGetTask'
 import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
 
@@ -32,15 +31,6 @@ const UpdateTask = () => {
   const subtasksState = useState<SubTask[]>([])
 
   const { mutate } = useQueryUpdateTask()
-
-  const keyActions: KeyAction[] = [
-    {
-      key: 'escape',
-      description: 'Back',
-      action: () => window.history.back(),
-    },
-  ]
-  useKeyAction(keyActions)
 
   return (
     <RequireAuth>

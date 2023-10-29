@@ -24,7 +24,7 @@ import Hints from './components/hints'
 import Loading from './components/loading'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
-import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
+import { TaskBox } from './components/taskbox'
 
 // types
 import { Task } from './types/task'
@@ -232,56 +232,16 @@ const Home = () => {
               <>
                 {tasks.slice(0, 3).map((task: Task, i: number) => (
                   <>
-                    <button
+                    <TaskBox
+                      className={selectedTaskIndex !== i ? 'opacity-20' : ''}
                       onClick={() =>
                         (i === 0 || i === 1 || i === 2) &&
                         setSelectedTaskIndex(i)
                       }
-                      className={
-                        'py-auto text-md mx-5 mt-2 rounded border border-gray-700 bg-gray-800 p-4 text-center font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black drop-shadow-sm focus:z-10 focus:ring md:mx-auto md:max-w-sm md:p-5 ' +
-                        (selectedTaskIndex !== i ? ' opacity-20' : '')
-                      }
-                      title={`(Shortcut: ${i + 1})`}>
-                      <div>
-                        <span>
-                          {selectedTaskIndex === i &&
-                          task.hasOwnProperty('subtasks') &&
-                          task.subtasks.length > 0 &&
-                          task.subtasks.some(
-                            (s: (typeof task.subtasks)[number]) =>
-                              !s.done &&
-                              (!s.snooze || new Date(s.snooze) < new Date())
-                          )
-                            ? task.subtasks.find(
-                                (s: (typeof task.subtasks)[number]) =>
-                                  !s.done &&
-                                  (!s.snooze || new Date(s.snooze) < new Date())
-                              )?.title ?? task.title
-                            : task.title}
-                        </span>
-                      </div>
-                      {selectedTaskIndex === i &&
-                        task.hasOwnProperty('subtasks') &&
-                        task.subtasks.length > 0 && (
-                          <div className='py-1 text-xs font-normal'>
-                            {task.title} ({subtasksDone}/{task.subtasks.length})
-                          </div>
-                        )}
-                      <div>
-                        <DateTag due={task.due} />
-                        <TimeFrame timeFrame={task.timeFrame} />
-                        <Repeat
-                          repeat={task.repeat}
-                          repeatInterval={task.repeatInterval}
-                          repeatUnit={task.repeatUnit}
-                          repeatWeekdays={task.repeatWeekdays}
-                        />
-                        <Strict
-                          strictDeadline={task.strictDeadline}
-                          dueDate={task.due}
-                        />
-                      </div>
-                    </button>
+                      showSubtask={selectedTaskIndex === i}
+                      task={task}
+                      title={`(Shortcut: ${i + 1})`}
+                    />
                     {selectedTaskIndex === i && (
                       <div className='mx-5 flex flex-row flex-wrap justify-center pt-2 pr-2'>
                         <Buttons />

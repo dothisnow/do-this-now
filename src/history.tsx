@@ -13,12 +13,12 @@ import Button from './components/button'
 import Hints from './components/hints'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
-import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
 import { useHistory } from './hooks/useHistory'
 import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 
 import Loading from './components/loading'
+import { TaskBox } from './components/taskbox'
 import { repeatWeekdaysSchema, Task as TaskType } from './types/task'
 
 const DateNavigator = ({
@@ -60,9 +60,9 @@ const History = () => {
 
   return (
     <RequireAuth>
-      <div className='my-10 mx-5 h-screen'>
+      <div className='my-10 mx-5 flex h-screen flex-col items-center'>
         <Progress />
-        <div className='flex flex-row flex-wrap justify-center pb-2'>
+        <div className='mt-2 flex flex-row flex-wrap justify-center pb-2'>
           <Button onClick={() => navigate('/')} icon={HomeIcon} text='Home' />
         </div>
         <DateNavigator {...{ daysAgoState }} />
@@ -80,7 +80,6 @@ const History = () => {
                 repeat={task.M.repeat?.S}
                 repeatInterval={task.M.repeatInterval?.N}
                 repeatUnit={task.M.repeatUnit?.S}
-                showDate={true}
                 strictDeadline={task.M.strictDeadline?.BOOL}
                 timeFrame={task.M.timeFrame?.N}
                 title={task.M.title?.S}
@@ -106,7 +105,6 @@ const Task = ({
   repeatInterval,
   repeatUnit,
   repeatWeekdays,
-  showDate,
   strictDeadline,
   timeFrame,
   title,
@@ -114,28 +112,24 @@ const Task = ({
 }: TaskType & {
   innerRef: (x: any) => void
   isSelected: boolean
-  showDate: boolean
   onClick: () => void
 }) => (
-  <div
-    ref={innerRef}
-    className={
-      (isSelected
-        ? 'border-gray-600 bg-gray-700'
-        : 'border-gray-700 bg-gray-800') +
-      ' max-w-96 text-md mx-auto block rounded border p-4 text-center font-bold text-white drop-shadow-sm md:max-w-sm'
-    }
-    onClick={onClick}>
-    <span>{title}</span>
-    {showDate && due !== undefined && due !== 'No Due Date' && (
-      <DateTag due={due} />
-    )}
-    <TimeFrame timeFrame={timeFrame} />
-    <Repeat {...{ repeat, repeatInterval, repeatUnit, repeatWeekdays }} />
-    {due !== undefined && due !== 'No Due Date' && (
-      <Strict strictDeadline={strictDeadline} dueDate={due} highlight={false} />
-    )}
-  </div>
+  <TaskBox
+    innerRef={innerRef}
+    isSelected={isSelected}
+    onClick={onClick}
+    task={{
+      due,
+      repeat,
+      repeatInterval,
+      repeatUnit,
+      repeatWeekdays,
+      strictDeadline,
+      timeFrame,
+      title,
+      subtasks: [],
+    }}
+  />
 )
 
 export default History

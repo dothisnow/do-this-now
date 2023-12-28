@@ -178,13 +178,13 @@ const Home = () => {
 
   return (
     <RequireAuth>
-      <div className='flex h-screen flex-col justify-center'>
+      <div className='flex h-screen flex-col items-center justify-center gap-2'>
         {isLoading || doneIsLoading || deleteIsLoading || snoozeIsLoading ? (
           <Loading />
         ) : (
           <>
             <Progress nextIncrease={selectedTask?.timeFrame} />
-            <div className='mx-5 flex flex-row flex-wrap justify-center pr-2'>
+            <div className='mx-5 mt-1 flex flex-row flex-wrap justify-center'>
               <Button
                 onClick={() => navigate('/tasks')}
                 text={'All tasks'}
@@ -206,17 +206,16 @@ const Home = () => {
                 {tasks.slice(0, 3).map((task: Task, i: number) => (
                   <>
                     <TaskBox
-                      className={selectedTaskIndex !== i ? 'opacity-20' : ''}
+                      isSelected={selectedTaskIndex === i}
                       onClick={() =>
                         (i === 0 || i === 1 || i === 2) &&
                         setSelectedTaskIndex(i)
                       }
-                      showSubtask={selectedTaskIndex === i}
                       task={task}
                       title={`(Shortcut: ${i + 1})`}
                     />
                     {selectedTaskIndex === i && (
-                      <div className='mx-5 flex flex-row flex-wrap justify-center pt-2 pr-2'>
+                      <div className='mx-5 flex flex-row flex-wrap justify-center'>
                         <Buttons />
                       </div>
                     )}

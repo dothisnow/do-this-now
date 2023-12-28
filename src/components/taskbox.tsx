@@ -4,19 +4,19 @@ import { DateTag, Repeat, Strict, TimeFrame } from './tags'
 import { Task } from '../types/task'
 
 export const TaskBox = ({
-  className,
+  innerRef,
+  isSelected,
   onClick,
-  showSubtask: propsShowSubtask,
   task,
   title,
 }: {
-  className?: string
+  innerRef?: (x: any) => void
+  isSelected: boolean
   onClick?: () => void
-  showSubtask?: boolean
   task: Task
   title?: string
 }) => {
-  const showSubtask = propsShowSubtask && task?.subtasks?.length > 0
+  const showSubtask = isSelected && task?.subtasks?.length > 0
   const subtasksDone =
     task.hasOwnProperty('subtasks') && Array.isArray(task.subtasks)
       ? task.subtasks.reduce(
@@ -27,10 +27,13 @@ export const TaskBox = ({
       : 0
   return (
     <button
+      ref={innerRef}
       onClick={onClick}
       className={
-        'py-auto text-md mx-5 mt-2 rounded border border-gray-700 bg-gray-800 p-4 text-center font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black drop-shadow-sm focus:z-10 focus:ring md:mx-auto md:max-w-sm md:p-5 ' +
-        className
+        (isSelected
+          ? 'border-gray-600 bg-gray-700 '
+          : 'border-gray-700 bg-gray-800 ') +
+        'text-md w-full max-w-sm rounded-lg border p-4 text-center font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black drop-shadow-sm focus:z-10 focus:ring md:p-5 '
       }
       title={title}>
       <div>

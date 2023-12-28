@@ -13,7 +13,7 @@ const Progress = ({ nextIncrease = 0 }: { nextIncrease?: number }) => {
 
   return (
     <div className='flex justify-center'>
-      <div className='mb-2 flex flex-col items-center gap-1 text-xs'>
+      <div className='flex flex-col items-center gap-1 text-xs'>
         <div className='flex w-full justify-around gap-2'>
           <div
             title={`${

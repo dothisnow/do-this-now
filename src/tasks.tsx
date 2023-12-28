@@ -19,7 +19,6 @@ import Hints from './components/hints'
 import Loading from './components/loading'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
-import { DateTag, Repeat, Strict, TimeFrame } from './components/tags'
 
 import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
@@ -27,7 +26,7 @@ import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasks } from './hooks/useQueryTasks'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 
-import { Task as TaskType } from './types/task'
+import { TaskBox } from './components/taskbox'
 
 const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState(0)
@@ -152,9 +151,9 @@ const Tasks = () => {
         </div>
       ) : (
         <>
-          <div className='my-10 mx-5 h-screen'>
+          <div className='my-10 mx-5 flex h-screen flex-col items-center gap-1'>
             <Progress />
-            <div className='flex flex-row flex-wrap justify-center pb-2'>
+            <div className='mt-2 flex flex-row flex-wrap justify-center'>
               <Button
                 onClick={() => navigate('/')}
                 icon={HomeIcon}
@@ -190,8 +189,7 @@ const Tasks = () => {
                             0
                           )
                             ? 'text-orange-300'
-                            : 'text-white') +
-                          ' max-w-96 mx-auto text-center text-sm md:max-w-sm'
+                            : 'text-white') + ' text-center text-sm md:max-w-sm'
                         }>
                         {newSafeDate(task.due).toDateString()}
                       </div>
@@ -202,19 +200,15 @@ const Tasks = () => {
                   i > 0 &&
                   newSafeDate(task.due) > new Date() &&
                   newSafeDate(tasks[i - 1].due) <= new Date() && (
-                    <div
-                      className={
-                        'max-w-96 mx-auto text-center text-sm text-white md:max-w-sm'
-                      }>
+                    <div className='text-center text-sm text-white md:max-w-sm'>
                       Due after today
                     </div>
                   )}
-                <Task
-                  isSelected={i === selectedTask}
+                <TaskBox
                   innerRef={(e: any) => (taskElems.current[i] = e)}
-                  {...task}
+                  isSelected={i === selectedTask}
                   onClick={() => setSelectedTask(i)}
-                  showDate={sort === 1}
+                  task={task}
                 />
                 {i === selectedTask && (
                   <div className='flex flex-row flex-wrap justify-center py-2'>
@@ -256,51 +250,5 @@ const Tasks = () => {
     </RequireAuth>
   )
 }
-
-const Task = ({
-  due,
-  innerRef,
-  isSelected,
-  repeat,
-  repeatInterval,
-  repeatUnit,
-  repeatWeekdays,
-  showDate,
-  strictDeadline,
-  timeFrame,
-  title,
-  onClick,
-  subtasks,
-}: TaskType & {
-  innerRef: (x: any) => void
-  isSelected: boolean
-  showDate: boolean
-  onClick: () => void
-}) => (
-  <button
-    ref={innerRef}
-    className={
-      (isSelected
-        ? 'border-gray-600 bg-gray-700'
-        : 'border-gray-700 bg-gray-800') +
-      ' max-w-96 text-md mx-auto my-1 block w-full rounded border p-4 text-center font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black drop-shadow-sm focus:z-10 focus:ring md:max-w-sm'
-    }
-    onClick={onClick}>
-    <span>{title}</span>
-    {subtasks && subtasks.length > 0 && subtasks.some(s => !s.done) && (
-      <div className='my-1 text-sm'>
-        Current subtask: {subtasks.find(s => !s.done)?.title}
-      </div>
-    )}
-    {showDate && due !== undefined && due !== 'No Due Date' && (
-      <DateTag due={due} />
-    )}
-    <TimeFrame timeFrame={timeFrame} />
-    <Repeat {...{ repeat, repeatInterval, repeatUnit, repeatWeekdays }} />
-    {due !== undefined && due !== 'No Due Date' && (
-      <Strict strictDeadline={strictDeadline} dueDate={due} />
-    )}
-  </button>
-)
 
 export default Tasks

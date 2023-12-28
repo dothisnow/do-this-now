@@ -9,7 +9,7 @@ import { useLocation } from 'wouter'
 
 import { BackwardIcon, ForwardIcon, HomeIcon } from '@heroicons/react/20/solid'
 
-import Button from './components/button'
+import { Button } from './components/button'
 import Hints from './components/hints'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'

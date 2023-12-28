@@ -7,7 +7,7 @@ import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
 
 import { ArrowLeftIcon } from '@heroicons/react/20/solid'
-import Button from './components/button'
+import { Button } from './components/button'
 import { Task, TaskInput } from './types/task'
 
 const NewTask = () => {

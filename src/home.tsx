@@ -19,7 +19,7 @@ import { isSnoozed, useQueryTasksTop } from './hooks/useQueryTasksTop'
 import loginManager from './helpers/LoginManager'
 import useDing from './helpers/useDing'
 
-import Button from './components/button'
+import { Button } from './components/button'
 import Hints from './components/hints'
 import Loading from './components/loading'
 import Progress from './components/progress'

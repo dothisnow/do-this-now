@@ -14,7 +14,7 @@ import { format } from 'date-fns'
 import { newSafeDate } from './helpers/dates'
 import useDing from './helpers/useDing'
 
-import Button from './components/button'
+import { Button } from './components/button'
 import Hints from './components/hints'
 import Loading from './components/loading'
 import Progress from './components/progress'

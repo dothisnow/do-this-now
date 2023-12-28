@@ -5,7 +5,7 @@ import { useQueryGetTask } from './hooks/useQueryGetTask'
 import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
 
 import { ArrowLeftIcon } from '@heroicons/react/20/solid'
-import Button from './components/button'
+import { Button } from './components/button'
 import Loading from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'

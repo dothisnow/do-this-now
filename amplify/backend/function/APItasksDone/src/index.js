@@ -47,16 +47,11 @@ exports.handler = async event => {
     newItem.hasOwnProperty('subtasks') &&
     newItem.subtasks.some(st => !st.done)
   ) {
-    for (let i = 0; i < newItem.subtasks.length; i++) {
-      if (
-        newItem.subtasks[i].done ||
-        (newItem.subtasks[i].snooze &&
-          new Date(newItem.subtasks[i].snooze) >= new Date())
-      )
-        continue
-      newItem.subtasks[i].done = true
-      break
-    }
+    const nextSubtask =
+      newItem.subtasks.find(
+        s => !s.done && (!s.snooze || new Date(s.snooze) < new Date())
+      ) ?? newItem.subtasks.find(s => !s.done)
+    nextSubtask.done = true
     const updateParams = {
       TableName: ENV.STORAGE_TASKS_NAME,
       Item: newItem,

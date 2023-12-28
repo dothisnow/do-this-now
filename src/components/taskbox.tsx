@@ -39,10 +39,17 @@ export const TaskBox = ({
       <div>
         <span>
           {showSubtask
-            ? task?.subtasks?.find(
+            ? // show the first unsnoozed subtask
+              task?.subtasks?.find(
                 (s: (typeof task.subtasks)[number]) =>
                   !s.done && (!s.snooze || new Date(s.snooze) < new Date())
-              )?.title ?? task.title
+              )?.title ??
+              // if there are none, show the first subtask that isn't done
+              task?.subtasks?.find(
+                (s: (typeof task.subtasks)[number]) => !s.done
+              )?.title ??
+              // otherwise, just show the task title
+              task.title
             : task.title}
         </span>
       </div>

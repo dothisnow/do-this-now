@@ -37,9 +37,16 @@ const Progress = () => {
             {minutesToHours(lives - livesUsed)}{' '}
           </div>
 
-          {todo - done - livesUsed > 0 && (
+          {done + livesUsed < todo && (
             <div className='text-gray-300'>
               {minutesToHours(todo - done - livesUsed)} left
+            </div>
+          )}
+
+          {done + livesUsed >= todo && done < todo && (
+            <div className='text-gray-300'>
+              {minutesToHours(todo - done)} to{' '}
+              <HeartIcon className='inline-block h-4 w-4 text-red-400' />
             </div>
           )}
         </div>

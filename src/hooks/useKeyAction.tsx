@@ -5,6 +5,7 @@ export type KeyAction = {
   key: string
   description: string
   action: ((e: KeyboardEvent) => void) | (() => void)
+  shift?: boolean
 }
 
 const useKeyAction = (
@@ -24,7 +25,8 @@ const useKeyAction = (
           !e.altKey &&
           !e.ctrlKey &&
           !e.metaKey &&
-          keycode(kA.key) === e.which
+          keycode(kA.key) === e.which &&
+          (kA.shift === undefined || kA.shift === e.shiftKey)
         ) {
           e.preventDefault()
           kA.action(e)

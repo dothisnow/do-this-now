@@ -106,6 +106,13 @@ const Home = () => {
       key: 's',
       description: 'Snooze task',
       action: snoozeTask,
+      shift: false,
+    },
+    {
+      key: 'S',
+      description: 'Snooze all subtasks',
+      action: snoozeAllSubtasks,
+      shift: true,
     },
     {
       key: 't',

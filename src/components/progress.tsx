@@ -2,7 +2,7 @@ import { FireIcon, HeartIcon } from '@heroicons/react/20/solid'
 import { minutesToHours } from '../helpers/time'
 import { useQueryProgressToday } from '../hooks/useQueryProgressToday'
 
-const Progress = ({ nextIncrease = 0 }: { nextIncrease?: number }) => {
+const Progress = () => {
   const progress = useQueryProgressToday()
 
   if (progress.data === undefined) return <></>
@@ -56,42 +56,12 @@ const Progress = ({ nextIncrease = 0 }: { nextIncrease?: number }) => {
             width: Math.round((144 * todo) / 600),
           }}
           className='relative mt-0.5 h-2 overflow-hidden rounded-full border border-gray-700'>
-          {done + livesUsed < todo ? (
-            <>
-              <div
-                className='h-full rounded-full bg-amber-500'
-                style={{
-                  width:
-                    Math.min(
-                      ((done + livesUsed + nextIncrease) / todo) * 100,
-                      100
-                    ) + '%',
-                }}
-              />
-              <div
-                className='-mt-1.5 h-full rounded-full bg-gray-500'
-                style={{
-                  width: Math.min(((done + livesUsed) / todo) * 100, 100) + '%',
-                }}
-              />
-            </>
-          ) : (
-            <>
-              <div
-                className='h-full rounded-full bg-gray-500'
-                style={{
-                  width: Math.min(((done + livesUsed) / todo) * 100, 100) + '%',
-                }}
-              />
-              <div
-                className='-mt-1.5 h-full rounded-full bg-amber-500'
-                style={{
-                  width:
-                    Math.min(((done + nextIncrease) / todo) * 100, 100) + '%',
-                }}
-              />
-            </>
-          )}
+          <div
+            className='h-full rounded-full bg-gray-500'
+            style={{
+              width: Math.min(((done + livesUsed) / todo) * 100, 100) + '%',
+            }}
+          />
           <div
             className='-mt-1.5 h-full rounded-full bg-white'
             style={{

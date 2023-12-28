@@ -183,7 +183,7 @@ const Home = () => {
           <Loading />
         ) : (
           <>
-            <Progress nextIncrease={selectedTask?.timeFrame} />
+            <Progress />
             <div className='mx-5 mt-1 flex flex-row flex-wrap justify-center'>
               <Button
                 onClick={() => navigate('/tasks')}

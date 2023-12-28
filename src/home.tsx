@@ -54,53 +54,20 @@ const Home = () => {
   const { mutate: mutateSnooze, isLoading: snoozeIsLoading } =
     useQuerySnoozeTask()
 
-  const subtasksDone =
-    selectedTask &&
-    selectedTask.hasOwnProperty('subtasks') &&
-    Array.isArray(selectedTask.subtasks)
-      ? selectedTask.subtasks.reduce(
-          (acc: number, cur: (typeof selectedTask.subtasks)[number]) =>
-            acc + (cur.done ? 1 : 0),
-          0
-        )
-      : 0
-
   const completeTask = () => {
     if (!selectedTask) return
     ding()
     mutate(selectedTask)
-    if (
-      !selectedTask.hasOwnProperty('subtasks') ||
-      subtasksDone + 1 >= selectedTask.subtasks.length
-    )
-      setSelectedTaskIndex(0)
   }
-
-  const subtasksSnoozed =
-    selectedTask &&
-    selectedTask.hasOwnProperty('subtasks') &&
-    Array.isArray(selectedTask.subtasks)
-      ? selectedTask.subtasks.reduce(
-          (acc: number, cur: (typeof selectedTask.subtasks)[number]) =>
-            acc + (cur.snooze && new Date(cur.snooze) >= new Date() ? 1 : 0),
-          0
-        )
-      : 0
 
   const snoozeTask = () => {
     if (!selectedTask) return
     mutateSnooze({ task: selectedTask })
-    if (
-      !selectedTask.hasOwnProperty('subtasks') ||
-      subtasksSnoozed + 1 >= selectedTask.subtasks.length
-    )
-      setSelectedTaskIndex(0)
   }
 
   const snoozeAllSubtasks = () => {
     if (!selectedTask) return
     mutateSnooze({ task: selectedTask, allSubtasks: true })
-    setSelectedTaskIndex(0)
   }
 
   const deleteTask = () => {
@@ -112,7 +79,6 @@ const Home = () => {
     )
       return
     mutateDelete(selectedTask)
-    setSelectedTaskIndex(0)
   }
 
   const keyActions: KeyAction[] = [

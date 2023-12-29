@@ -30,7 +30,7 @@ import { TaskBox } from './components/taskbox'
 
 const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState(0)
-  const [sort, setSort] = useState(0)
+  const [sort, setSort] = useState<'CHRON' | 'TOP'>('CHRON')
   const taskElems: MutableRefObject<HTMLElement[]> = useRef([])
   const ding = useDing()
   const navigate = useLocation()[1]
@@ -38,7 +38,7 @@ const Tasks = () => {
   const { data, isFetching } = useQueryTasks()
   const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()
 
-  const tasks = (sort === 0 ? data : dataTop)?.Items ?? []
+  const tasks = (sort === 'CHRON' ? data : dataTop)?.Items ?? []
 
   const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
   const { mutate: mutateDelete, isLoading: deleteIsLoading } =
@@ -73,7 +73,7 @@ const Tasks = () => {
     {
       key: 'o',
       description: 'Toggle order between date and top',
-      action: () => setSort(s => (s + 1) % 2),
+      action: () => setSort(s => (s === 'CHRON' ? 'TOP' : 'CHRON')),
     },
     {
       key: 'u',
@@ -134,7 +134,7 @@ const Tasks = () => {
     }
   }
 
-  if (sort === 0)
+  if (sort === 'CHRON')
     tasks.sort((a: (typeof tasks)[number], b: (typeof tasks)[number]) =>
       a.due === 'No Due Date'
         ? -1
@@ -142,6 +142,14 @@ const Tasks = () => {
         ? 1
         : newSafeDate(a.due).getTime() - newSafeDate(b.due).getTime()
     )
+
+  const firstTaskDueAfterToday = tasks.findIndex(
+    (task: (typeof tasks)[number]) => newSafeDate(task.due) > new Date()
+  )
+  const firstSnoozedTask = tasks.findIndex(
+    (task: (typeof tasks)[number]) =>
+      task.snooze && new Date(task.snooze) > new Date()
+  )
 
   return (
     <RequireAuth>
@@ -165,84 +173,90 @@ const Tasks = () => {
                 text='New Task'
               />
               <Button
-                onClick={() => setSort(s => (s + 1) % 2)}
+                onClick={() => setSort(s => (s === 'CHRON' ? 'TOP' : 'CHRON'))}
                 icon={ArrowDownIcon}
                 text='Toggle Order'
               />
             </div>
-            {tasks.map((task: (typeof tasks)[number], i: number) => (
-              <Fragment key={task.title}>
-                {sort === 0 && (
-                  <>
-                    {(i === 0 ||
-                      formatDate(newSafeDate(tasks[i - 1].due)) !==
-                        formatDate(newSafeDate(task.due))) && (
-                      <div
-                        className={
-                          (newSafeDate(task.due) <
-                          new Date(
-                            new Date().getFullYear(),
-                            new Date().getMonth(),
-                            new Date().getDate(),
-                            0,
-                            0,
-                            0
-                          )
-                            ? 'text-orange-300'
-                            : 'text-white') + ' text-center text-sm md:max-w-sm'
-                        }>
-                        {newSafeDate(task.due).toDateString()}
-                      </div>
-                    )}
-                  </>
-                )}
-                {sort === 1 &&
-                  i > 0 &&
-                  newSafeDate(task.due) > new Date() &&
-                  newSafeDate(tasks[i - 1].due) <= new Date() && (
+            {tasks.map((task: (typeof tasks)[number], i: number) => {
+              const previousTask = i > 0 ? tasks[i - 1] : undefined
+              return (
+                <Fragment key={task.title}>
+                  {sort === 'CHRON' && (
+                    <>
+                      {(previousTask === undefined ||
+                        formatDate(newSafeDate(previousTask.due)) !==
+                          formatDate(newSafeDate(task.due))) && (
+                        <div
+                          className={
+                            (newSafeDate(task.due) <
+                            new Date(
+                              new Date().getFullYear(),
+                              new Date().getMonth(),
+                              new Date().getDate(),
+                              0,
+                              0,
+                              0
+                            )
+                              ? 'text-orange-300'
+                              : 'text-white') +
+                            ' text-center text-sm md:max-w-sm'
+                          }>
+                          {newSafeDate(task.due).toDateString()}
+                        </div>
+                      )}
+                    </>
+                  )}
+                  {sort === 'TOP' && i === firstTaskDueAfterToday && (
                     <div className='text-center text-sm text-white md:max-w-sm'>
                       Due after today
                     </div>
                   )}
-                <TaskBox
-                  innerRef={(e: any) => (taskElems.current[i] = e)}
-                  isSelected={i === selectedTask}
-                  onClick={() => setSelectedTask(i)}
-                  task={task}
-                />
-                {i === selectedTask && (
-                  <div className='flex flex-row flex-wrap justify-center py-2'>
-                    {[
-                      {
-                        text: 'Complete',
-                        icon: CheckCircleIcon,
-                        onClick: completeTask,
-                      },
-                      {
-                        text: 'Update',
-                        icon: PencilIcon,
-                        onClick: () =>
-                          navigate(
-                            `/update-task/${encodeURIComponent(task.title)}`
-                          ),
-                      },
-                      {
-                        text: 'Delete',
-                        icon: TrashIcon,
-                        onClick: () =>
-                          window.confirm(
-                            `Are you sure you want to delete '${task.title}'?`
-                          ) && mutateDelete(task),
-                      },
-                    ].map(props => (
-                      <Button key={props.text} {...props} />
-                    ))}
-                  </div>
-                )}
-              </Fragment>
-            ))}
-            {(sort === 0 && isFetching) ||
-              (sort === 1 && isFetchingTop && <Loading />)}
+                  {sort === 'TOP' && i === firstSnoozedTask && (
+                    <div className='text-center text-sm text-white md:max-w-sm'>
+                      Snoozed
+                    </div>
+                  )}
+                  <TaskBox
+                    innerRef={(e: any) => (taskElems.current[i] = e)}
+                    isSelected={i === selectedTask}
+                    onClick={() => setSelectedTask(i)}
+                    task={task}
+                  />
+                  {i === selectedTask && (
+                    <div className='flex flex-row flex-wrap justify-center py-2'>
+                      {[
+                        {
+                          text: 'Complete',
+                          icon: CheckCircleIcon,
+                          onClick: completeTask,
+                        },
+                        {
+                          text: 'Update',
+                          icon: PencilIcon,
+                          onClick: () =>
+                            navigate(
+                              `/update-task/${encodeURIComponent(task.title)}`
+                            ),
+                        },
+                        {
+                          text: 'Delete',
+                          icon: TrashIcon,
+                          onClick: () =>
+                            window.confirm(
+                              `Are you sure you want to delete '${task.title}'?`
+                            ) && mutateDelete(task),
+                        },
+                      ].map(props => (
+                        <Button key={props.text} {...props} />
+                      ))}
+                    </div>
+                  )}
+                </Fragment>
+              )
+            })}
+            {((sort === 'CHRON' && isFetching) ||
+              (sort === 'TOP' && isFetchingTop)) && <Loading />}
           </div>
           <Hints keyActions={keyActions} />
         </>

@@ -23,6 +23,7 @@ const TaskForm = ({
   dueMonth: initialDueMonth,
   dueDay: initialDueDay,
   dueYear: initialDueYear,
+  errorMessage,
   strictDeadline: initialStrictDeadline,
   repeat: initialRepeat,
   repeatInterval: initialRepeatInterval,
@@ -32,6 +33,7 @@ const TaskForm = ({
   subtasks: initialSubtasks,
   submitForm,
 }: Partial<TaskInput> & {
+  errorMessage?: string | null
   submitForm: (input: TaskInput) => void
 }) => {
   const [formError, setFormError] = useState<ZodError>()
@@ -109,13 +111,10 @@ const TaskForm = ({
     updateDate(newDate)
   }
 
-  console.log(formError?.errors)
-
   const errors =
     Object.fromEntries(
       formError?.errors.map(error => [error.path[0], error.message]) ?? []
     ) ?? {}
-  console.log(errors)
 
   const submit = () => {
     const input = taskInputSchema.safeParse({
@@ -151,6 +150,8 @@ const TaskForm = ({
 
   return (
     <div className='mt-6 space-y-6 sm:mt-5 sm:space-y-5'>
+      {errorMessage && <div className='mt-4 text-red-500'>{errorMessage}</div>}
+
       <div className='sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-700 sm:pt-5'>
         <label
           htmlFor='Title'

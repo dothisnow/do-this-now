@@ -14,7 +14,6 @@ const useKeyAction = (
 ) => {
   const callback = useCallback(
     (e: KeyboardEvent) => {
-      console.log(e)
       if (
         e.target instanceof HTMLInputElement ||
         e.target instanceof HTMLTextAreaElement

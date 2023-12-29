@@ -10,7 +10,6 @@
 Amplify Params - DO NOT EDIT */
 
 const ENV = require('process').env
-
 const AWS = require('aws-sdk')
 const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -29,13 +28,26 @@ exports.handler = async event => {
   const params = {
     TableName: ENV.STORAGE_TASKS_NAME,
     Item: body,
+    ConditionExpression: 'attribute_not_exists(title)',
   }
 
-  const response = await docClient.put(params).promise()
+  try {
+    await docClient.put(params).promise()
+  } catch (e) {
+    if (e.code === 'ConditionalCheckFailedException')
+      return {
+        statusCode: 409,
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': '*',
+        },
+        body: JSON.stringify('A task with this title already exists'),
+      }
+    throw e
+  }
 
   return {
     statusCode: 200,
-    //  Uncomment below to enable CORS requests
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': '*',
@@ -44,7 +56,7 @@ exports.handler = async event => {
   }
 }
 
-const error = m => ({
+const error = () => ({
   statusCode: 502,
   headers: {
     'Access-Control-Allow-Origin': '*',

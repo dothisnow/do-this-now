@@ -51,8 +51,6 @@ const History = () => {
 
   const tasks = data?.tasks?.L || []
 
-  console.log({ tasks })
-
   const keyActions: KeyAction[] = [
     { key: 'escape', description: 'Home', action: () => navigate('/') },
   ]

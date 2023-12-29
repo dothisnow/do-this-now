@@ -20,7 +20,7 @@
       "function": {
         "APItasksNew": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",
-          "s3Key": "amplify-builds/APItasksNew-3345314f595a71416958-build.zip"
+          "s3Key": "amplify-builds/APItasksNew-6167592f667667775244-build.zip"
         },
         "APItasksTop": {
           "deploymentBucketName": "amplify-maxlascombe-prod-125438-deployment",

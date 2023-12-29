@@ -7,7 +7,7 @@ import {
   PlusCircleIcon,
   TrashIcon,
 } from '@heroicons/react/20/solid'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 import { useLocation } from 'wouter'
 
 import useKeyAction, { KeyAction } from './hooks/useKeyAction'
@@ -36,7 +36,6 @@ const Home = () => {
   const { data, isLoading } = useQueryTasksTop()
 
   let tasks = (data?.Items ?? []).filter(t => !isSnoozed(t))
-  console.log(tasks)
 
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<0 | 1 | 2>(0)
   const selectedTask = !tasks
@@ -170,7 +169,7 @@ const Home = () => {
     return (
       <>
         {info.map(([func, text, icon]) => (
-          <Button key={text} onClick={func} text={text} icon={icon} />
+          <Button key={func.name} onClick={func} text={text} icon={icon} />
         ))}
       </>
     )
@@ -204,7 +203,7 @@ const Home = () => {
             {tasks.length > 0 ? (
               <>
                 {tasks.slice(0, 3).map((task: Task, i: number) => (
-                  <>
+                  <Fragment key={task.title}>
                     <TaskBox
                       isSelected={selectedTaskIndex === i}
                       onClick={() =>
@@ -219,7 +218,7 @@ const Home = () => {
                         <Buttons />
                       </div>
                     )}
-                  </>
+                  </Fragment>
                 ))}
               </>
             ) : (

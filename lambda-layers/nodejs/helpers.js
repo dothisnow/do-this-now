@@ -36,6 +36,8 @@ const nextDueDate = task => {
   else if (task.repeat === 'Custom' && task.repeatUnit === 'year')
     date.setFullYear(date.getFullYear() + task.repeatInterval)
   date.setHours(date.getHours() + 2)
+  if (task.until && new Date(task.until) < new Date(dateString(date)))
+    return undefined
   return new Date(dateString(date))
 }
 

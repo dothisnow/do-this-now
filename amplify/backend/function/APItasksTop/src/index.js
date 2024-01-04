@@ -6,7 +6,7 @@
 	STORAGE_TASKS_STREAMARN
 Amplify Params - DO NOT EDIT */
 
-const { dateString, nextDueDate } = require('/opt/nodejs/helpers')
+const { nextDueDate } = require('/opt/nodejs/helpers')
 
 const ENV = require('process').env
 
@@ -57,7 +57,7 @@ exports.handler = async event => {
     t =>
       t.hasOwnProperty('due') &&
       new Date(t.due) <= today &&
-      nextDueDate(t) >= in2Days,
+      (nextDueDate(t) ?? Infinity) >= in2Days,
   ]
 
   const sortProperties = [

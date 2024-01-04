@@ -73,11 +73,13 @@ exports.handler = async event => {
 
   const now = body.hasOwnProperty('date') ? new Date(body.date) : new Date()
 
+  const newDue = nextDueDate(newItem)
+
   let response
-  if (newItem.repeat === 'No Repeat')
+  if (newItem.repeat === 'No Repeat' || newDue === undefined)
     response = await docClient.delete(params).promise()
   else {
-    newItem.due = dateString(nextDueDate(newItem))
+    newItem.due = dateString(newDue)
 
     if (!newItem?.history) newItem.history = []
     newItem.history.push(dateString(now))

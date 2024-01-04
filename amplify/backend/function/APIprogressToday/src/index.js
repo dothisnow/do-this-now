@@ -67,7 +67,7 @@ exports.handler = async event => {
   for (const task of allTasks) {
     const time = parseInt(task.timeFrame)
     let due = new Date(task.due)
-    while (due <= in2Weeks) {
+    while (due !== undefined && due <= in2Weeks) {
       totalTimeInNext2Weeks += time
       // tasksToDoInNextWeek.push({ title: task.title, due: dateString(due) })
       if (task.repeat === 'No Repeat') break
@@ -131,5 +131,3 @@ exports.handler = async event => {
 
   return res
 }
-
-

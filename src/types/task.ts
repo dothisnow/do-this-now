@@ -54,8 +54,11 @@ export const taskInputSchema = z.object({
   strictDeadline: z.boolean(),
   repeat: repeatOptionSchema,
   repeatInterval: z.number(),
-  repeatWeekdays: repeatWeekdaysSchema,
   repeatUnit: repeatUnitSchema,
+  repeatUntilMonth: z.union([z.number(), z.undefined()]),
+  repeatUntilDay: z.union([z.number(), z.undefined()]),
+  repeatUntilYear: z.union([z.number(), z.undefined()]),
+  repeatWeekdays: repeatWeekdaysSchema,
   timeFrame: z.union([z.number(), z.string().transform(x => parseInt(x))]),
   subtasks: z.array(subTaskSchema),
 })
@@ -68,6 +71,7 @@ export const taskSchema = z.object({
   repeat: repeatOptionSchema,
   repeatInterval: z.number(),
   repeatUnit: repeatUnitSchema,
+  repeatUntil: z.union([dateStringSchema, z.undefined()]).optional(),
   repeatWeekdays: repeatWeekdaysSchema.catch([
     false,
     false,

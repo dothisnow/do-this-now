@@ -28,6 +28,9 @@ const TaskForm = ({
   repeat: initialRepeat,
   repeatInterval: initialRepeatInterval,
   repeatUnit: initialRepeatUnit,
+  repeatUntilDay: initialRepeatUntilDay,
+  repeatUntilMonth: initialRepeatUntilMonth,
+  repeatUntilYear: initialRepeatUntilYear,
   repeatWeekdays: initialRepeatWeekdays,
   timeFrame: initialTimeFrame,
   subtasks: initialSubtasks,
@@ -57,6 +60,18 @@ const TaskForm = ({
   )
   const [repeatUnit, setRepeatUnit] = useState<RepeatUnit>(
     initialRepeatUnit ?? 'day'
+  )
+  const [repeatForever, setRepeatForever] = useState(
+    initialRepeatUntilMonth === undefined
+  )
+  const [repeatUntilMonth, setRepeatUntilMonth] = useState(
+    initialRepeatUntilMonth ?? new Date().getMonth() + 1
+  )
+  const [repeatUntilDay, setRepeatUntilDay] = useState(
+    initialRepeatUntilDay ?? new Date().getDate()
+  )
+  const [repeatUntilYear, setRepeatUntilYear] = useState(
+    initialRepeatUntilYear ?? new Date().getFullYear()
   )
   const [repeatWeekdays, setRepeatWeekdays] = useState<RepeatWeekdays>(
     initialRepeatWeekdays ?? [false, false, false, false, false, false, false]
@@ -117,7 +132,7 @@ const TaskForm = ({
     ) ?? {}
 
   const submit = () => {
-    const input = taskInputSchema.safeParse({
+    const rawInput: TaskInput = {
       title,
       dueMonth,
       dueDay,
@@ -129,7 +144,8 @@ const TaskForm = ({
       repeatWeekdays,
       timeFrame,
       subtasks,
-    })
+    }
+    const input = taskInputSchema.safeParse(rawInput)
     if (!input.success) return setFormError(input.error)
     submitForm(input.data)
   }

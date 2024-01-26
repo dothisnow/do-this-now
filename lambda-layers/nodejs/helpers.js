@@ -8,18 +8,11 @@ const nextDueDate = task => {
     date.setDate(date.getDate() + task.repeatInterval)
   else if (task.repeat === 'Weekly') date.setDate(date.getDate() + 7)
   else if (task.repeat === 'Custom' && task.repeatUnit === 'week') {
-    if (
-      !task.hasOwnProperty('repeatWeekdays') ||
-      !task.repeatWeekdays.some(x => x)
-    )
+    if (!('repeatWeekdays' in task) || !task.repeatWeekdays.some(x => x))
       date.setDate(date.getDate() + 7 * task.repeatInterval)
     else {
-      let i
-      for (
-        i = (date.getDay() + 1) % 7;
-        !task.repeatWeekdays[i];
-        i = (i + 1) % 7
-      ) {}
+      let i = (date.getDay() + 1) % 7
+      while (!task.repeatWeekdays[i]) i = (i + 1) % 7
       if (i > date.getDay()) date.setDate(date.getDate() + i - date.getDay())
       else {
         date.setDate(date.getDate() + 7 * task.repeatInterval)

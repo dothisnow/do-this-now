@@ -72,7 +72,7 @@ const TaskForm = ({
   }
 
   const todayAtMidnight = () => {
-    let date = new Date()
+    const date = new Date()
     date.setHours(0, 0, 0, 0)
     return date
   }
@@ -102,12 +102,12 @@ const TaskForm = ({
   }
 
   const decrementDate = () => {
-    let newDate = new Date(dueYear, dueMonth - 1, dueDay - 1, 0, 0, 0)
+    const newDate = new Date(dueYear, dueMonth - 1, dueDay - 1, 0, 0, 0)
     updateDate(newDate)
   }
 
   const incrementDate = () => {
-    let newDate = new Date(dueYear, dueMonth - 1, dueDay + 1, 0, 0, 0)
+    const newDate = new Date(dueYear, dueMonth - 1, dueDay + 1, 0, 0, 0)
     updateDate(newDate)
   }
 

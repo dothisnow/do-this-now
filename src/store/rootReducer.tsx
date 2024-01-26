@@ -2,20 +2,36 @@ import { AuthState } from '@aws-amplify/ui-components'
 
 export type State = {
   authState: AuthState
-  user: any
+  user: object
   hasLoadedUser: boolean
 }
 
-const initialState = {
+const initialState: State = {
   authState: AuthState.SignedOut,
   user: {},
   hasLoadedUser: false,
 }
 
-type Action = {
-  type: string
-  payload?: any
-}
+type Action =
+  | {
+      type: 'logout'
+    }
+  | {
+      type: 'changeAuthState'
+      payload: AuthState
+    }
+  | {
+      type: 'changeState'
+      payload: Partial<State>
+    }
+  | {
+      type: 'changeUser'
+      payload: object
+    }
+  | {
+      type: 'changeUserGroups'
+      payload: unknown
+    }
 
 const rootReducer = (state = initialState, action: Action) => {
   switch (action.type) {
@@ -33,7 +49,9 @@ const rootReducer = (state = initialState, action: Action) => {
         hasLoadedUser: true,
       }
     default:
-      return { ...state, ...action.payload }
+      return typeof action.payload === 'object' && action.payload
+        ? { ...state, ...action.payload }
+        : state
   }
 }
 

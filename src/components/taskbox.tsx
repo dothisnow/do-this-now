@@ -1,6 +1,7 @@
 import { DateTag, Repeat, Strict, TimeFrame } from './tags'
 
 // types
+import { LegacyRef } from 'react'
 import { Task } from '../types/task'
 
 export const TaskBox = ({
@@ -10,7 +11,7 @@ export const TaskBox = ({
   task,
   title,
 }: {
-  innerRef?: (x: any) => void
+  innerRef?: LegacyRef<HTMLButtonElement>
   isSelected: boolean
   onClick?: () => void
   task: Task
@@ -18,7 +19,7 @@ export const TaskBox = ({
 }) => {
   const showSubtask = isSelected && task?.subtasks?.length > 0
   const subtasksDone =
-    task.hasOwnProperty('subtasks') && Array.isArray(task.subtasks)
+    'subtasks' in task && Array.isArray(task.subtasks)
       ? task.subtasks.reduce(
           (acc: number, cur: (typeof task.subtasks)[number]) =>
             acc + (cur.done ? 1 : 0),
@@ -27,7 +28,6 @@ export const TaskBox = ({
       : 0
   return (
     <button
-      ref={innerRef}
       onClick={onClick}
       className={
         (isSelected
@@ -35,7 +35,8 @@ export const TaskBox = ({
           : 'border-gray-700 bg-gray-800 ') +
         'text-md w-full max-w-sm rounded-lg border p-4 text-center font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black drop-shadow-sm focus:z-10 focus:ring md:p-5 '
       }
-      title={title}>
+      title={title}
+      {...(innerRef !== null ? { ref: innerRef } : {})}>
       <div>
         <span>
           {showSubtask

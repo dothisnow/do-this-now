@@ -218,7 +218,7 @@ const Tasks = () => {
                     </div>
                   )}
                   <TaskBox
-                    innerRef={(e: any) => (taskElems.current[i] = e)}
+                    innerRef={(e: HTMLElement) => (taskElems.current[i] = e)}
                     isSelected={i === selectedTask}
                     onClick={() => setSelectedTask(i)}
                     task={task}

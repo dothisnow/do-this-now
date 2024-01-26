@@ -9,7 +9,9 @@
 	STORAGE_TASKS_STREAMARN
 Amplify Params - DO NOT EDIT */
 
+// eslint-disable-next-line
 const ENV = require('process').env
+// eslint-disable-next-line
 const AWS = require('aws-sdk')
 const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -23,7 +25,7 @@ exports.handler = async event => {
 
   console.log(`BODY: ${JSON.stringify(body)}`)
 
-  if (!body.hasOwnProperty('title')) return error('Missing title!')
+  if (!('title' in body)) return error('Missing title!')
 
   const params = {
     TableName: ENV.STORAGE_TASKS_NAME,

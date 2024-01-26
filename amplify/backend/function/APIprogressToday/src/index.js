@@ -9,10 +9,11 @@
 	STORAGE_TASKS_STREAMARN
 Amplify Params - DO NOT EDIT */
 
+// eslint-disable-next-line
 const { dateString, nextDueDate } = require('/opt/nodejs/helpers')
-
+// eslint-disable-next-line
 const ENV = require('process').env
-
+// eslint-disable-next-line
 const AWS = require('aws-sdk')
 const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -23,8 +24,8 @@ exports.handler = async event => {
   console.log(`EVENT: ${JSON.stringify(event)}`)
 
   const today =
-    event.hasOwnProperty('queryStringParameters') &&
-    event.queryStringParameters.hasOwnProperty('date')
+                'queryStringParameters' in event &&
+                'date' in event.queryStringParameters
       ? new Date(event.queryStringParameters.date)
       : new Date(
           new Date().getFullYear(),

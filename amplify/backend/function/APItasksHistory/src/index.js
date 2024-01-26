@@ -6,9 +6,11 @@
 	STORAGE_HISTORY_STREAMARN
 Amplify Params - DO NOT EDIT */
 
+// eslint-disable-next-line
 const { dateString } = require('/opt/nodejs/helpers')
-
+// eslint-disable-next-line
 const ENV = require('process').env
+// eslint-disable-next-line
 const { DynamoDBClient, GetItemCommand } = require('@aws-sdk/client-dynamodb')
 
 const client = new DynamoDBClient({ region: ENV.REGION })
@@ -20,8 +22,8 @@ exports.handler = async event => {
   console.log(`EVENT: ${JSON.stringify(event)}`)
 
   const today =
-    event.hasOwnProperty('pathParameters') &&
-    event.pathParameters.hasOwnProperty('date')
+                'pathParameters' in event &&
+                'date' in event.pathParameters
       ? new Date(event.pathParameters.date)
       : new Date(
           new Date().getFullYear(),

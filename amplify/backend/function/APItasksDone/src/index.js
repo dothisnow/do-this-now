@@ -9,10 +9,11 @@
 	STORAGE_TASKS_STREAMARN
 Amplify Params - DO NOT EDIT */
 
+// eslint-disable-next-line
 const { dateString, nextDueDate } = require('/opt/nodejs/helpers')
-
+// eslint-disable-next-line
 const ENV = require('process').env
-
+// eslint-disable-next-line
 const AWS = require('aws-sdk')
 const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -26,7 +27,7 @@ exports.handler = async event => {
 
   console.log(`BODY: ${JSON.stringify(body)}`)
 
-  if (!body.hasOwnProperty('task') || !body.task.hasOwnProperty('title'))
+  if (!('task' in body)|| !('title' in body.task))
     return error('Missing title!')
   const task = body.task
 
@@ -44,7 +45,7 @@ exports.handler = async event => {
   let newItem = data.Item
 
   if (
-    newItem.hasOwnProperty('subtasks') &&
+          'subtasks' in newItem &&
     newItem.subtasks.some(st => !st.done)
   ) {
     const nextSubtask =
@@ -71,7 +72,7 @@ exports.handler = async event => {
     }
   }
 
-  const now = body.hasOwnProperty('date') ? new Date(body.date) : new Date()
+  const now = 'date' in body? new Date(body.date) : new Date()
 
   const newDue = nextDueDate(newItem)
 
@@ -85,7 +86,7 @@ exports.handler = async event => {
     newItem.history.push(dateString(now))
 
     if (
-      newItem.hasOwnProperty('subtasks') &&
+            'subtasks' in newItem &&
       Array.isArray(newItem.subtasks) &&
       newItem.subtasks.length > 0
     )
@@ -117,7 +118,7 @@ exports.handler = async event => {
     .then(oldHistory => {
       historyPutParams.Item = oldHistory.Item
       if (historyPutParams.Item?.tasks) {
-        historyPutParams.Item.tasks = [...historyPutParams.Item?.tasks, task]
+        historyPutParams.Item.tasks = [...historyPutParams.Item.tasks, task]
       } else {
         historyPutParams.Item.tasks = [task]
       }

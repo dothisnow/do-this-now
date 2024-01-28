@@ -1,2 +1,2 @@
-declare const awsmobile: {}
+declare const awsmobile: object
 export default awsmobile

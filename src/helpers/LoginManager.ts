@@ -16,9 +16,9 @@ type LoginState =
 class LoginManager {
   formState: 'signIn' | 'signedIn'
   loginState: LoginState
-  newPassword: (user: any, password: string) => Promise<any>
-  signIn: (password: string) => Promise<any>
-  signOut: () => Promise<any> | undefined
+  newPassword: (user: unknown, password: string) => Promise<unknown>
+  signIn: (password: string) => Promise<unknown>
+  signOut: () => Promise<unknown> | undefined
 
   constructor() {
     this.formState = 'signIn'
@@ -38,8 +38,18 @@ class LoginManager {
       }
     }
 
-    const listener = (data: any) => {
-      switch (data?.payload?.event) {
+    const listener = (data: unknown) => {
+      if (
+        typeof data !== 'object' ||
+        !data ||
+        !('payload' in data) ||
+        typeof data.payload !== 'object' ||
+        !data.payload ||
+        !('event' in data.payload) ||
+        !data.payload.event
+      )
+        return
+      switch (data.payload.event) {
         case 'signIn':
           this.loadData()
           store.dispatch({
@@ -52,12 +62,6 @@ class LoginManager {
             type: 'changeAuthState',
             payload: AuthState.ConfirmSignUp,
           })
-          break
-        case 'signIn_failure':
-          break
-        case 'tokenRefresh':
-          break
-        case 'tokenRefresh_failure':
           break
         case 'configured':
           this.loadData()

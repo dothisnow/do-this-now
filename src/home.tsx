@@ -35,7 +35,7 @@ const Home = () => {
 
   const { data, isLoading } = useQueryTasksTop()
 
-  let tasks = (data?.Items ?? []).filter(t => !isSnoozed(t))
+  const tasks = (data?.Items ?? []).filter(t => !isSnoozed(t))
 
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<0 | 1 | 2>(0)
   const selectedTask = !tasks

@@ -72,7 +72,7 @@ const History = () => {
               <Task
                 key={i}
                 isSelected={false}
-                innerRef={(e: any) => (taskElems.current[i] = e)}
+                innerRef={(e: HTMLElement) => (taskElems.current[i] = e)}
                 onClick={() => {}}
                 due={task.M.due === 'No Due Date' ? task.M.due : task.M.due?.S}
                 repeat={task.M.repeat?.S}
@@ -108,7 +108,7 @@ const Task = ({
   title,
   onClick,
 }: TaskType & {
-  innerRef: (x: any) => void
+  innerRef: (x: HTMLElement) => void
   isSelected: boolean
   onClick: () => void
 }) => (

@@ -5,7 +5,7 @@ import { z } from 'zod'
 // types
 import { Task } from '../types/task'
 
-export const useQueryUpdateTask = (): { mutate: (task: any) => void } => {
+export const useQueryUpdateTask = (): { mutate: (task: Task) => void } => {
   return useMutation(
     async (task: Task) => {
       return z

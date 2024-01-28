@@ -6,10 +6,11 @@
 	STORAGE_TASKS_STREAMARN
 Amplify Params - DO NOT EDIT */
 
+// eslint-disable-next-line
 const { nextDueDate } = require('/opt/nodejs/helpers')
-
+// eslint-disable-next-line
 const ENV = require('process').env
-
+// eslint-disable-next-line
 const AWS = require('aws-sdk')
 const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -20,8 +21,7 @@ exports.handler = async event => {
   console.log(`EVENT: ${JSON.stringify(event)}`)
 
   const today =
-    event.hasOwnProperty('queryStringParameters') &&
-    event.queryStringParameters.hasOwnProperty('date')
+    'queryStringParameters' in event && 'date' in event.queryStringParameters
       ? new Date(event.queryStringParameters.date)
       : new Date(
           new Date().getFullYear(),
@@ -39,12 +39,12 @@ exports.handler = async event => {
 
   const sortFlags = [
     // due today or past due
-    t => t.hasOwnProperty('due') && new Date(t.due) <= today,
+    t => 'due' in t && new Date(t.due) <= today,
 
     // strict deadline and due today or past due
     t =>
-      t.hasOwnProperty('due') &&
-      t.hasOwnProperty('strictDeadline') &&
+      'due' in t &&
+      'strictDeadline' in t &&
       new Date(t.due) <= today &&
       t.strictDeadline,
 
@@ -55,7 +55,7 @@ exports.handler = async event => {
 
     // if I do this today, I won't have to do it tomorrow
     t =>
-      t.hasOwnProperty('due') &&
+      'due' in t &&
       new Date(t.due) <= today &&
       (nextDueDate(t) ?? Infinity) >= in2Days,
   ]
@@ -85,7 +85,7 @@ exports.handler = async event => {
       if (flag(b) && !flag(a)) return 1
     }
     for (const [p, transform] of sortProperties) {
-      if (!a.hasOwnProperty(p) || !b.hasOwnProperty(p)) continue
+      if (!(p in a) || !(p in b)) continue
       if (transform(a[p]) - transform(b[p]) !== 0)
         return transform(a[p]) - transform(b[p])
     }

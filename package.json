@@ -22,7 +22,7 @@
     "typescript": "^5.3.3",
     "use-sound": "^4.0.1",
     "wouter": "^2.10.0",
-    "zod": "^3.21.4"
+    "zod": "^3.22.3"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -5,7 +5,7 @@ import { z } from 'zod'
 // types
 import { taskSchema } from '../types/task'
 
-export const tasksSchema = z.object({
+const tasksSchema = z.object({
   Items: z.array(taskSchema),
   Count: z.number(),
   ScannedCount: z.number(),

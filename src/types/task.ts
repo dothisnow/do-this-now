@@ -122,4 +122,3 @@ export const dynamoDBTaskSchema = z.object({
     })
     .optional(),
 })
-export type DynamoDBTask = z.infer<typeof dynamoDBTaskSchema>

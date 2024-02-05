@@ -24,18 +24,15 @@
     "zod": "^3.22.3"
   },
   "scripts": {
-    "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "knip": "knip"
+    "knip": "knip",
+    "prettier": "prettier src/**/*.{js,ts,tsx} --check",
+    "start": "react-scripts start",
+    "test": "react-scripts test"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

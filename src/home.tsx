@@ -21,6 +21,7 @@ import useDing from './helpers/useDing'
 
 import { Button } from './components/button'
 import Hints from './components/hints'
+import { LastUpdated } from './components/lastupdated'
 import Loading from './components/loading'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
@@ -33,7 +34,7 @@ const Home = () => {
   const navigate = useLocation()[1]
   const ding = useDing()
 
-  const { data, isLoading } = useQueryTasksTop()
+  const { data, dataUpdatedAt, isLoading } = useQueryTasksTop()
 
   const tasks = (data?.Items ?? []).filter(t => !isSnoozed(t))
 
@@ -224,6 +225,7 @@ const Home = () => {
             ) : (
               'No tasks'
             )}
+            <LastUpdated at={dataUpdatedAt} />
           </>
         )}
         <Hints keyActions={keyActions} />

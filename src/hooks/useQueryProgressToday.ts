@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import { dateString } from '../helpers/dates'
 
-export const progressTodaySchema = z.object({
+const progressTodaySchema = z.object({
   done: z.number(),
   lives: z.number(),
   todo: z.number(),

@@ -194,7 +194,11 @@ const TaskForm = ({
               id='due-month'
               placeholder='MM'
               value={dueMonth}
-              onChange={e => setDueMonth(parseInt(e.target.value))}
+              onChange={e =>
+                setDueMonth(
+                  parseInt(e.target.value === '' ? '1' : e.target.value)
+                )
+              }
               className='mr-3'
             />
             <FormInput
@@ -206,7 +210,11 @@ const TaskForm = ({
               id='due-day'
               placeholder='DD'
               value={dueDay}
-              onChange={e => setDueDay(parseInt(e.target.value))}
+              onChange={e =>
+                setDueDay(
+                  parseInt(e.target.value === '' ? '1' : e.target.value)
+                )
+              }
               className='mr-3'
             />
             <FormInput
@@ -216,7 +224,11 @@ const TaskForm = ({
               id='due-year'
               placeholder='YYYY'
               value={dueYear}
-              onChange={e => setDueYear(parseInt(e.target.value))}
+              onChange={e =>
+                setDueYear(
+                  parseInt(e.target.value === '' ? '1' : e.target.value)
+                )
+              }
               className='mr-3'
             />
             <FormButton onClick={incrementDate}>+</FormButton>

@@ -35,10 +35,10 @@ export const useQueryTasksTop = () => {
         })
       )
       tasks.Items.sort((a, b) => (isSnoozed(a) ? 1 : isSnoozed(b) ? -1 : 0))
-      return tasks
+      return tasks.Items
     },
     {
-      refetchInterval: 1000 * 2,
+      refetchInterval: 1000 * 60,
       refetchIntervalInBackground: false,
     }
   )

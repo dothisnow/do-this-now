@@ -34,9 +34,9 @@ const Home = () => {
   const navigate = useLocation()[1]
   const ding = useDing()
 
-  const { data, dataUpdatedAt, isLoading } = useQueryTasksTop()
+  const { data, dataUpdatedAt, isLoading, isFetching } = useQueryTasksTop()
 
-  const tasks = (data?.Items ?? []).filter(t => !isSnoozed(t))
+  const tasks = (data ?? []).filter(t => !isSnoozed(t))
 
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<0 | 1 | 2>(0)
   const selectedTask = !tasks
@@ -51,8 +51,7 @@ const Home = () => {
   const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
   const { mutate: mutateDelete, isLoading: deleteIsLoading } =
     useQueryTaskDelete()
-  const { mutate: mutateSnooze, isLoading: snoozeIsLoading } =
-    useQuerySnoozeTask()
+  const { mutate: mutateSnooze } = useQuerySnoozeTask()
 
   const completeTask = () => {
     if (!selectedTask) return
@@ -179,7 +178,7 @@ const Home = () => {
   return (
     <RequireAuth>
       <div className='flex h-screen flex-col items-center justify-center gap-2'>
-        {isLoading || doneIsLoading || deleteIsLoading || snoozeIsLoading ? (
+        {isLoading || doneIsLoading || deleteIsLoading ? (
           <Loading />
         ) : (
           <>
@@ -225,7 +224,7 @@ const Home = () => {
             ) : (
               'No tasks'
             )}
-            <LastUpdated at={dataUpdatedAt} />
+            <LastUpdated at={dataUpdatedAt} isFetching={isFetching} />
           </>
         )}
         <Hints keyActions={keyActions} />

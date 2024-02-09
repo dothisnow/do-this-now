@@ -26,7 +26,6 @@ import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasks } from './hooks/useQueryTasks'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
 
-import { LastUpdated } from './components/lastupdated'
 import { TaskBox } from './components/taskbox'
 
 const Tasks = () => {
@@ -36,14 +35,10 @@ const Tasks = () => {
   const ding = useDing()
   const navigate = useLocation()[1]
 
-  const { data, dataUpdatedAt, isFetching } = useQueryTasks()
-  const {
-    data: dataTop,
-    dataUpdatedAt: dataTopUpdatedAt,
-    isFetching: isFetchingTop,
-  } = useQueryTasksTop()
+  const { data, isFetching } = useQueryTasks()
+  const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()
 
-  const tasks = (sort === 'CHRON' ? data : dataTop)?.Items ?? []
+  const tasks = (sort === 'CHRON' ? data?.Items : dataTop) ?? []
 
   const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
   const { mutate: mutateDelete, isLoading: deleteIsLoading } =
@@ -183,9 +178,6 @@ const Tasks = () => {
                 text='Toggle Order'
               />
             </div>
-            <LastUpdated
-              at={sort === 'CHRON' ? dataUpdatedAt : dataTopUpdatedAt}
-            />
             {tasks.map((task: (typeof tasks)[number], i: number) => {
               const previousTask = i > 0 ? tasks[i - 1] : undefined
               return (

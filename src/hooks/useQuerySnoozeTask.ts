@@ -28,6 +28,11 @@ export const useQuerySnoozeTask = () => {
         })
       )
     },
+
+    /*
+     * This was based on this article: https://tanstack.com/query/v4/docs/framework/react/guides/optimistic-updates#updating-a-list-of-todos-when-adding-a-new-todo
+     * I love react query
+     */
     onMutate: async ({
       task: { title },
       allSubtasks = false,

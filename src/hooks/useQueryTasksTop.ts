@@ -39,7 +39,8 @@ export const useQueryTasksTop = () => {
     },
     {
       refetchInterval: 1000 * 60,
-      refetchIntervalInBackground: false,
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
     }
   )
 }

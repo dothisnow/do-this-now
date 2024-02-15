@@ -27,14 +27,13 @@ const UpdateTask = () => {
   const { data, isFetching: isTaskLoading } = useQueryGetTask(taskId)
   const task = data ?? undefined
 
-  const [loading, setLoading] = useState(false)
   const subtasksState = useState<SubTask[]>([])
 
   const { mutate } = useQueryUpdateTask()
 
   return (
     <RequireAuth>
-      {(loading && isTaskLoading) || !task ? (
+      {isTaskLoading || !task ? (
         <div className='absolute top-0 left-0 right-0 bottom-0 flex h-screen flex-col justify-center bg-gray-800 opacity-90'>
           <Loading light={false} />
         </div>
@@ -57,7 +56,6 @@ const UpdateTask = () => {
                 dueDay={newSafeDate(task.due).getDate()}
                 dueYear={newSafeDate(task.due).getFullYear()}
                 submitForm={(input: TaskInput) => {
-                  setLoading(true)
                   const task: Task = {
                     ...input,
                     ...((subtasksState?.[0]?.length ?? 0) > 0
@@ -66,7 +64,9 @@ const UpdateTask = () => {
                     ...(taskId !== input.title[0] ? { oldTitle: taskId } : {}),
                     due: `${input.dueYear}-${input.dueMonth}-${input.dueDay}`,
                   }
-                  mutate(task)
+                  mutate(task, {
+                    onSuccess: () => window.history.back(),
+                  })
                 }}
               />
             </div>

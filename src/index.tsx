@@ -14,7 +14,13 @@ Amplify.configure({
   ...config,
 })
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60,
+    },
+  },
+})
 
 const rootElement = document.getElementById('root')
 if (!rootElement) throw new Error('No root element found')

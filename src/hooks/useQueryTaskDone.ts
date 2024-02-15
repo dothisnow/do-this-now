@@ -20,9 +20,6 @@ export const useQueryTaskDone = () => {
         })
       )
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks-top'] })
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
   })
 }

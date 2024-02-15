@@ -24,23 +24,15 @@ export const isSnoozed = (t: Task) =>
 
 export const useQueryTasksTop = () => {
   const date = dateString(new Date())
-  return useQuery(
-    ['tasks-top', date],
-    async () => {
-      const tasks = tasksSchema.parse(
-        await API.get('tasks', '/tasks/top', {
-          queryStringParameters: {
-            date,
-          },
-        })
-      )
-      tasks.Items.sort((a, b) => (isSnoozed(a) ? 1 : isSnoozed(b) ? -1 : 0))
-      return tasks.Items
-    },
-    {
-      refetchInterval: 1000 * 60,
-      refetchOnMount: false,
-      refetchOnWindowFocus: false,
-    }
-  )
+  return useQuery(['tasks', 'top', date], async () => {
+    const tasks = tasksSchema.parse(
+      await API.get('tasks', '/tasks/top', {
+        queryStringParameters: {
+          date,
+        },
+      })
+    )
+    tasks.Items.sort((a, b) => (isSnoozed(a) ? 1 : isSnoozed(b) ? -1 : 0))
+    return tasks.Items
+  })
 }

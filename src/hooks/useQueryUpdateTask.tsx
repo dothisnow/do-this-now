@@ -13,10 +13,6 @@ export const useQueryUpdateTask = (): { mutate: (task: Task) => void } => {
         .object({})
         .parse(await API.post('tasks', '/tasks/update', { body: task }))
     },
-    onSuccess: () => window.history.back(),
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks-top'] })
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
   })
 }

@@ -13,9 +13,6 @@ export const useQueryTaskDelete = () => {
         .object({})
         .parse(await API.post('tasks', '/tasks/delete', { body: task }))
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks-top'] })
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
   })
 }

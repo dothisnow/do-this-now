@@ -11,8 +11,6 @@ import { Task, TaskInput } from './types/task'
 const NewTask = () => {
   const { error, isLoading, mutate } = useQueryNewTask()
 
-  console.log({ error })
-
   return (
     <RequireAuth>
       <div className='space-y-8 divide-y divide-gray-700 p-10 text-white'>
@@ -50,7 +48,9 @@ const NewTask = () => {
                   ...input,
                   due: `${input.dueYear}-${input.dueMonth}-${input.dueDay}`,
                 }
-                mutate(task)
+                mutate(task, {
+                  onSuccess: () => window.history.back(),
+                })
               }}
             />
           </div>

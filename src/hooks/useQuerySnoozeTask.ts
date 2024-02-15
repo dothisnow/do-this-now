@@ -109,14 +109,14 @@ export const useQuerySnoozeTask = () => {
       // Return a context object with the snapshotted value
       return { previousTopTasks }
     },
+
     // If the mutation fails,
     // use the context returned from onMutate to roll back
-    onError: (_, __, context) => {
-      queryClient.setQueryData(['tasks-top', date], context?.previousTopTasks)
-    },
+    onError: (_, __, context) =>
+      queryClient.setQueryData(['tasks-top', date], context?.previousTopTasks),
+
     // Always refetch after error or success:
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks-top', date] })
-    },
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['tasks', 'top', date] }),
   })
 }

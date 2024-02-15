@@ -25,16 +25,7 @@ export const useHistory = (daysAgo: number = 0) => {
       new Date().getDate() - daysAgo
     )
   )
-  return useQuery(
-    ['get-task', date],
-    async () => {
-      return historySchema.parse(
-        await API.get('tasks', `/tasks/history/${date}`, {})
-      )
-    },
-    {
-      refetchOnWindowFocus: false,
-      refetchOnMount: true,
-    }
+  return useQuery(['tasks', 'history', date], async () =>
+    historySchema.parse(await API.get('tasks', `/tasks/history/${date}`, {}))
   )
 }

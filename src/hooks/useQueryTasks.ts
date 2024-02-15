@@ -12,13 +12,6 @@ const tasksSchema = z.object({
 })
 
 export const useQueryTasks = () =>
-  useQuery(
-    ['tasks'],
-    async () => {
-      return tasksSchema.parse(await API.get('tasks', '/tasks', {}))
-    },
-    {
-      refetchInterval: 1000 * 2,
-      refetchIntervalInBackground: false,
-    }
+  useQuery(['tasks'], async () =>
+    tasksSchema.parse(await API.get('tasks', '/tasks', {}))
   )

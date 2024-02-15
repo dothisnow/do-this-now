@@ -13,10 +13,6 @@ export const useQueryNewTask = () => {
         .literal('Success')
         .parse(await API.post('tasks', '/tasks/new', { body: task }))
     },
-    onSuccess: () => window.history.back(),
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks-top'] })
-      queryClient.invalidateQueries({ queryKey: ['tasks'] })
-    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['tasks'] }),
   })
 }

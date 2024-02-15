@@ -44,14 +44,14 @@ export const useQuerySnoozeTask = () => {
 
       // Cancel any outgoing refetches
       // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: ['tasks-top', date] })
+      await queryClient.cancelQueries({ queryKey: ['tasks', 'top', date] })
 
       // Snapshot the previous value
-      const previousTopTasks = queryClient.getQueryData(['tasks-top', date])
+      const previousTopTasks = queryClient.getQueryData(['tasks', 'top', date])
 
       // Optimistically update to the new value
       queryClient.setQueryData(
-        ['tasks-top', date],
+        ['tasks', 'top', date],
         (old: Task[] | undefined) => {
           console.log(old)
           if (!old) return old
@@ -113,7 +113,10 @@ export const useQuerySnoozeTask = () => {
     // If the mutation fails,
     // use the context returned from onMutate to roll back
     onError: (_, __, context) =>
-      queryClient.setQueryData(['tasks-top', date], context?.previousTopTasks),
+      queryClient.setQueryData(
+        ['tasks', 'top', date],
+        context?.previousTopTasks
+      ),
 
     // Always refetch after error or success:
     onSettled: () =>

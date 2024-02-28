@@ -141,6 +141,20 @@ const Home = () => {
       action: () => setSelectedTaskIndex(2),
     },
     {
+      key: 'up',
+      description: 'Select previous task',
+      action: () => {
+        setSelectedTaskIndex(selectedTaskIndex === 2 ? 1 : 0)
+      },
+    },
+    {
+      key: 'down',
+      description: 'Select next task',
+      action: () => {
+        setSelectedTaskIndex(selectedTaskIndex === 0 ? 1 : 2)
+      },
+    },
+    {
       key: 'backspace',
       description: 'Delete current task',
       action: deleteTask,

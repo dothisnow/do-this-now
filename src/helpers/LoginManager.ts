@@ -1,5 +1,6 @@
 import { AuthState } from '@aws-amplify/ui-components'
 import { Auth, Hub } from 'aws-amplify'
+import { z } from 'zod'
 import store from '../store/store'
 
 const EMAIL = 'maxlascombe@gmail.com'
@@ -79,16 +80,25 @@ class LoginManager {
 
   loadData = () => {
     Auth.currentAuthenticatedUser()
-      .then(user => {
+      .then((user: unknown) => {
+        const parsedUser = z
+          .object({
+            signInUserSession: z.object({
+              idToken: z.object({
+                payload: z.object({ 'cognito:groups': z.array(z.string()) }),
+              }),
+            }),
+          })
+          .parse(user)
         store.dispatch({
           type: 'changeUserGroups',
           payload:
-            user?.signInUserSession?.idToken?.payload?.['cognito:groups'],
+            parsedUser.signInUserSession.idToken.payload['cognito:groups'],
         })
         return Auth.currentUserInfo()
       })
-      .then(data => {
-        if (data !== null) {
+      .then((data: unknown) => {
+        if (typeof data === 'object' && data !== null) {
           this.formState = 'signedIn'
           store.dispatch({ type: 'changeUser', payload: data })
         } else {

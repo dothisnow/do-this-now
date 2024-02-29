@@ -30,7 +30,8 @@
     "knip": "knip",
     "prettier": "prettier src/**/*.{js,ts,tsx} --check",
     "start": "react-scripts start",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "ts-coverage": "typescript-coverage-report"
   },
   "browserslist": {
     "production": [
@@ -52,6 +53,7 @@
     "prettier": "^2.8.3",
     "prettier-plugin-organize-imports": "^3.2.2",
     "prettier-plugin-tailwindcss": "^0.2.2",
-    "tailwindcss": "^3.1.7"
+    "tailwindcss": "^3.1.7",
+    "typescript-coverage-report": "^1.0.0"
   }
 }

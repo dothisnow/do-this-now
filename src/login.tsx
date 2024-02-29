@@ -11,7 +11,7 @@ import { State } from './store/rootReducer'
 
 const Login = () => {
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<object>()
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [newPassword, setNewPassword] = useState('')
 
@@ -26,22 +26,28 @@ const Login = () => {
         .then(() => {
           navigate('/')
         })
-        .catch(e => {
+        .catch((e: Error) => {
           alert('e')
           console.error(e)
         })
     } else {
       loginManager
         .signIn(password)
-        .then(r => {
-          if (r.challengeName && r.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        .then((r: unknown) => {
+          if (
+            typeof r === 'object' &&
+            r &&
+            'challengeName' in r &&
+            r.challengeName &&
+            r.challengeName === 'NEW_PASSWORD_REQUIRED'
+          ) {
             setShowNewPassword(true)
             setUser(r)
           } else {
             navigate('/')
           }
         })
-        .catch(e => alert('e' + e))
+        .catch((e: Error) => alert('e' + e))
     }
   }
 

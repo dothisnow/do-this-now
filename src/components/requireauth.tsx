@@ -11,6 +11,8 @@ const RequireAuth = ({ children }: { children: ReactNode }) => {
   )
   const authState = useSelector((s: { authState?: AuthState }) => s?.authState)
 
+  console.log({ hasLoadedUser, authState, AuthState })
+
   if (!hasLoadedUser)
     return (
       <div className='flex h-screen flex-col justify-center'>

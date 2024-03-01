@@ -85,7 +85,12 @@ class LoginManager {
           .object({
             signInUserSession: z.object({
               idToken: z.object({
-                payload: z.object({ 'cognito:groups': z.array(z.string()) }),
+                payload: z.object({
+                  'cognito:groups': z.union([
+                    z.array(z.string()),
+                    z.undefined(),
+                  ]),
+                }),
               }),
             }),
           })
@@ -106,7 +111,8 @@ class LoginManager {
           this.formState = 'signIn'
         }
       })
-      .catch(() => {
+      .catch((e: Error) => {
+        console.error(e)
         store.dispatch({ type: 'logout' })
         this.formState = 'signIn'
       })

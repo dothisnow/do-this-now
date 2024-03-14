@@ -9,7 +9,7 @@ import UpdateTask from './updatetask'
 
 const App = () => {
   return (
-    <div className='w-100vw h-100vh bg-gray-900'>
+    <div className='w-100vw h-100vh bg-black'>
       <Switch>
         <Route path='/'>
           <Home />

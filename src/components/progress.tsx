@@ -1,6 +1,7 @@
 import { FireIcon, HeartIcon } from '@heroicons/react/20/solid'
 import { minutesToHours } from '../helpers/time'
 import { useQueryProgressToday } from '../hooks/useQueryProgressToday'
+import { Tag } from './tags'
 
 const Progress = () => {
   const progress = useQueryProgressToday()
@@ -13,34 +14,22 @@ const Progress = () => {
 
   return (
     <div className='flex justify-center'>
-      <div className='flex flex-col items-center gap-1 text-xs'>
-        <div className='flex w-full justify-around gap-2'>
-          <div
-            title={`${
-              streakIsActive ? 'Active' : 'Inactive'
-            } ${streak} day streak`}
-            className='flex text-gray-300'>
-            <FireIcon
-              className={
-                'block h-4 w-4 ' + (streakIsActive ? 'text-amber-500' : '')
-              }
-            />
-            {streak}
-          </div>
+      <div className='flex flex-col items-center gap-1 text-xs font-light'>
+        <div className='flex w-full justify-center gap-5 text-white'>
+          <Tag
+            icon={FireIcon}
+            text={'' + streak}
+            color={streakIsActive ? 'text-amber-500' : ''}
+          />
 
-          <div className='flex text-gray-300'>
-            <HeartIcon
-              className={
-                'block h-4 w-4 ' + (done >= todo ? 'text-red-400' : '')
-              }
-            />{' '}
-            {minutesToHours(lives - livesUsed)}{' '}
-          </div>
+          <Tag
+            icon={HeartIcon}
+            text={'' + minutesToHours(lives - livesUsed)}
+            color={done >= todo ? 'text-red-400' : ''}
+          />
 
           {done + livesUsed < todo && (
-            <div className='text-gray-300'>
-              {minutesToHours(todo - done - livesUsed)} left
-            </div>
+            <Tag text={minutesToHours(todo - done - livesUsed) + ' left'} />
           )}
 
           {done + livesUsed >= todo && done < todo && (

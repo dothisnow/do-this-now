@@ -1,3 +1,4 @@
+import { BackwardIcon, ForwardIcon, HomeIcon } from '@heroicons/react/20/solid'
 import {
   Dispatch,
   MutableRefObject,
@@ -6,30 +7,25 @@ import {
   useState,
 } from 'react'
 import { useLocation } from 'wouter'
-
-import { BackwardIcon, ForwardIcon, HomeIcon } from '@heroicons/react/20/solid'
-
 import { Button } from './components/button'
 import Hints from './components/hints'
+import { Loading } from './components/loading'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
-
+import { TaskBox } from './components/taskbox'
 import { useHistory } from './hooks/useHistory'
 import useKeyAction, { KeyAction } from './hooks/useKeyAction'
-
-import Loading from './components/loading'
-import { TaskBox } from './components/taskbox'
-import { repeatWeekdaysSchema, Task as TaskType } from './types/task'
+import { Task as TaskType, repeatWeekdaysSchema } from './types/task'
 
 const DateNavigator = ({
   daysAgoState: [daysAgo, setDaysAgo],
 }: {
   daysAgoState: [number, Dispatch<SetStateAction<number>>]
 }) => (
-  <div className='flex flex-row justify-center'>
+  <div className='flex justify-center gap-2'>
     <Button icon={BackwardIcon} onClick={() => setDaysAgo(da => da + 1)} />
     {/* display date of daysAgo days ago */}
-    <div className='ml-2 mr-1 pt-2.5 text-xs text-white'>
+    <div className='pt-2.5 text-xs text-white'>
       {new Date(
         new Date().setDate(new Date().getDate() - daysAgo)
       ).toLocaleDateString()}

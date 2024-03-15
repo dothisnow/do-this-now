@@ -1,12 +1,15 @@
 import {
-  CheckCircleIcon,
+  ArrowDownIcon,
+  ArrowRightIcon,
+  ArrowUpIcon,
+  MinusIcon,
   PlusCircleIcon,
+  PlusIcon,
   TrashIcon,
 } from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
 import { ComponentProps, useState } from 'react'
 import { ZodError } from 'zod'
-
 import useKeyAction, { KeyAction } from '../hooks/useKeyAction'
 import {
   RepeatOption,
@@ -16,6 +19,8 @@ import {
   TaskInput,
   taskInputSchema,
 } from '../types/task'
+import { Button } from './button'
+import { Input } from './input'
 import { Switch } from './switch'
 
 const TaskForm = ({
@@ -160,7 +165,7 @@ const TaskForm = ({
         </label>
         <div className='mt-1 flex flex-col gap-2 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg rounded-md shadow-sm'>
-            <FormInput
+            <Input
               id='titleInput'
               type='text'
               value={title}
@@ -181,11 +186,9 @@ const TaskForm = ({
           Due Date
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
-          <div className='flex max-w-lg rounded-md shadow-sm'>
-            <FormButton className='mr-3' onClick={decrementDate}>
-              -
-            </FormButton>
-            <FormInput
+          <div className='flex max-w-lg items-center gap-2 rounded-md shadow-sm'>
+            <FormButton icon={MinusIcon} onClick={decrementDate} />
+            <Input
               type='number'
               max={12}
               min={1}
@@ -199,9 +202,8 @@ const TaskForm = ({
                   parseInt(e.target.value === '' ? '1' : e.target.value)
                 )
               }
-              className='mr-3'
             />
-            <FormInput
+            <Input
               type='number'
               max={31}
               min={1}
@@ -215,9 +217,8 @@ const TaskForm = ({
                   parseInt(e.target.value === '' ? '1' : e.target.value)
                 )
               }
-              className='mr-3'
             />
-            <FormInput
+            <Input
               type='number'
               step={1}
               name='due-year'
@@ -229,9 +230,8 @@ const TaskForm = ({
                   parseInt(e.target.value === '' ? '1' : e.target.value)
                 )
               }
-              className='mr-3'
             />
-            <FormButton onClick={incrementDate}>+</FormButton>
+            <FormButton onClick={incrementDate} icon={PlusCircleIcon} />
           </div>
           <div className='mt-1 max-w-lg text-center text-gray-600'>
             {format(
@@ -276,7 +276,7 @@ const TaskForm = ({
             <>
               <div className='mt-3 flex max-w-lg'>
                 <div className='flex-1 py-2.5 text-sm'>Every:</div>
-                <FormInput
+                <Input
                   type='number'
                   step={1}
                   min={1}
@@ -295,29 +295,24 @@ const TaskForm = ({
                 </FormSelect>
               </div>
               {repeatUnit === 'week' && repeatWeekdays && (
-                <div className='pointer-events-auto mt-3 flex max-w-lg'>
+                <div className='pointer-events-auto mt-3 flex flex max-w-lg justify-evenly'>
                   {repeatWeekdays.map((_, i) => (
-                    <FormButton
-                      onClick={() =>
+                    <SwitchWithLabel
+                      key={days[i]}
+                      label={days[i]}
+                      onChange={v =>
                         setRepeatWeekdays(s => [
-                          i === 0 ? !s[0] : s[0],
-                          i === 1 ? !s[1] : s[1],
-                          i === 2 ? !s[2] : s[2],
-                          i === 3 ? !s[3] : s[3],
-                          i === 4 ? !s[4] : s[4],
-                          i === 5 ? !s[5] : s[5],
-                          i === 6 ? !s[6] : s[6],
+                          i === 0 ? v : s[0],
+                          i === 1 ? v : s[1],
+                          i === 2 ? v : s[2],
+                          i === 3 ? v : s[3],
+                          i === 4 ? v : s[4],
+                          i === 5 ? v : s[5],
+                          i === 6 ? v : s[6],
                         ])
                       }
-                      className={
-                        (i > 0 && 'ml-2') +
-                        (repeatWeekdays[i]
-                          ? ' border-white bg-gray-200 text-gray-800 hover:border-gray-200 hover:bg-gray-400'
-                          : ' border-gray-700 bg-gray-800 hover:border-gray-500  hover:bg-gray-600') +
-                        ' flex-1 cursor-pointer rounded border p-2 text-center text-xs font-bold'
-                      }>
-                      {days[i]}
-                    </FormButton>
+                      checked={repeatWeekdays[i]}
+                    />
                   ))}
                 </div>
               )}
@@ -332,27 +327,24 @@ const TaskForm = ({
           Expected Time Frame
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
-          <div className='flex max-w-lg'>
+          <div className='flex max-w-lg items-center gap-2'>
             <FormButton
+              icon={MinusIcon}
               onClick={() => setTimeFrame(t => Math.max(0, t - 15))}
-              className='mr-3'
-              disabled={timeFrame === 0}>
-              -
-            </FormButton>
-            <FormInput
+              disabled={timeFrame === 0}
+            />
+            <Input
               type='number'
               step={15}
               min={0}
               value={timeFrame}
               onChange={e => setTimeFrame(parseInt(e.target.value))}
-              className='mr-3'
             />
             <FormButton
+              icon={PlusIcon}
               onClick={() => setTimeFrame(t => t + 15)}
-              className='mr-3'>
-              +
-            </FormButton>
-            <div className='py-2.5 text-sm'>mins</div>
+            />
+            <div className='text-sm'>mins</div>
           </div>
         </div>
       </div>
@@ -384,10 +376,10 @@ const TaskForm = ({
           {hasSubtasks && (
             <>
               {subtasks.map((subtask, i) => (
-                <div className='mt-3 flex max-w-lg'>
+                <div className='mt-3 flex max-w-lg items-center gap-2'>
                   {i > 0 && (
                     <FormButton
-                      className='mr-3'
+                      icon={ArrowUpIcon}
                       onClick={() =>
                         setSubtasks(s => {
                           const newSubtasks = [...s]
@@ -395,11 +387,10 @@ const TaskForm = ({
                           newSubtasks[i] = s[i - 1]
                           return newSubtasks
                         })
-                      }>
-                      ↑
-                    </FormButton>
+                      }
+                    />
                   )}
-                  <FormInput
+                  <Input
                     type='text'
                     value={subtask.title}
                     onChange={e => {
@@ -416,7 +407,7 @@ const TaskForm = ({
                   />
                   {i < subtasks.length - 1 && (
                     <FormButton
-                      className='ml-3'
+                      icon={ArrowDownIcon}
                       onClick={() =>
                         setSubtasks(s => {
                           const newSubtasks = [...s]
@@ -424,93 +415,87 @@ const TaskForm = ({
                           newSubtasks[i] = s[i + 1]
                           return newSubtasks
                         })
-                      }>
-                      ↓
-                    </FormButton>
+                      }
+                    />
                   )}
                   <FormButton
-                    className='ml-3'
+                    icon={TrashIcon}
                     onClick={() =>
                       setSubtasks(s => [...s.slice(0, i), ...s.slice(i + 1)])
-                    }>
-                    <TrashIcon className='block h-5 w-5' />
-                  </FormButton>
-                  <FormButton
-                    className={
-                      'ml-3' +
-                      (subtask.done
-                        ? ' border-white bg-gray-200 text-gray-800 hover:border-gray-200 hover:bg-gray-400'
-                        : ' border-gray-700 bg-gray-800 hover:border-gray-500  hover:bg-gray-600')
                     }
-                    onClick={() =>
+                  />
+                  <SwitchWithLabel
+                    label='Done?'
+                    checked={subtask.done}
+                    onChange={v =>
                       setSubtasks(s => [
                         ...s.slice(0, i),
                         {
                           ...s[i],
-                          done: !s[i].done,
+                          done: v,
                         },
                         ...s.slice(i + 1),
                       ])
-                    }>
-                    <CheckCircleIcon className='block h-5 w-5' />
-                  </FormButton>
+                    }
+                  />
                 </div>
               ))}
-              <div className='mt-3 flex max-w-lg'>
-                <FormButton
+              <div className='mt-3 flex max-w-lg justify-center'>
+                <Button
+                  icon={PlusCircleIcon}
+                  text='New Subtask'
                   onClick={() =>
                     setSubtasks([...subtasks, { done: false, title: '' }])
                   }
-                  className={'block flex w-full justify-center'}>
-                  <PlusCircleIcon className='block h-5 w-5' />
-                </FormButton>
+                />
               </div>
             </>
           )}
         </div>
       </div>
-      <div className='pt-5 text-center sm:border-t sm:border-gray-700'>
-        <FormButton className='rounded-full p-3 px-4 text-sm' onClick={submit}>
-          Submit
-        </FormButton>
+      <div className='flex justify-center pt-5 sm:border-t sm:border-gray-700'>
+        <Button icon={ArrowRightIcon} text='Submit' onClick={submit} />
       </div>
     </div>
   )
 }
 
-const FormButton = (props: ComponentProps<'button'>) => (
-  <button
-    {...props}
-    className={
-      props.className +
-      ' inline-block rounded border border-gray-700 bg-gray-800 p-2 text-white placeholder-gray-400 outline-none ring-white ring-offset-0 ring-offset-black focus:z-10 focus:ring'
-    }>
-    {props.children}
-  </button>
-)
-
-const FormInput = (props: ComponentProps<'input'>) => (
-  <input
-    {...props}
-    className={
-      'block w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 outline-none ring-white ring-offset-0 ring-offset-black focus:z-10 focus:ring sm:text-sm ' +
-      props.className
-    }
-  />
-)
+const FormButton = (
+  props: Omit<ComponentProps<typeof Button>, 'className'>
+) => <Button {...props} className='border-gray-800' />
 
 const FormSelect = (props: ComponentProps<'select'>) => (
   <select
     {...props}
     className={
-      'block w-full w-full min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 pr-10 text-white placeholder-gray-400 outline-none ring-white ring-offset-0 ring-offset-black focus:z-10 focus:ring sm:text-sm ' +
+      'mw-11/12 mx-auto block w-96 min-w-0 flex-1 rounded border border-gray-800 bg-black p-2.5 text-white placeholder-gray-400 outline-none ring-white ring-offset-0 ring-offset-black focus:border-gray-700 focus:border-blue-500 focus:bg-gray-900 focus:ring sm:text-sm ' +
       props.className
     }>
     {props.children}
   </select>
 )
 
-const days = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+const SwitchWithLabel = ({
+  label,
+  ...props
+}: {
+  label: string
+} & ComponentProps<typeof Switch>) => (
+  <div className='flex flex-col items-center text-xs'>
+    <label htmlFor={props.id}>{label}</label>
+    <Switch {...props} />
+  </div>
+)
+
+const days = [
+  'Sunday',
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+]
 const repeatOptions: RepeatOption[] = [
   'No Repeat',
   'Daily',

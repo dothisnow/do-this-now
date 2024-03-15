@@ -11,25 +11,24 @@ import { minutesToHours } from '../helpers/time'
 
 import { DateString, RepeatOption, RepeatWeekdays } from '../types/task'
 
-const Tag = ({
-  color,
+export const Tag = ({
   icon,
   text,
+  color,
 }: {
-  color?: `text-${string}`
-  icon: typeof CalendarIcon
+  icon?: typeof CalendarIcon
   text: string
+  color?: string
 }) => {
   const IconComponent = icon
   return (
-    <span
-      className={`${
-        color ?? 'text-white'
-      } ml-1 inline-block rounded-full bg-white bg-opacity-20 p-1 px-2 text-xs`}>
-      <div className='flex'>
-        <IconComponent className='mt-0.5 mr-1 block h-3.5' />
+    <span className='text-xs font-light'>
+      <span className='flex items-center whitespace-nowrap'>
+        {IconComponent && (
+          <IconComponent className={color + ' mr-1 block h-3.5'} />
+        )}
         <div>{text}</div>
-      </div>
+      </span>
     </span>
   )
 }
@@ -122,9 +121,7 @@ export const Repeat = ({
 }
 
 export const Strict = ({
-  dueDate,
   strictDeadline,
-  highlight = true,
 }: {
   dueDate: DateString
   strictDeadline?: boolean
@@ -132,37 +129,7 @@ export const Strict = ({
 }) => {
   if (!strictDeadline) return <></>
   try {
-    return (
-      <Tag
-        icon={ExclamationCircleIcon}
-        text='strict'
-        color={
-          highlight &&
-          newSafeDate(dueDate) <
-            new Date(
-              new Date().getFullYear(),
-              new Date().getMonth(),
-              new Date().getDate(),
-              0,
-              0,
-              0
-            )
-            ? 'text-red-300'
-            : highlight &&
-              newSafeDate(dueDate) <=
-                new Date(
-                  new Date().getFullYear(),
-                  new Date().getMonth(),
-                  new Date().getDate(),
-                  0,
-                  0,
-                  0
-                )
-            ? 'text-orange-300'
-            : 'text-white'
-        }
-      />
-    )
+    return <Tag icon={ExclamationCircleIcon} text='strict' />
   } catch (e) {
     console.error(e)
     return <></>

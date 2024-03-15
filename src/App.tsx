@@ -1,4 +1,6 @@
+import { GlobeAmericasIcon } from '@heroicons/react/20/solid'
 import { Redirect, Route, Switch } from 'wouter'
+import { Button } from './components/button'
 import loginManager from './helpers/LoginManager'
 import History from './history'
 import Home from './home'
@@ -9,7 +11,7 @@ import UpdateTask from './updatetask'
 
 const App = () => {
   return (
-    <div className='w-100vw h-100vh bg-gray-900'>
+    <div className='w-100vw h-100vh bg-black'>
       <Switch>
         <Route path='/'>
           <Home />
@@ -33,12 +35,13 @@ const App = () => {
           <Redirect to='/' />
         </Route>
       </Switch>
-      <button
-        onClick={loginManager.signOut}
-        type='button'
-        className='fixed right-5 bottom-5 rounded border border-gray-700 bg-gray-800 px-2.5 py-1.5 text-xs font-medium text-white outline-none ring-white ring-offset-0 ring-offset-black hover:border-gray-600 hover:bg-gray-700 focus:z-10 focus:ring'>
-        Log out
-      </button>
+      <div className='fixed right-5 bottom-5'>
+        <Button
+          icon={GlobeAmericasIcon}
+          onClick={loginManager.signOut}
+          text='Log out'
+        />
+      </div>
     </div>
   )
 }

@@ -1,11 +1,9 @@
-import { useQueryNewTask } from './hooks/useQueryNewTask'
-
-import Loading from './components/loading'
-import RequireAuth from './components/requireauth'
-import TaskForm from './components/taskform'
-
 import { ArrowLeftIcon } from '@heroicons/react/20/solid'
 import { Button } from './components/button'
+import { Loading } from './components/loading'
+import RequireAuth from './components/requireauth'
+import TaskForm from './components/taskform'
+import { useQueryNewTask } from './hooks/useQueryNewTask'
 import { Task, TaskInput } from './types/task'
 
 const NewTask = () => {
@@ -16,7 +14,7 @@ const NewTask = () => {
       <div className='space-y-8 divide-y divide-gray-700 p-10 text-white'>
         {isLoading && (
           <div className='fixed top-0 left-0 right-0 bottom-0 flex h-screen flex-col justify-center bg-gray-800 opacity-90'>
-            <Loading light={false} />
+            <Loading />
           </div>
         )}
         <div className='space-y-8 divide-y divide-gray-700 sm:space-y-5'>

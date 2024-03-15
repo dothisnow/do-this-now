@@ -31,9 +31,9 @@ export const TaskBox = ({
       onClick={onClick}
       className={
         (isSelected
-          ? 'border-gray-600 bg-gray-700 '
-          : 'border-gray-700 bg-gray-800 ') +
-        'text-md w-full max-w-sm rounded-lg border p-4 text-center font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black drop-shadow-sm focus:z-10 focus:ring md:p-5 '
+          ? 'border-gray-700 bg-gray-900 text-white '
+          : 'border-gray-800 text-gray-300 text-white hover:border-gray-700 hover:bg-gray-900 ') +
+        'flex w-full max-w-sm flex-col gap-2 rounded-lg border p-4 text-left outline-none ring-white ring-offset-0 ring-offset-black focus:z-10 focus:ring '
       }
       title={title}
       {...(innerRef !== null ? { ref: innerRef } : {})}>
@@ -55,11 +55,15 @@ export const TaskBox = ({
         </span>
       </div>
       {showSubtask && (
-        <div className='py-1 text-xs font-normal'>
+        <div className='text-xs font-normal'>
           {task.title} ({subtasksDone}/{task.subtasks.length})
         </div>
       )}
-      <div>
+      <div
+        className={
+          (isSelected ? 'text-gray-300 ' : 'text-gray-600 ') +
+          'flex flex-wrap gap-x-4'
+        }>
         <DateTag due={task.due} />
         <TimeFrame timeFrame={task.timeFrame} />
         <Repeat

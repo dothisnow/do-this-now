@@ -9,16 +9,6 @@ import {
 } from '@heroicons/react/20/solid'
 import { Fragment, useState } from 'react'
 import { useLocation } from 'wouter'
-
-import useKeyAction, { KeyAction } from './hooks/useKeyAction'
-import { useQuerySnoozeTask } from './hooks/useQuerySnoozeTask'
-import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
-import { useQueryTaskDone } from './hooks/useQueryTaskDone'
-import { isSnoozed, useQueryTasksTop } from './hooks/useQueryTasksTop'
-
-import loginManager from './helpers/LoginManager'
-import useDing from './helpers/useDing'
-
 import { Button } from './components/button'
 import Hints from './components/hints'
 import { LastUpdated } from './components/lastupdated'
@@ -26,6 +16,13 @@ import { Loading } from './components/loading'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
 import { TaskBox } from './components/taskbox'
+import loginManager from './helpers/LoginManager'
+import useDing from './hooks/useDing'
+import useKeyAction, { KeyAction } from './hooks/useKeyAction'
+import { useQuerySnoozeTask } from './hooks/useQuerySnoozeTask'
+import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
+import { useQueryTaskDone } from './hooks/useQueryTaskDone'
+import { isSnoozed, useQueryTasksTop } from './hooks/useQueryTasksTop'
 
 // types
 import { Task } from './types/task'

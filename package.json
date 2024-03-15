@@ -19,6 +19,7 @@
     "react-scripts": "5.0.1",
     "redux": "^4.2.0",
     "s-ago": "^2.2.0",
+    "tailwind-override": "^0.6.1",
     "typescript": "^5.3.3",
     "use-sound": "^4.0.1",
     "wouter": "^2.10.0",

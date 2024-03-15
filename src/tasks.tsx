@@ -1,6 +1,3 @@
-import { Fragment, MutableRefObject, useRef, useState } from 'react'
-import { useLocation } from 'wouter'
-
 import {
   ArrowDownIcon,
   CheckCircleIcon,
@@ -10,23 +7,21 @@ import {
   TrashIcon,
 } from '@heroicons/react/20/solid'
 import { format } from 'date-fns'
-
-import { newSafeDate } from './helpers/dates'
-import useDing from './helpers/useDing'
-
+import { Fragment, MutableRefObject, useRef, useState } from 'react'
+import { useLocation } from 'wouter'
 import { Button } from './components/button'
 import Hints from './components/hints'
-import Loading from './components/loading'
+import { Loading } from './components/loading'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
-
+import { TaskBox } from './components/taskbox'
+import { newSafeDate } from './helpers/dates'
+import useDing from './helpers/useDing'
 import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasks } from './hooks/useQueryTasks'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
-
-import { TaskBox } from './components/taskbox'
 
 const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState(0)

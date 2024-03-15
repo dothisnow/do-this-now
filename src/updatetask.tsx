@@ -1,15 +1,13 @@
+import { ArrowLeftIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react'
 import { useLocation } from 'wouter'
-
-import { useQueryGetTask } from './hooks/useQueryGetTask'
-import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
-
-import { ArrowLeftIcon } from '@heroicons/react/20/solid'
 import { Button } from './components/button'
-import Loading from './components/loading'
+import { Loading } from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
 import { newSafeDate } from './helpers/dates'
+import { useQueryGetTask } from './hooks/useQueryGetTask'
+import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
 import { SubTask, Task, TaskInput } from './types/task'
 
 const UpdateTask = () => {
@@ -35,7 +33,7 @@ const UpdateTask = () => {
     <RequireAuth>
       {isTaskLoading || !task ? (
         <div className='absolute top-0 left-0 right-0 bottom-0 flex h-screen flex-col justify-center bg-gray-800 opacity-90'>
-          <Loading light={false} />
+          <Loading />
         </div>
       ) : (
         <div className='space-y-8 divide-y divide-gray-700 p-10 text-white'>

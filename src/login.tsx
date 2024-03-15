@@ -1,12 +1,12 @@
 import { AuthState } from '@aws-amplify/ui-components'
+import { ArrowRightIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect, useLocation } from 'wouter'
-
-import useKeyAction from './hooks/useKeyAction'
-
+import { Button } from './components/button'
+import { Input } from './components/input'
 import loginManager from './helpers/LoginManager'
-
+import useKeyAction from './hooks/useKeyAction'
 import { State } from './store/rootReducer'
 
 const Login = () => {
@@ -67,34 +67,28 @@ const Login = () => {
         <label htmlFor='password' className='sr-only'>
           Password
         </label>
-        <input
+        <Input
           type='password'
           id='password'
           placeholder='Password'
           value={password}
           onChange={event => setPassword(event.target.value)}
-          className='mw-11/12 mx-auto block w-96 min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
         />
       </div>
       {showNewPassword && (
         <div>
           <label htmlFor='newpassword'>Password</label>
-          <input
+          <Input
             type='password'
             id='newpassword'
             placeholder='New Password'
             value={newPassword}
             onChange={event => setNewPassword(event.target.value)}
-            className='mw-11/12 mx-auto block w-96 min-w-0 flex-1 rounded border border-gray-700 bg-gray-800 p-2.5 text-white placeholder-gray-400 focus:border-blue-500 focus:ring-blue-500 sm:text-sm'
           />
         </div>
       )}
       <div className='mt-2 flex justify-center'>
-        <button
-          onClick={login}
-          className='inline-block rounded-full border border-gray-700 bg-gray-800 py-2 px-2.5 text-sm text-white hover:border-gray-600 hover:bg-gray-700'>
-          Submit
-        </button>
+        <Button icon={ArrowRightIcon} onClick={login} text='Submit' />
       </div>
     </div>
   )

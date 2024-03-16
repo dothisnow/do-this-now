@@ -1,5 +1,7 @@
 import { Amplify } from '@aws-amplify/core'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
+import { QueryClient } from '@tanstack/react-query'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
@@ -18,8 +20,13 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60,
+      cacheTime: 1000 * 60 * 60 * 24, // 24 hours
     },
   },
+})
+
+const localStoragePersister = createSyncStoragePersister({
+  storage: window.localStorage,
 })
 
 const rootElement = document.getElementById('root')
@@ -29,9 +36,11 @@ const root = ReactDOM.createRoot(rootElement)
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
+      <PersistQueryClientProvider
+        persistOptions={{ persister: localStoragePersister }}
+        client={queryClient}>
         <App />
-      </QueryClientProvider>
+      </PersistQueryClientProvider>
     </Provider>
   </React.StrictMode>
 )

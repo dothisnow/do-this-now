@@ -15,19 +15,24 @@ export const Tag = ({
   icon,
   text,
   color,
+  iconRight = false,
 }: {
   icon?: typeof CalendarIcon
   text: string
   color?: string
+  iconRight?: boolean
 }) => {
   const IconComponent = icon
   return (
     <span className='text-xs font-light'>
-      <span className='flex items-center whitespace-nowrap'>
-        {IconComponent && (
-          <IconComponent className={color + ' mr-1 block h-3.5'} />
+      <span className='flex items-center gap-1 whitespace-nowrap'>
+        {!iconRight && IconComponent && (
+          <IconComponent className={color + ' block h-3.5'} />
         )}
         <div>{text}</div>
+        {iconRight && IconComponent && (
+          <IconComponent className={color + ' block h-3.5'} />
+        )}
       </span>
     </span>
   )

@@ -11,6 +11,7 @@ const Progress = () => {
   const { done, lives, streak, streakIsActive, todo } = progress.data
 
   const livesUsed = Math.min(lives, todo - done)
+  const livesLeft = lives - livesUsed
 
   return (
     <div className='flex justify-center'>
@@ -19,24 +20,33 @@ const Progress = () => {
           <Tag
             icon={FireIcon}
             text={'' + streak}
-            color={streakIsActive ? 'text-amber-500' : ''}
+            color={streakIsActive ? 'text-amber-500' : 'text-white/50'}
           />
 
-          <Tag
-            icon={HeartIcon}
-            text={'' + minutesToHours(lives - livesUsed)}
-            color={done >= todo ? 'text-red-400' : ''}
-          />
-
-          {done + livesUsed < todo && (
-            <Tag text={minutesToHours(todo - done - livesUsed) + ' left'} />
+          {livesLeft > 0 ? (
+            <Tag
+              icon={HeartIcon}
+              text={'' + minutesToHours(lives - livesUsed)}
+              color={done >= todo ? 'text-red-400' : 'text-white/50'}
+            />
+          ) : (
+            todo - done - livesUsed > 0 && (
+              <Tag
+                icon={FireIcon}
+                iconRight={true}
+                text={minutesToHours(todo - done - livesUsed) + ' to'}
+                color='text-amber-500'
+              />
+            )
           )}
 
-          {done + livesUsed >= todo && done < todo && (
-            <div className='text-gray-300'>
-              {minutesToHours(todo - done)} to{' '}
-              <HeartIcon className='inline-block h-4 w-4 text-red-400' />
-            </div>
+          {todo - done > 0 && (
+            <Tag
+              icon={HeartIcon}
+              text={minutesToHours(todo - done) + ' to'}
+              color='text-red-400'
+              iconRight={true}
+            />
           )}
         </div>
 

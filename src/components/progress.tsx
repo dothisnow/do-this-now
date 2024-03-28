@@ -35,7 +35,6 @@ const Progress = () => {
                 icon={FireIcon}
                 iconRight={true}
                 text={minutesToHours(todo - done - livesUsed) + ' to'}
-                color='text-amber-500'
               />
             )
           )}
@@ -44,7 +43,6 @@ const Progress = () => {
             <Tag
               icon={HeartIcon}
               text={minutesToHours(todo - done) + ' to'}
-              color='text-red-400'
               iconRight={true}
             />
           )}

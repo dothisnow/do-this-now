@@ -13,16 +13,6 @@ const Progress = () => {
   const livesUsed = Math.min(lives, todo - done)
   const livesLeft = lives - livesUsed
 
-  console.log({
-    done,
-    lives,
-    streak,
-    streakIsActive,
-    todo,
-    livesUsed,
-    livesLeft,
-  })
-
   return (
     <div className='flex justify-center'>
       <div className='flex flex-col items-center gap-1 text-xs font-light'>

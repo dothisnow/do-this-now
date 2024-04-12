@@ -1,4 +1,8 @@
-import { BackwardIcon, ForwardIcon, HomeIcon } from '@heroicons/react/20/solid'
+import {
+  faBackward,
+  faForward,
+  faHome,
+} from '@fortawesome/free-solid-svg-icons'
 import {
   Dispatch,
   MutableRefObject,
@@ -23,7 +27,7 @@ const DateNavigator = ({
   daysAgoState: [number, Dispatch<SetStateAction<number>>]
 }) => (
   <div className='flex justify-center gap-2'>
-    <Button icon={BackwardIcon} onClick={() => setDaysAgo(da => da + 1)} />
+    <Button icon={faBackward} onClick={() => setDaysAgo(da => da + 1)} />
     {/* display date of daysAgo days ago */}
     <div className='pt-2.5 text-xs text-white'>
       {new Date(
@@ -31,7 +35,7 @@ const DateNavigator = ({
       ).toLocaleDateString()}
     </div>
     <Button
-      icon={ForwardIcon}
+      icon={faForward}
       onClick={() => setDaysAgo(da => Math.max(0, da - 1))}
     />
   </div>
@@ -57,7 +61,7 @@ const History = () => {
       <div className='my-10 mx-5 flex h-screen flex-col items-center'>
         <Progress />
         <div className='mt-2 flex flex-row flex-wrap justify-center pb-2'>
-          <Button onClick={() => navigate('/')} icon={HomeIcon} text='Home' />
+          <Button onClick={() => navigate('/')} icon={faHome} text='Home' />
         </div>
         <DateNavigator {...{ daysAgoState }} />
         {isLoading ? (
@@ -104,7 +108,7 @@ const Task = ({
   title,
   onClick,
 }: TaskType & {
-  innerRef: (x: HTMLElement) => void
+  innerRef: (x: HTMLButtonElement) => void
   isSelected: boolean
   onClick: () => void
 }) => (

@@ -1,12 +1,12 @@
 import {
-  BackwardIcon,
-  Bars3Icon,
-  BellIcon,
-  CheckCircleIcon,
-  PencilSquareIcon,
-  PlusCircleIcon,
-  TrashIcon,
-} from '@heroicons/react/20/solid'
+  faBackward,
+  faBars,
+  faBell,
+  faCheckCircle,
+  faPen,
+  faPlusCircle,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 import { Fragment, useState } from 'react'
 import { useLocation } from 'wouter'
 import { Button } from './components/button'
@@ -159,28 +159,34 @@ const Home = () => {
   ]
   useKeyAction(keyActions)
 
-  type ButtonTuple = [() => void, string | undefined, typeof CheckCircleIcon]
+  type ButtonTuple = [() => void, string | undefined, typeof faBackward]
   const Buttons = () => {
     const info: ButtonTuple[] = [
-      [completeTask, 'Complete', CheckCircleIcon],
-      [snoozeTask, 'Snooze', BellIcon],
+      [completeTask, 'Complete', faCheckCircle],
+      [snoozeTask, 'Snooze', faBell],
       [
         () =>
           selectedTask &&
           navigate(`/update-task/${encodeURIComponent(selectedTask.title)}`),
         undefined,
-        PencilSquareIcon,
+        faPen,
       ],
-      [deleteTask, undefined, TrashIcon],
+      [deleteTask, undefined, faTrash],
     ]
 
     if (selectedTask && selectedTask.subtasks.length > 0)
-      info.splice(2, 0, [snoozeAllSubtasks, 'Snooze all subtasks', BellIcon])
+      info.splice(2, 0, [snoozeAllSubtasks, 'Snooze all subtasks', faBell])
 
     return (
       <>
         {info.map(([func, text, icon]) => (
-          <Button key={func.name} onClick={func} text={text} icon={icon} />
+          <Button
+            loading={true}
+            key={func.name}
+            onClick={func}
+            text={text}
+            icon={icon}
+          />
         ))}
       </>
     )
@@ -198,17 +204,17 @@ const Home = () => {
               <Button
                 onClick={() => navigate('/tasks')}
                 text={'All tasks'}
-                icon={Bars3Icon}
+                icon={faBars}
               />
               <Button
                 onClick={() => navigate('/new-task')}
                 text={'New task'}
-                icon={PlusCircleIcon}
+                icon={faPlusCircle}
               />
               <Button
                 onClick={() => navigate('/history')}
                 text={'History'}
-                icon={BackwardIcon}
+                icon={faBackward}
               />
             </div>
             {tasks.length > 0 ? (

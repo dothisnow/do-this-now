@@ -1,11 +1,11 @@
 import {
-  ArrowDownIcon,
-  CheckCircleIcon,
-  HomeIcon,
-  PencilIcon,
-  PlusCircleIcon,
-  TrashIcon,
-} from '@heroicons/react/20/solid'
+  faArrowDown,
+  faCheckCircle,
+  faHome,
+  faPen,
+  faPlusCircle,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 import { format } from 'date-fns'
 import { Fragment, MutableRefObject, useRef, useState } from 'react'
 import { useLocation } from 'wouter'
@@ -157,19 +157,15 @@ const Tasks = () => {
           <div className='my-10 mx-5 flex h-screen flex-col items-center gap-1'>
             <Progress />
             <div className='mt-2 flex flex-row flex-wrap justify-center'>
-              <Button
-                onClick={() => navigate('/')}
-                icon={HomeIcon}
-                text='Home'
-              />
+              <Button onClick={() => navigate('/')} icon={faHome} text='Home' />
               <Button
                 onClick={() => navigate('/new-task')}
-                icon={PlusCircleIcon}
+                icon={faPlusCircle}
                 text='New Task'
               />
               <Button
                 onClick={() => setSort(s => (s === 'CHRON' ? 'TOP' : 'CHRON'))}
-                icon={ArrowDownIcon}
+                icon={faArrowDown}
                 text='Toggle Order'
               />
             </div>
@@ -213,7 +209,9 @@ const Tasks = () => {
                     </div>
                   )}
                   <TaskBox
-                    innerRef={(e: HTMLElement) => (taskElems.current[i] = e)}
+                    innerRef={(e: HTMLButtonElement) =>
+                      (taskElems.current[i] = e)
+                    }
                     isSelected={i === selectedTask}
                     onClick={() => setSelectedTask(i)}
                     task={task}
@@ -223,12 +221,12 @@ const Tasks = () => {
                       {[
                         {
                           text: 'Complete',
-                          icon: CheckCircleIcon,
+                          icon: faCheckCircle,
                           onClick: completeTask,
                         },
                         {
                           text: 'Update',
-                          icon: PencilIcon,
+                          icon: faPen,
                           onClick: () =>
                             navigate(
                               `/update-task/${encodeURIComponent(task.title)}`
@@ -236,7 +234,7 @@ const Tasks = () => {
                         },
                         {
                           text: 'Delete',
-                          icon: TrashIcon,
+                          icon: faTrash,
                           onClick: () =>
                             window.confirm(
                               `Are you sure you want to delete '${task.title}'?`

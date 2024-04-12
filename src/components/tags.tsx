@@ -1,9 +1,10 @@
 import {
-  ArrowPathIcon,
-  CalendarIcon,
-  ClockIcon,
-  ExclamationCircleIcon,
-} from '@heroicons/react/20/solid'
+  faCalendar,
+  faCircleExclamation,
+  faClock,
+  faRepeat,
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { format } from 'date-fns'
 
 import { newSafeDate } from '../helpers/dates'
@@ -17,7 +18,7 @@ export const Tag = ({
   color,
   iconRight = false,
 }: {
-  icon?: typeof CalendarIcon
+  icon?: typeof faCalendar
   text: string
   color?: string
   iconRight?: boolean
@@ -27,11 +28,11 @@ export const Tag = ({
     <span className='text-xs font-light'>
       <span className='flex items-center gap-1 whitespace-nowrap'>
         {!iconRight && IconComponent && (
-          <IconComponent className={color + ' block h-3.5'} />
+          <FontAwesomeIcon icon={icon} className={color + ' block h-3'} />
         )}
         <div>{text}</div>
         {iconRight && IconComponent && (
-          <IconComponent className={color + ' block h-3.5'} />
+          <FontAwesomeIcon icon={icon} className={color + ' block h-3'} />
         )}
       </span>
     </span>
@@ -76,7 +77,7 @@ export const DateTag = ({ due }: { due: DateString }) => {
             ? 'Yesterday'
             : format(newSafeDate(due), 'iii LLL d')
         }
-        icon={CalendarIcon}
+        icon={faCalendar}
       />
     )
   } catch (e) {
@@ -87,7 +88,7 @@ export const DateTag = ({ due }: { due: DateString }) => {
 
 export const TimeFrame = ({ timeFrame }: { timeFrame?: number }) => {
   if (!timeFrame) return <></>
-  return <Tag icon={ClockIcon} text={minutesToHours(timeFrame)} />
+  return <Tag icon={faClock} text={minutesToHours(timeFrame)} />
 }
 
 export const Repeat = ({
@@ -119,10 +120,10 @@ export const Repeat = ({
       (repeatInterval > 1
         ? `${repeatInterval} ${repeatUnit}s`
         : `${repeatUnit}ly`) + text
-    return <Tag icon={ArrowPathIcon} text={text.toLowerCase()} />
+    return <Tag icon={faRepeat} text={text.toLowerCase()} />
   }
 
-  return <Tag icon={ArrowPathIcon} text={repeat.toLowerCase()} />
+  return <Tag icon={faRepeat} text={repeat.toLowerCase()} />
 }
 
 export const Strict = ({
@@ -134,7 +135,7 @@ export const Strict = ({
 }) => {
   if (!strictDeadline) return <></>
   try {
-    return <Tag icon={ExclamationCircleIcon} text='strict' />
+    return <Tag icon={faCircleExclamation} text='strict' />
   } catch (e) {
     console.error(e)
     return <></>

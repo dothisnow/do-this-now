@@ -1,4 +1,4 @@
-import { ArrowLeftIcon } from '@heroicons/react/20/solid'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { Button } from './components/button'
 import { Loading } from './components/loading'
 import RequireAuth from './components/requireauth'
@@ -22,7 +22,7 @@ const NewTask = () => {
             <div className='flex'>
               <Button
                 onClick={() => window.history.back()}
-                icon={ArrowLeftIcon}
+                icon={faArrowLeft}
               />
               <h3 className='ml-2 pt-1 text-lg font-medium'>New Task</h3>
             </div>

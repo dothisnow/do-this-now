@@ -1,4 +1,4 @@
-import { FireIcon, HeartIcon } from '@heroicons/react/20/solid'
+import { faFire, faHeart } from '@fortawesome/free-solid-svg-icons'
 import { minutesToHours } from '../helpers/time'
 import { useQueryProgressToday } from '../hooks/useQueryProgressToday'
 import { Tag } from './tags'
@@ -18,21 +18,21 @@ const Progress = () => {
       <div className='flex flex-col items-center gap-1 text-xs font-light'>
         <div className='flex w-full justify-center gap-5 text-white'>
           <Tag
-            icon={FireIcon}
+            icon={faFire}
             text={'' + streak}
             color={streakIsActive ? 'text-amber-500' : 'text-white/50'}
           />
 
           {livesLeft > 0 ? (
             <Tag
-              icon={HeartIcon}
+              icon={faHeart}
               text={'' + minutesToHours(lives - livesUsed)}
               color={done >= todo ? 'text-red-400' : 'text-white/50'}
             />
           ) : (
             todo - done - livesUsed > 0 && (
               <Tag
-                icon={FireIcon}
+                icon={faFire}
                 iconRight={true}
                 text={minutesToHours(todo - done - livesUsed) + ' to'}
               />
@@ -41,7 +41,7 @@ const Progress = () => {
 
           {todo - done > 0 && (
             <Tag
-              icon={HeartIcon}
+              icon={faHeart}
               text={minutesToHours(todo - done) + ' to'}
               iconRight={true}
             />

@@ -1,5 +1,5 @@
 import { AuthState } from '@aws-amplify/ui-components'
-import { ArrowRightIcon } from '@heroicons/react/20/solid'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect, useLocation } from 'wouter'
@@ -88,7 +88,7 @@ const Login = () => {
         </div>
       )}
       <div className='mt-2 flex justify-center'>
-        <Button icon={ArrowRightIcon} onClick={login} text='Submit' />
+        <Button icon={faArrowRight} onClick={login} text='Submit' />
       </div>
     </div>
   )

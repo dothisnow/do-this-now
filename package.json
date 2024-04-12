@@ -4,8 +4,10 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/ui-components": "^1.9.6",
+    "@fortawesome/fontawesome-svg-core": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@headlessui/react": "^1.6.6",
-    "@heroicons/react": "^2.0.18",
     "@tanstack/query-sync-storage-persister": "^5.28.4",
     "@tanstack/react-query": "^4.24.4",
     "@tanstack/react-query-persist-client": "^5.28.4",

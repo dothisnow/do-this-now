@@ -1,4 +1,4 @@
-import { GlobeAmericasIcon } from '@heroicons/react/20/solid'
+import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { Redirect, Route, Switch } from 'wouter'
 import { Button } from './components/button'
 import loginManager from './helpers/LoginManager'
@@ -37,7 +37,7 @@ const App = () => {
       </Switch>
       <div className='fixed right-5 bottom-5'>
         <Button
-          icon={GlobeAmericasIcon}
+          icon={faRightFromBracket}
           onClick={loginManager.signOut}
           text='Log out'
         />

@@ -1,23 +1,28 @@
-import { AcademicCapIcon } from '@heroicons/react/20/solid'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ComponentProps } from 'react'
 import { overrideTailwindClasses } from 'tailwind-override'
 
 export const Button = ({
-  icon: Icon,
+  icon,
   text,
+  loading = false,
   ...props
 }: {
-  icon: typeof AcademicCapIcon
+  icon: ComponentProps<typeof FontAwesomeIcon>['icon']
   text?: string
+  loading?: boolean
 } & Omit<ComponentProps<'button'>, 'children'>) => (
   <button
     {...props}
     className={overrideTailwindClasses(
-      'block flex rounded-full border border-black py-2 px-2.5 text-sm font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black hover:border-gray-700 hover:bg-gray-900 focus:z-10 focus:ring disabled:opacity-50 disabled:hover:border-gray-800 disabled:hover:bg-black ' +
+      'block flex items-center rounded-full border border-black py-2 px-2.5 text-sm font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black hover:border-gray-700 hover:bg-gray-900 focus:z-10 focus:ring disabled:opacity-50 disabled:hover:border-gray-800 disabled:hover:bg-black ' +
         props.className
     )}>
     {!!text && <div className='mr-1'>{text}</div>}
-    <Icon className='block h-5 w-5' />
+    <FontAwesomeIcon
+      icon={icon}
+      className={'block h-4 w-4 ' + (loading ? '' : '')}
+    />
   </button>
 )
 

@@ -1,12 +1,12 @@
 import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowUpIcon,
-  MinusIcon,
-  PlusCircleIcon,
-  PlusIcon,
-  TrashIcon,
-} from '@heroicons/react/20/solid'
+  faArrowDown,
+  faArrowRight,
+  faArrowUp,
+  faMinus,
+  faPlus,
+  faPlusCircle,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons'
 import { format } from 'date-fns'
 import { ComponentProps, useState } from 'react'
 import { ZodError } from 'zod'
@@ -187,7 +187,7 @@ const TaskForm = ({
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg items-center gap-2 rounded-md shadow-sm'>
-            <FormButton icon={MinusIcon} onClick={decrementDate} />
+            <FormButton icon={faMinus} onClick={decrementDate} />
             <Input
               type='number'
               max={12}
@@ -231,7 +231,7 @@ const TaskForm = ({
                 )
               }
             />
-            <FormButton onClick={incrementDate} icon={PlusCircleIcon} />
+            <FormButton onClick={incrementDate} icon={faPlus} />
           </div>
           <div className='mt-1 max-w-lg text-center text-gray-600'>
             {format(
@@ -329,7 +329,7 @@ const TaskForm = ({
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg items-center gap-2'>
             <FormButton
-              icon={MinusIcon}
+              icon={faMinus}
               onClick={() => setTimeFrame(t => Math.max(0, t - 15))}
               disabled={timeFrame === 0}
             />
@@ -341,7 +341,7 @@ const TaskForm = ({
               onChange={e => setTimeFrame(parseInt(e.target.value))}
             />
             <FormButton
-              icon={PlusIcon}
+              icon={faPlus}
               onClick={() => setTimeFrame(t => t + 15)}
             />
             <div className='text-sm'>mins</div>
@@ -379,7 +379,7 @@ const TaskForm = ({
                 <div className='mt-3 flex max-w-lg items-center gap-2'>
                   {i > 0 && (
                     <FormButton
-                      icon={ArrowUpIcon}
+                      icon={faArrowUp}
                       onClick={() =>
                         setSubtasks(s => {
                           const newSubtasks = [...s]
@@ -407,7 +407,7 @@ const TaskForm = ({
                   />
                   {i < subtasks.length - 1 && (
                     <FormButton
-                      icon={ArrowDownIcon}
+                      icon={faArrowDown}
                       onClick={() =>
                         setSubtasks(s => {
                           const newSubtasks = [...s]
@@ -419,7 +419,7 @@ const TaskForm = ({
                     />
                   )}
                   <FormButton
-                    icon={TrashIcon}
+                    icon={faTrash}
                     onClick={() =>
                       setSubtasks(s => [...s.slice(0, i), ...s.slice(i + 1)])
                     }
@@ -442,7 +442,7 @@ const TaskForm = ({
               ))}
               <div className='mt-3 flex max-w-lg justify-center'>
                 <Button
-                  icon={PlusCircleIcon}
+                  icon={faPlusCircle}
                   text='New Subtask'
                   onClick={() =>
                     setSubtasks([...subtasks, { done: false, title: '' }])
@@ -454,7 +454,7 @@ const TaskForm = ({
         </div>
       </div>
       <div className='flex justify-center pt-5 sm:border-t sm:border-gray-700'>
-        <Button icon={ArrowRightIcon} text='Submit' onClick={submit} />
+        <Button icon={faArrowRight} text='Submit' onClick={submit} />
       </div>
     </div>
   )

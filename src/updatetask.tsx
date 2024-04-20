@@ -62,6 +62,7 @@ const UpdateTask = () => {
                     ...(taskId !== input.title[0] ? { oldTitle: taskId } : {}),
                     due: `${input.dueYear}-${input.dueMonth}-${input.dueDay}`,
                   }
+                  // @ts-expect-error - this should be fixed when i upgrade to v5
                   mutate(task, {
                     onSuccess: () => window.history.back(),
                   })

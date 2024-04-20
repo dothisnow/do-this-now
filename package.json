@@ -37,7 +37,8 @@
     "preview": "vite preview",
     "knip": "knip",
     "prettier": "prettier src/**/*.{js,ts,tsx} --check",
-    "ts-coverage": "typescript-coverage-report"
+    "ts-coverage": "typescript-coverage-report",
+    "preinstall": "npx only-allow pnpm"
   },
   "browserslist": {
     "production": [">0.2%", "not dead", "not op_mini all"],

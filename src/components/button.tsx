@@ -1,3 +1,4 @@
+import { faSpinner } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ComponentProps } from 'react'
 import { overrideTailwindClasses } from 'tailwind-override'
@@ -15,14 +16,19 @@ export const Button = ({
   <button
     {...props}
     className={overrideTailwindClasses(
-      'block flex items-center rounded-full border border-black py-2 px-2.5 text-sm font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black hover:border-gray-700 hover:bg-gray-900 focus:z-10 focus:ring disabled:opacity-50 disabled:hover:border-gray-800 disabled:hover:bg-black ' +
+      'block flex items-center gap-1 rounded-full border border-black py-2 px-2.5 text-sm font-bold text-white outline-none ring-white ring-offset-0 ring-offset-black hover:border-gray-700 hover:bg-gray-900 focus:z-10 focus:ring disabled:opacity-50 disabled:hover:border-gray-800 disabled:hover:bg-black ' +
         props.className
     )}>
-    {!!text && <div className='mr-1'>{text}</div>}
-    <FontAwesomeIcon
-      icon={icon}
-      className={'block h-4 w-4 ' + (loading ? '' : '')}
-    />
+    {!!text && text}
+    {(!text || !loading) && (
+      <FontAwesomeIcon icon={icon} className={'block h-4 w-4 '} />
+    )}
+    {loading && (
+      <FontAwesomeIcon
+        icon={faSpinner}
+        className={'block h-4 w-4 animate-spin'}
+      />
+    )}
   </button>
 )
 

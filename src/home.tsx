@@ -45,25 +45,24 @@ const Home = () => {
   if (tasks && tasks.length > 0 && tasks.length <= selectedTaskIndex)
     setSelectedTaskIndex(tasks.length === 2 ? 1 : 0)
 
-  const { mutate, isLoading: doneIsLoading } = useQueryTaskDone()
-  const { mutate: mutateDelete, isLoading: deleteIsLoading } =
-    useQueryTaskDelete()
-  const { mutate: mutateSnooze } = useQuerySnoozeTask()
+  const doneMutation = useQueryTaskDone()
+  const deleteMutation = useQueryTaskDelete()
+  const snoozeMutation = useQuerySnoozeTask()
 
   const completeTask = () => {
     if (!selectedTask) return
     ding()
-    mutate(selectedTask)
+    doneMutation.mutate(selectedTask)
   }
 
   const snoozeTask = () => {
     if (!selectedTask) return
-    mutateSnooze({ task: selectedTask })
+    snoozeMutation.mutate({ task: selectedTask })
   }
 
   const snoozeAllSubtasks = () => {
     if (!selectedTask) return
-    mutateSnooze({ task: selectedTask, allSubtasks: true })
+    snoozeMutation.mutate({ task: selectedTask, allSubtasks: true })
   }
 
   const deleteTask = () => {
@@ -74,7 +73,7 @@ const Home = () => {
       )
     )
       return
-    mutateDelete(selectedTask)
+    deleteMutation.mutate(selectedTask)
   }
 
   const keyActions: KeyAction[] = [
@@ -159,10 +158,20 @@ const Home = () => {
   ]
   useKeyAction(keyActions)
 
-  type ButtonTuple = [() => void, string | undefined, typeof faBackward]
+  type ButtonTuple = [
+    () => void,
+    string | undefined,
+    typeof faBackward,
+    boolean?
+  ]
   const Buttons = () => {
     const info: ButtonTuple[] = [
-      [completeTask, 'Complete', faCheckCircle],
+      [
+        completeTask,
+        'Complete',
+        faCheckCircle,
+        doneMutation.isLoading && doneMutation.variables === selectedTask,
+      ],
       [snoozeTask, 'Snooze', faBell],
       [
         () =>
@@ -179,13 +188,13 @@ const Home = () => {
 
     return (
       <>
-        {info.map(([func, text, icon]) => (
+        {info.map(([func, text, icon, loading]) => (
           <Button
-            loading={true}
             key={func.name}
             onClick={func}
             text={text}
             icon={icon}
+            loading={loading}
           />
         ))}
       </>
@@ -195,7 +204,7 @@ const Home = () => {
   return (
     <RequireAuth>
       <div className='flex h-screen flex-col items-center justify-center gap-2'>
-        {isLoading || doneIsLoading || deleteIsLoading ? (
+        {isLoading || deleteMutation.isLoading ? (
           <Loading />
         ) : (
           <>

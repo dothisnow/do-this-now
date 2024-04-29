@@ -180,7 +180,12 @@ const Home = () => {
         undefined,
         faPen,
       ],
-      [deleteTask, undefined, faTrash],
+      [
+        deleteTask,
+        undefined,
+        faTrash,
+        deleteMutation.isLoading && deleteMutation.variables === selectedTask,
+      ],
     ]
 
     if (selectedTask && selectedTask.subtasks.length > 0)

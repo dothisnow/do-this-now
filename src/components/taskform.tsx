@@ -37,9 +37,11 @@ const TaskForm = ({
   timeFrame: initialTimeFrame,
   subtasks: initialSubtasks,
   submitForm,
+  isSaving = false,
 }: Partial<TaskInput> & {
   errorMessage?: string | null
   submitForm: (input: TaskInput) => void
+  isSaving?: boolean
 }) => {
   const [formError, setFormError] = useState<ZodError>()
 
@@ -454,7 +456,12 @@ const TaskForm = ({
         </div>
       </div>
       <div className='flex justify-center pt-5 sm:border-t sm:border-gray-700'>
-        <Button icon={faArrowRight} text='Submit' onClick={submit} />
+        <Button
+          loading={isSaving}
+          icon={faArrowRight}
+          text='Submit'
+          onClick={submit}
+        />
       </div>
     </div>
   )

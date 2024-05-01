@@ -6,6 +6,7 @@ import {
   faPlusCircle,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons'
+import { useQueryClient } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { Fragment, MutableRefObject, useRef, useState } from 'react'
 import { useLocation } from 'wouter'
@@ -29,6 +30,7 @@ const Tasks = () => {
   const taskElems: MutableRefObject<HTMLElement[]> = useRef([])
   const ding = useDing()
   const navigate = useLocation()[1]
+  const queryClient = useQueryClient()
 
   const { data, isFetching } = useQueryTasks()
   const { data: dataTop, isFetching: isFetchingTop } = useQueryTasksTop()
@@ -72,10 +74,16 @@ const Tasks = () => {
     {
       key: 'u',
       description: 'Update task',
-      action: () =>
+      action: () => {
+        if (!tasks[selectedTask]) return
+        queryClient.setQueryData(
+          ['tasks', 'get', tasks[selectedTask].title],
+          tasks[selectedTask]
+        )
         navigate(
           `/update-task/${encodeURIComponent(tasks[selectedTask].title)}`
-        ),
+        )
+      },
     },
     {
       key: 'up',

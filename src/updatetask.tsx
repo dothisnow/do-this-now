@@ -27,7 +27,7 @@ const UpdateTask = () => {
 
   const subtasksState = useState<SubTask[]>([])
 
-  const { mutate } = useQueryUpdateTask()
+  const updateTaskMutation = useQueryUpdateTask()
 
   return (
     <RequireAuth>
@@ -63,7 +63,7 @@ const UpdateTask = () => {
                     due: `${input.dueYear}-${input.dueMonth}-${input.dueDay}`,
                   }
                   // @ts-expect-error - this should be fixed when i upgrade to v5
-                  mutate(task, {
+                  updateTaskMutation.mutate(task, {
                     onSuccess: () => window.history.back(),
                   })
                 }}

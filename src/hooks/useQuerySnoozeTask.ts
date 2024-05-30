@@ -15,15 +15,18 @@ export const useQuerySnoozeTask = () => {
     mutationFn: async ({
       task: { title },
       allSubtasks = false,
+      subtask,
     }: {
       task: Task
       allSubtasks?: boolean
+      subtask?: string
     }) => {
       return z.object({}).parse(
         await API.post('tasks', '/tasks/snooze', {
           body: {
             title,
             allSubtasks,
+            subtask,
           },
         })
       )

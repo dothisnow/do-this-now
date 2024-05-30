@@ -24,8 +24,7 @@ exports.handler = async event => {
   console.log(`EVENT: ${JSON.stringify(event)}`)
 
   const today =
-                'queryStringParameters' in event &&
-                'date' in event.queryStringParameters
+    'queryStringParameters' in event && 'date' in event.queryStringParameters
       ? new Date(event.queryStringParameters.date)
       : new Date(
           new Date().getFullYear(),
@@ -42,6 +41,8 @@ exports.handler = async event => {
   console.log(`TODAY: ${today}`)
   console.log(`IN 2 WEEKS: ${in2Weeks}`)
 
+  console.log(`DATESTRING TODAY: ${dateString(today)}`)
+
   const historyGetParams = {
     TableName: ENV.STORAGE_HISTORY_NAME,
     Key: {
@@ -51,11 +52,18 @@ exports.handler = async event => {
 
   let data = await docClient.get(historyGetParams).promise()
 
-  const done =
-    data?.Item?.tasks?.reduce(
-      (acc, cur) => acc + (parseInt(cur?.timeFrame) ?? 30),
-      0
-    ) ?? 0
+  console.log(data.Item?.tasks)
+
+  let done = 0
+  for (const t of data?.Item?.tasks ?? [])
+    done +=
+      'timeFrame' in t
+        ? typeof t.timeFrame === 'string'
+          ? parseInt(t.timeFrame)
+          : t.timeFrame
+        : 0
+
+  console.log(done)
 
   const params = {
     TableName: ENV.STORAGE_TASKS_NAME,
@@ -106,7 +114,7 @@ exports.handler = async event => {
       ExpressionAttributeNames: { '#x': 'streakBeforeToday', '#x2': 'lives' },
       ExpressionAttributeValues: {
         ':y': streak,
-        ':y2': done + lives - todo
+        ':y2': done + lives - todo,
       },
     }
 

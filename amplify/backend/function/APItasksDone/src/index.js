@@ -27,7 +27,7 @@ exports.handler = async event => {
 
   console.log(`BODY: ${JSON.stringify(body)}`)
 
-  if (!('task' in body)|| !('title' in body.task))
+  if (!('task' in body) || !('title' in body.task))
     return error('Missing title!')
   const task = body.task
 
@@ -45,13 +45,15 @@ exports.handler = async event => {
   let newItem = data.Item
 
   if (
-          'subtasks' in newItem &&
-    newItem.subtasks.some(st => !st.done)
+    'subtasks' in newItem &&
+    ('subtask' in body || newItem.subtasks.some(st => !st.done))
   ) {
-    const nextSubtask =
-      newItem.subtasks.find(
-        s => !s.done && (!s.snooze || new Date(s.snooze) < new Date())
-      ) ?? newItem.subtasks.find(s => !s.done)
+    const subtaskTitle = 'subtask' in body ? body.subtask : undefined
+    const nextSubtask = subtaskTitle
+      ? newItem.subtasks.find(st => st.title === subtaskTitle)
+      : newItem.subtasks.find(
+          s => !s.done && (!s.snooze || new Date(s.snooze) < new Date())
+        ) ?? newItem.subtasks.find(s => !s.done)
     nextSubtask.done = true
     const updateParams = {
       TableName: ENV.STORAGE_TASKS_NAME,
@@ -72,7 +74,7 @@ exports.handler = async event => {
     }
   }
 
-  const now = 'date' in body? new Date(body.date) : new Date()
+  const now = 'date' in body ? new Date(body.date) : new Date()
 
   const newDue = nextDueDate(newItem)
 
@@ -86,7 +88,7 @@ exports.handler = async event => {
     newItem.history.push(dateString(now))
 
     if (
-            'subtasks' in newItem &&
+      'subtasks' in newItem &&
       Array.isArray(newItem.subtasks) &&
       newItem.subtasks.length > 0
     )

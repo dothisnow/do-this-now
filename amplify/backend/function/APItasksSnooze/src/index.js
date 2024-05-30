@@ -6,9 +6,9 @@
 	STORAGE_TASKS_STREAMARN
 Amplify Params - DO NOT EDIT */
 
-// eslint-disable-next-line 
+// eslint-disable-next-line
 const ENV = require('process').env
-// eslint-disable-next-line 
+// eslint-disable-next-line
 const AWS = require('aws-sdk')
 const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -35,26 +35,26 @@ exports.handler = async event => {
 
   let response
 
-  const allSubtasks = 'allSubtasks' in body
-    ? body.allSubtasks
-    : false
+  const allSubtasks = 'allSubtasks' in body ? body.allSubtasks : false
 
   if (
     !allSubtasks &&
-          'subtasks' in task &&
-    task.subtasks.some(
-      st =>
-        !st.done &&
-        (!('snooze' in st) || new Date(st.snooze) <= new Date())
-    )
+    'subtasks' in task &&
+    ('subtask' in body ||
+      task.subtasks.some(
+        st =>
+          !st.done && (!('snooze' in st) || new Date(st.snooze) <= new Date())
+      ))
   ) {
     // has an unsnoozed subtask
-
-    const i = task.subtasks.findIndex(
-      st =>
-        !st.done &&
-        (!('snooze' in st) || new Date(st.snooze) <= new Date())
-    )
+    const subtaskTitle = 'subtask' in body ? body.subtask : undefined
+    const i = subtaskTitle
+      ? task.subtasks.findIndex(st => st.title === subtaskTitle)
+      : // if we haven't passed a subtask explicitly, find first unsnoozed subtask
+        task.subtasks.findIndex(
+          st =>
+            !st.done && (!('snooze' in st) || new Date(st.snooze) <= new Date())
+        )
     const newSubtasks = [
       ...task.subtasks.slice(0, i),
       {

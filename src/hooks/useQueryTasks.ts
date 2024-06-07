@@ -1,6 +1,6 @@
-import API from '@aws-amplify/api'
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
+import { handleGet } from './api'
 
 // types
 import { taskSchema } from '../types/task'
@@ -13,5 +13,5 @@ const tasksSchema = z.object({
 
 export const useQueryTasks = () =>
   useQuery(['tasks'], async () =>
-    tasksSchema.parse(await API.get('tasks', '/tasks', {}))
+    tasksSchema.parse(await handleGet({ path: '/tasks' }))
   )

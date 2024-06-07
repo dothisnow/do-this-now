@@ -17,7 +17,7 @@ import { Loading } from './components/loading'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
 import { TaskBox } from './components/taskbox'
-import loginManager from './helpers/LoginManager'
+import { handleSignOut } from './helpers/login-helper'
 import useDing from './hooks/useDing'
 import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQuerySnoozeTask } from './hooks/useQuerySnoozeTask'
@@ -92,7 +92,7 @@ const Home = () => {
     {
       key: 'l',
       description: 'Logout',
-      action: loginManager.signOut,
+      action: handleSignOut,
     },
     {
       key: 'n',

@@ -1,54 +1,52 @@
-import { AuthState } from '@aws-amplify/ui-components'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect, useLocation } from 'wouter'
 import { Button } from './components/button'
 import { Input } from './components/input'
-import loginManager from './helpers/LoginManager'
+import { handleSignIn } from './helpers/login-helper'
 import useKeyAction from './hooks/useKeyAction'
 import { State } from './store/rootReducer'
 
 const Login = () => {
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState<object>()
-  const [showNewPassword, setShowNewPassword] = useState(false)
-  const [newPassword, setNewPassword] = useState('')
+  // const [user, setUser] = useState<object>()
+  // const [showNewPassword, setShowNewPassword] = useState(false)
+  // const [newPassword, setNewPassword] = useState('')
 
   const authState = useSelector((state: State) => state.authState)
 
   const navigate = useLocation()[1]
 
   const login = () => {
-    if (showNewPassword) {
-      loginManager
-        .newPassword(user, newPassword)
-        .then(() => {
+    // if (showNewPassword) {
+    //     .newPassword(user, newPassword)
+    //     .then(() => {
+    //       navigate('/')
+    //     })
+    //     .catch((e: Error) => {
+    //       alert('e')
+    //       console.error(e)
+    //     })
+    // } else {
+    handleSignIn(password)
+      .then((r: unknown) => {
+        if (
+          typeof r === 'object' &&
+          r &&
+          'challengeName' in r &&
+          r.challengeName &&
+          r.challengeName === 'NEW_PASSWORD_REQUIRED'
+        ) {
+          throw new Error('New password required')
+          // setShowNewPassword(true)
+          // setUser(r)
+        } else {
           navigate('/')
-        })
-        .catch((e: Error) => {
-          alert('e')
-          console.error(e)
-        })
-    } else {
-      loginManager
-        .signIn(password)
-        .then((r: unknown) => {
-          if (
-            typeof r === 'object' &&
-            r &&
-            'challengeName' in r &&
-            r.challengeName &&
-            r.challengeName === 'NEW_PASSWORD_REQUIRED'
-          ) {
-            setShowNewPassword(true)
-            setUser(r)
-          } else {
-            navigate('/')
-          }
-        })
-        .catch((e: Error) => alert('e' + e))
-    }
+        }
+      })
+      .catch((e: Error) => alert(e.message))
+    // }
   }
 
   useKeyAction([
@@ -59,7 +57,7 @@ const Login = () => {
     },
   ])
 
-  if (authState === AuthState.SignedIn) return <Redirect to='/' />
+  if (authState === 'authenticated') return <Redirect to='/' />
 
   return (
     <div className='flex h-screen flex-col justify-center'>
@@ -75,6 +73,7 @@ const Login = () => {
           onChange={event => setPassword(event.target.value)}
         />
       </div>
+      {/*
       {showNewPassword && (
         <div>
           <label htmlFor='newpassword'>Password</label>
@@ -87,6 +86,7 @@ const Login = () => {
           />
         </div>
       )}
+              */}
       <div className='mt-2 flex justify-center'>
         <Button icon={faArrowRight} onClick={login} text='Submit' />
       </div>

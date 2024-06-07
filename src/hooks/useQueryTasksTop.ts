@@ -25,12 +25,12 @@ export const isSnoozed = (t: Task) =>
 export const useQueryTasksTop = () => {
   const date = dateString(new Date())
   return useQuery(['tasks', 'top', date], async () => {
-    console.log('called top tasks')
-    const response = await handleGet({
-      path: '/tasks/top',
-      queryParams: { date },
-    })
-    const tasks = tasksSchema.parse(response)
+    const tasks = tasksSchema.parse(
+      await handleGet({
+        path: '/tasks/top',
+        queryParams: { date },
+      })
+    )
     tasks.Items.sort((a, b) => (isSnoozed(a) ? 1 : isSnoozed(b) ? -1 : 0))
     return tasks.Items
   })

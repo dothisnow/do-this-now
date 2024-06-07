@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import { useSelector } from 'react-redux'
 import { Redirect } from 'wouter'
-import { currentAuthenticatedUser } from '../helpers/login-helper'
+import { currentAuthenticatedUser } from '../helpers/auth'
 import { Loading } from './loading'
 
 const RequireAuth = ({ children }: { children: ReactNode }) => {
@@ -9,7 +9,6 @@ const RequireAuth = ({ children }: { children: ReactNode }) => {
     (s: { hasLoadedUser?: boolean }) => s?.hasLoadedUser
   )
   const authState = useSelector((s: { authState?: string }) => s?.authState)
-  console.log({ hasLoadedUser })
   if (!hasLoadedUser) {
     currentAuthenticatedUser()
     return (

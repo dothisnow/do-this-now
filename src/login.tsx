@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { Redirect, useLocation } from 'wouter'
 import { Button } from './components/button'
 import { Input } from './components/input'
-import { handleSignIn } from './helpers/login-helper'
+import { handleSignIn } from './helpers/auth'
 import useKeyAction from './hooks/useKeyAction'
 import { State } from './store/rootReducer'
 

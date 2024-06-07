@@ -1,7 +1,7 @@
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { Redirect, Route, Switch } from 'wouter'
 import { Button } from './components/button'
-import { handleSignOut } from './helpers/login-helper'
+import { handleSignOut } from './helpers/auth'
 import History from './history'
 import Home from './home'
 import Login from './login'

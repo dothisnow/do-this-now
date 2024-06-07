@@ -1,6 +1,6 @@
-import API from '@aws-amplify/api'
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
+import { handleGet } from './api'
 
 import { dateString } from '../helpers/dates'
 
@@ -16,9 +16,7 @@ export const useQueryProgressToday = () => {
   const date = dateString(new Date())
   return useQuery(['tasks', 'progresstoday', date], async () =>
     progressTodaySchema.parse(
-      await API.get('tasks', '/tasks/progresstoday', {
-        queryStringParameters: { date },
-      })
+      await handleGet({ path: '/tasks/progresstoday', queryParams: { date } })
     )
   )
 }

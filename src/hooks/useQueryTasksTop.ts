@@ -1,6 +1,6 @@
-import API from '@aws-amplify/api'
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
+import { handleGet } from './api'
 
 import { dateString } from '../helpers/dates'
 
@@ -26,10 +26,9 @@ export const useQueryTasksTop = () => {
   const date = dateString(new Date())
   return useQuery(['tasks', 'top', date], async () => {
     const tasks = tasksSchema.parse(
-      await API.get('tasks', '/tasks/top', {
-        queryStringParameters: {
-          date,
-        },
+      await handleGet({
+        path: '/tasks/top',
+        queryParams: { date },
       })
     )
     tasks.Items.sort((a, b) => (isSnoozed(a) ? 1 : isSnoozed(b) ? -1 : 0))

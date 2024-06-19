@@ -1,20 +1,18 @@
-import { Amplify } from '@aws-amplify/core'
 import { createSyncStoragePersister } from '@tanstack/query-sync-storage-persister'
 import { QueryClient } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { Amplify } from 'aws-amplify'
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { Provider } from 'react-redux'
-import config from './aws-exports'
+import config from './amplifyconfiguration.json'
 
 import App from './App'
 import store from './store/store'
 
 import './index.css'
 
-Amplify.configure({
-  ...config,
-})
+Amplify.configure(config)
 
 const queryClient = new QueryClient({
   defaultOptions: {

@@ -1,7 +1,7 @@
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
 import { Redirect, Route, Switch } from 'wouter'
 import { Button } from './components/button'
-import loginManager from './helpers/LoginManager'
+import { handleSignOut } from './helpers/auth'
 import History from './history'
 import Home from './home'
 import Login from './login'
@@ -38,7 +38,7 @@ const App = () => {
       <div className='fixed right-5 bottom-5'>
         <Button
           icon={faRightFromBracket}
-          onClick={loginManager.signOut}
+          onClick={handleSignOut}
           text='Log out'
         />
       </div>

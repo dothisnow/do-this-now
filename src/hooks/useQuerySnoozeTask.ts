@@ -1,6 +1,6 @@
-import API from '@aws-amplify/api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
+import { handlePost } from './api'
 
 import { dateString } from '../helpers/dates'
 
@@ -22,7 +22,8 @@ export const useQuerySnoozeTask = () => {
       subtask?: string
     }) => {
       return z.object({}).parse(
-        await API.post('tasks', '/tasks/snooze', {
+        await handlePost({
+          path: '/tasks/snooze',
           body: {
             title,
             allSubtasks,

@@ -1,14 +1,26 @@
-import { AuthState } from '@aws-amplify/ui-components'
+type AuthState =
+  | 'idle'
+  | 'setup'
+  | 'signIn'
+  | 'signUp'
+  | 'confirmSignIn'
+  | 'confirmSignUp'
+  | 'setupTotp'
+  | 'forceNewPassword'
+  | 'forgotPassword'
+  | 'confirmResetPassword'
+  | 'verifyUser'
+  | 'confirmVerifyUser'
+  | 'signOut'
+  | 'authenticated'
 
 export type State = {
   authState: AuthState
-  user: object
   hasLoadedUser: boolean
 }
 
 const initialState: State = {
-  authState: AuthState.SignedOut,
-  user: {},
+  authState: 'idle',
   hasLoadedUser: false,
 }
 
@@ -24,34 +36,15 @@ type Action =
       type: 'changeState'
       payload: Partial<State>
     }
-  | {
-      type: 'changeUser'
-      payload: object
-    }
-  | {
-      type: 'changeUserGroups'
-      payload: unknown
-    }
 
 const rootReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case 'logout':
       return { ...initialState, hasLoadedUser: true }
     case 'changeAuthState':
-      return { ...state, authState: action.payload }
-    case 'changeState':
-      return { ...state, ...action.payload }
-    case 'changeUser':
-      return {
-        ...state,
-        user: action.payload,
-        authState: AuthState.SignedIn,
-        hasLoadedUser: true,
-      }
+      return { ...state, hasLoadedUser: true, authState: action.payload }
     default:
-      return typeof action.payload === 'object' && action.payload
-        ? { ...state, ...action.payload }
-        : state
+      return { ...state, ...action.payload }
   }
 }
 

@@ -1,6 +1,6 @@
-import API from '@aws-amplify/api'
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
+import { handleGet } from './api'
 
 import { dateString } from '../helpers/dates'
 import { dynamoDBTaskSchema as taskSchema } from '../types/task'
@@ -26,6 +26,6 @@ export const useHistory = (daysAgo: number = 0) => {
     )
   )
   return useQuery(['tasks', 'history', date], async () =>
-    historySchema.parse(await API.get('tasks', `/tasks/history/${date}`, {}))
+    historySchema.parse(await handleGet({ path: `/tasks/history/${date}` }))
   )
 }

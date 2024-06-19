@@ -8,7 +8,7 @@ import {
   faTrash,
 } from '@fortawesome/free-solid-svg-icons'
 import { format } from 'date-fns'
-import { ComponentProps, useState } from 'react'
+import { ComponentProps, RefObject, useRef, useState } from 'react'
 import { ZodError } from 'zod'
 import useKeyAction, { KeyAction } from '../hooks/useKeyAction'
 import {
@@ -46,12 +46,14 @@ const TaskForm = ({
   const [formError, setFormError] = useState<ZodError>()
 
   const [title, setTitle] = useState(initialTitle ?? '')
-  const [dueMonth, setDueMonth] = useState(
-    initialDueMonth ?? new Date().getMonth() + 1
-  )
-  const [dueDay, setDueDay] = useState(initialDueDay ?? new Date().getDate())
-  const [dueYear, setDueYear] = useState(
-    initialDueYear ?? new Date().getFullYear()
+
+  const dueDayRef = useRef<HTMLInputElement>(null)
+  const dueMonthRef = useRef<HTMLInputElement>(null)
+  const dueYearRef = useRef<HTMLInputElement>(null)
+  const [dueDate, setDueDate] = useState(
+    initialDueYear && initialDueMonth && initialDueDay
+      ? new Date(initialDueYear, initialDueMonth - 1, initialDueDay)
+      : new Date()
   )
   const [strictDeadline, setStrictDeadline] = useState(
     initialStrictDeadline ?? false
@@ -68,7 +70,10 @@ const TaskForm = ({
   const [repeatWeekdays, setRepeatWeekdays] = useState<RepeatWeekdays>(
     initialRepeatWeekdays ?? [false, false, false, false, false, false, false]
   )
+
   const [timeFrame, setTimeFrame] = useState(initialTimeFrame ?? 0)
+  const timeFrameMinutesRef = useRef<HTMLInputElement>(null)
+  const timeFrameHoursRef = useRef<HTMLInputElement>(null)
   const [subtasks, setSubtasks] = useState<SubTask[]>(initialSubtasks ?? [])
 
   const [hasSubtasks, setHasSubtasks] = useState((subtasks?.length ?? 0) > 0)
@@ -85,9 +90,7 @@ const TaskForm = ({
   }
 
   const dayDiff = Math.round(
-    (new Date(dueYear, dueMonth - 1, dueDay, 0, 0, 0, 0).getTime() -
-      todayAtMidnight().getTime()) /
-      (1000 * 60 * 60 * 24)
+    (dueDate.getTime() - todayAtMidnight().getTime()) / (1000 * 60 * 60 * 24)
   )
 
   const dayDiffPhrase = () => {
@@ -102,21 +105,10 @@ const TaskForm = ({
     }
   }
 
-  const updateDate = (newDate: Date) => {
-    setDueYear(newDate.getFullYear())
-    setDueMonth(newDate.getMonth() + 1)
-    setDueDay(newDate.getDate())
-  }
-
-  const decrementDate = () => {
-    const newDate = new Date(dueYear, dueMonth - 1, dueDay - 1, 0, 0, 0)
-    updateDate(newDate)
-  }
-
-  const incrementDate = () => {
-    const newDate = new Date(dueYear, dueMonth - 1, dueDay + 1, 0, 0, 0)
-    updateDate(newDate)
-  }
+  const decrementDate = () =>
+    setDueDate(new Date(dueDate.setDate(dueDate.getDate() - 1)))
+  const incrementDate = () =>
+    setDueDate(new Date(dueDate.setDate(dueDate.getDate() + 1)))
 
   const errors =
     Object.fromEntries(
@@ -126,9 +118,9 @@ const TaskForm = ({
   const submit = () => {
     const input = taskInputSchema.safeParse({
       title,
-      dueMonth,
-      dueDay,
-      dueYear,
+      dueMonth: dueDate.getMonth() + 1,
+      dueDay: dueDate.getDate(),
+      dueYear: dueDate.getFullYear(),
       strictDeadline,
       repeat,
       repeatInterval,
@@ -191,56 +183,63 @@ const TaskForm = ({
           <div className='flex max-w-lg items-center gap-2 rounded-md shadow-sm'>
             <FormButton icon={faMinus} onClick={decrementDate} />
             <Input
+              innerRef={dueMonthRef}
               type='number'
-              max={12}
-              min={1}
               step={1}
               name='due-month'
               id='due-month'
               placeholder='MM'
-              value={dueMonth}
+              value={dueDate.getMonth() + 1}
               onChange={e =>
-                setDueMonth(
-                  parseInt(e.target.value === '' ? '1' : e.target.value)
+                setDueDate(
+                  new Date(
+                    parseInt(dueYearRef.current?.value ?? '1'),
+                    parseInt(e.target.value === '' ? '1' : e.target.value) - 1,
+                    parseInt(dueDayRef.current?.value ?? '1')
+                  )
                 )
               }
             />
             <Input
+              innerRef={dueDayRef}
               type='number'
-              max={31}
-              min={1}
               step={1}
               name='due-day'
               id='due-day'
               placeholder='DD'
-              value={dueDay}
+              value={dueDate.getDate()}
               onChange={e =>
-                setDueDay(
-                  parseInt(e.target.value === '' ? '1' : e.target.value)
+                setDueDate(
+                  new Date(
+                    parseInt(dueYearRef.current?.value ?? '1'),
+                    parseInt(dueMonthRef.current?.value ?? '1') - 1,
+                    parseInt(e.target.value === '' ? '1' : e.target.value)
+                  )
                 )
               }
             />
             <Input
+              innerRef={dueYearRef}
               type='number'
               step={1}
               name='due-year'
               id='due-year'
               placeholder='YYYY'
-              value={dueYear}
+              value={dueDate.getFullYear()}
               onChange={e =>
-                setDueYear(
-                  parseInt(e.target.value === '' ? '1' : e.target.value)
+                setDueDate(
+                  new Date(
+                    parseInt(e.target.value === '' ? '1' : e.target.value),
+                    parseInt(dueMonthRef.current?.value ?? '1') - 1,
+                    parseInt(dueDayRef.current?.value ?? '1')
+                  )
                 )
               }
             />
             <FormButton onClick={incrementDate} icon={faPlus} />
           </div>
           <div className='mt-1 max-w-lg text-center text-gray-600'>
-            {format(
-              new Date(dueYear, dueMonth - 1, dueDay),
-              'EEEE, LLLL do, u'
-            )}{' '}
-            ({dayDiffPhrase()})
+            {format(dueDate, 'EEEE, LLLL do, u')} ({dayDiffPhrase()})
           </div>
         </div>
       </div>
@@ -330,23 +329,44 @@ const TaskForm = ({
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
           <div className='flex max-w-lg items-center gap-2'>
-            <FormButton
-              icon={faMinus}
-              onClick={() => setTimeFrame(t => Math.max(0, t - 15))}
-              disabled={timeFrame === 0}
-            />
-            <Input
-              type='number'
+            {timeFrame >= 60 && (
+              <NumberInput
+                innerRef={timeFrameHoursRef}
+                label='hrs'
+                minusDisabled={false}
+                minusFn={() => setTimeFrame(Math.max(0, timeFrame - 60))}
+                onChange={e =>
+                  setTimeFrame(
+                    parseInt(e.target.value) * 60 +
+                      parseInt(timeFrameMinutesRef.current?.value ?? '0')
+                  )
+                }
+                plusFn={() => setTimeFrame(timeFrame + 60)}
+                value={Math.floor(timeFrame / 60)}
+                step={1}
+                min={0}
+              />
+            )}
+            <NumberInput
+              innerRef={timeFrameMinutesRef}
+              label='mins'
+              minusDisabled={timeFrame === 0}
+              minusFn={() => setTimeFrame(Math.max(0, timeFrame - 15))}
+              onChange={e => {
+                console.log(e)
+                setTimeFrame(
+                  Math.max(
+                    0,
+                    parseInt(timeFrameHoursRef.current?.value ?? '0') * 60 +
+                      parseInt(e.target.value)
+                  )
+                )
+              }}
+              plusFn={() => setTimeFrame(timeFrame + 15)}
+              value={timeFrame % 60}
               step={15}
-              min={0}
-              value={timeFrame}
-              onChange={e => setTimeFrame(parseInt(e.target.value))}
+              min={-15}
             />
-            <FormButton
-              icon={faPlus}
-              onClick={() => setTimeFrame(t => t + 15)}
-            />
-            <div className='text-sm'>mins</div>
           </div>
         </div>
       </div>
@@ -466,6 +486,38 @@ const TaskForm = ({
     </div>
   )
 }
+
+const NumberInput = (
+  props: ComponentProps<'input'> & {
+    innerRef: RefObject<HTMLInputElement>
+    label: string
+    minusDisabled: boolean
+    minusFn: () => void
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    plusFn: () => void
+    step: number
+    min: number
+  }
+) => (
+  <>
+    {!props.minusDisabled && (
+      <FormButton icon={faMinus} onClick={props.minusFn} />
+    )}
+    <Input
+      id={props.id}
+      innerRef={props.innerRef}
+      type='number'
+      step={props.step}
+      min={props.min}
+      value={props.value}
+      onChange={props.onChange}
+    />
+    <FormButton icon={faPlus} onClick={props.plusFn} />
+    <label htmlFor={props.id} className='text-sm'>
+      {props.label}
+    </label>
+  </>
+)
 
 const FormButton = (
   props: Omit<ComponentProps<typeof Button>, 'className'>

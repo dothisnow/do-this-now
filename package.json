@@ -36,14 +36,11 @@
     "preview": "vite preview",
     "knip": "knip",
     "prettier": "prettier src/**/*.{js,ts,tsx} --check",
-    "ts-coverage": "typescript-coverage-report"
+    "ts-coverage": "typescript-coverage-report",
+    "amplify:APItasksTop": "cd amplify/backend/function/APItasksTop && tsc -p ./tsconfig.json && cd -"
   },
   "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
+    "production": [">0.2%", "not dead", "not op_mini all"],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",

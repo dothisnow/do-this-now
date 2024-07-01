@@ -37,7 +37,7 @@
     "knip": "knip",
     "prettier": "prettier src/**/*.{js,ts,tsx} --check",
     "ts-coverage": "typescript-coverage-report",
-    "amplify:APItasksTop": "echo \"hello\" && cd amplify/backend/function/APItasksTop && tsc -p ./tsconfig.json && cd -"
+    "amplify:APItasksTop": "cd amplify/backend/function/APItasksTop && tsc -p ./tsconfig.json && cd -"
   },
   "browserslist": {
     "production": [">0.2%", "not dead", "not op_mini all"],

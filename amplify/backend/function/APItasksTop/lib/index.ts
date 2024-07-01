@@ -6,8 +6,8 @@
 	STORAGE_TASKS_STREAMARN
 Amplify Params - DO NOT EDIT */
 
-import { Task } from './task'
 import { nextDueDate } from './helpers'
+import { Task } from './task'
 
 // eslint-disable-next-line
 const ENV = require('process').env
@@ -64,11 +64,6 @@ exports.handler = async (event: unknown) => {
       (nextDueDate(t) ?? Infinity) >= in2Days,
   ]
 
-  const sortProperties = [
-    ['due', x => new Date(x)],
-    ['timeFrame', x => (x === 0 ? Infinity : x)],
-  ]
-
   const params = {
     TableName: ENV.STORAGE_TASKS_NAME,
   }
@@ -88,11 +83,12 @@ exports.handler = async (event: unknown) => {
       if (flag(a) && !flag(b)) return -1
       if (flag(b) && !flag(a)) return 1
     }
-    if ('due' in a && 'due' in b && a.due !== b.due) return new Date(a.due) - new Date(b.due
-    for (const [p, transform] of sortProperties) {
-      if (!(p in a) || !(p in b)) continue
-      if (transform(a[p]) - transform(b[p]) !== 0)
-        return transform(a[p]) - transform(b[p])
+    if ('due' in a && 'due' in b && a.due !== b.due)
+      return new Date(a.due).getTime() - new Date(b.due).getTime()
+    if ('timeFrame' in a && 'timeFrame' in b && a.timeFrame !== b.timeFrame) {
+      if (a.timeFrame === 0) return 1
+      if (b.timeFrame === 0) return -1
+      return a.timeFrame - b.timeFrame
     }
     return 0
   })

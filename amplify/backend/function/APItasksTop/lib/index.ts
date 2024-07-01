@@ -6,22 +6,26 @@
 	STORAGE_TASKS_STREAMARN
 Amplify Params - DO NOT EDIT */
 
-// eslint-disable-next-line
-const { nextDueDate } = require('/opt/nodejs/helpers')
+import { nextDueDate } from './helpers'
+import { Task } from './task'
+
 // eslint-disable-next-line
 const ENV = require('process').env
 // eslint-disable-next-line
 const AWS = require('aws-sdk')
 const docClient = new AWS.DynamoDB.DocumentClient()
 
-/**
- * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
- */
-exports.handler = async event => {
+exports.handler = async (event: unknown) => {
   console.log(`EVENT: ${JSON.stringify(event)}`)
 
   const today =
-    'queryStringParameters' in event && 'date' in event.queryStringParameters
+    event &&
+    typeof event === 'object' &&
+    'queryStringParameters' in event &&
+    event.queryStringParameters &&
+    typeof event.queryStringParameters === 'object' &&
+    'date' in event.queryStringParameters &&
+    typeof event.queryStringParameters.date === 'string'
       ? new Date(event.queryStringParameters.date)
       : new Date(
           new Date().getFullYear(),
@@ -39,10 +43,10 @@ exports.handler = async event => {
 
   const sortFlags = [
     // due today or past due
-    t => 'due' in t && new Date(t.due) <= today,
+    (t: Task) => 'due' in t && new Date(t.due) <= today,
 
     // strict deadline and due today or past due
-    t =>
+    (t: Task) =>
       'due' in t &&
       'strictDeadline' in t &&
       new Date(t.due) <= today &&
@@ -54,15 +58,10 @@ exports.handler = async event => {
     //   t.history.filter(d => d === dateString(today)).length === 0,
 
     // if I do this today, I won't have to do it tomorrow
-    t =>
+    (t: Task) =>
       'due' in t &&
       new Date(t.due) <= today &&
       (nextDueDate(t) ?? Infinity) >= in2Days,
-  ]
-
-  const sortProperties = [
-    ['due', x => new Date(x)],
-    ['timeFrame', x => (x === 0 ? Infinity : x)],
   ]
 
   const params = {
@@ -72,22 +71,24 @@ exports.handler = async event => {
   const data = await docClient.scan(params).promise()
 
   // DO A BUNCH OF SORTING
-  let tasks = data.Items
+  const tasks = data.Items
 
   // flag logs
   // for (const t of tasks)
   //   for (let i = 0; i < sortFlags.length; i++)
   //     console.log(`${t.title} flag ${i}: ${sortFlags[i](t)}`)
 
-  tasks.sort((a, b) => {
+  tasks.sort((a: Task, b: Task) => {
     for (const flag of sortFlags) {
       if (flag(a) && !flag(b)) return -1
       if (flag(b) && !flag(a)) return 1
     }
-    for (const [p, transform] of sortProperties) {
-      if (!(p in a) || !(p in b)) continue
-      if (transform(a[p]) - transform(b[p]) !== 0)
-        return transform(a[p]) - transform(b[p])
+    if ('due' in a && 'due' in b && a.due !== b.due)
+      return new Date(a.due).getTime() - new Date(b.due).getTime()
+    if ('timeFrame' in a && 'timeFrame' in b && a.timeFrame !== b.timeFrame) {
+      if (a.timeFrame === 0) return 1
+      if (b.timeFrame === 0) return -1
+      return a.timeFrame - b.timeFrame
     }
     return 0
   })

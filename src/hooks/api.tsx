@@ -33,6 +33,7 @@ export const handlePost = async ({
     apiName: 'tasks',
     path,
     options: {
+      // @ts-expect-error but it works
       body,
       headers,
     },

@@ -21,11 +21,17 @@ export const sortTasks = (tasks: Task[], today: Date) => {
     //   !t.hasOwnProperty('history') ||
     //   t.history.filter(d => d === dateString(today)).length === 0,
 
-    // if I do this today, I won't have to do it tomorrow
+    // if I do this task, I won't have to do again it tomorrow
     (t: Task) =>
       'due' in t &&
       new Date(t.due) <= today &&
       (nextDueDate(t) ?? Infinity) >= in2Days,
+
+    // if I do this task, I won't have to do again today
+    (t: Task) =>
+      'due' in t &&
+      new Date(t.due) <= today &&
+      (nextDueDate(t) ?? Infinity) > today,
   ]
 
   tasks.sort((a, b) => {

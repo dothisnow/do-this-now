@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
+import { dateString } from '../shared-logic/helpers'
 import { handleGet } from './api'
-
-import { dateString } from '../helpers/dates'
 
 const progressTodaySchema = z.object({
   done: z.number(),

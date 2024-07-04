@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
-import { handlePost } from './api'
-
-import { dateString } from '../helpers/dates'
-
-// types
+import { dateString, newSafeDate } from '../shared-logic/helpers'
+import { sortTasks } from '../shared-logic/task-sorting'
 import { Task } from '../types/task'
+import { handlePost } from './api'
 
 export const useQuerySnoozeTask = () => {
   const date = dateString(new Date())
@@ -78,24 +76,19 @@ export const useQuerySnoozeTask = () => {
                   new Date(st.snooze) <= new Date())
             )
           ) {
-            const i = task.subtasks.findIndex(
+            const subtask = task.subtasks.find(
               st =>
                 !st.done &&
                 (!('snooze' in st) ||
                   st.snooze === undefined ||
                   new Date(st.snooze) <= new Date())
             )
-            const newSubtasks = [
-              ...task.subtasks.slice(0, i),
-              {
-                ...task.subtasks[i],
-                snooze: new Date(
-                  new Date().getTime() + 60 * 60 * 1000
-                ).toISOString(),
-              },
-              ...task.subtasks.slice(i + 1),
-            ]
-            task.subtasks = newSubtasks
+            if (!subtask) return old
+            subtask.snooze = new Date(
+              new Date().getTime() + 60 * 60 * 1000
+            ).toISOString()
+            // resort tasks
+            sortTasks(old, newSafeDate(date))
             return old
           }
 
@@ -103,9 +96,9 @@ export const useQuerySnoozeTask = () => {
           task.snooze = new Date(
             new Date().getTime() + 60 * 60 * 1000
           ).toISOString()
-          old.splice(index, 1)
-          old.push(task)
-
+          // resort tasks
+          sortTasks(old, newSafeDate(date))
+          console.log(old.map(t => t.title))
           return old
         }
       )

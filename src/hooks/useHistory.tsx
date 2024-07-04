@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { z } from 'zod'
+import { dateString } from '../shared-logic/helpers'
+import { dynamoDBTaskSchema as taskSchema } from '../shared-logic/task'
 import { handleGet } from './api'
-
-import { dateString } from '../helpers/dates'
-import { dynamoDBTaskSchema as taskSchema } from '../types/task'
 
 const historySchema = z.object({
   date: z.object({ S: z.string() }),

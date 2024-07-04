@@ -23,10 +23,9 @@ import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQuerySnoozeTask } from './hooks/useQuerySnoozeTask'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
-import { isSnoozed, useQueryTasksTop } from './hooks/useQueryTasksTop'
-
-// types
-import { Task } from './types/task'
+import { useQueryTasksTop } from './hooks/useQueryTasksTop'
+import { Task } from './shared-logic/task'
+import { isSnoozed } from './shared-logic/task-sorting'
 
 const Home = () => {
   const navigate = useLocation()[1]

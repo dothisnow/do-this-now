@@ -16,13 +16,13 @@ import { Loading } from './components/loading'
 import Progress from './components/progress'
 import RequireAuth from './components/requireauth'
 import { TaskBox } from './components/taskbox'
-import { newSafeDate } from './helpers/dates'
 import useDing from './hooks/useDing'
 import useKeyAction, { KeyAction } from './hooks/useKeyAction'
 import { useQueryTaskDelete } from './hooks/useQueryTaskDelete'
 import { useQueryTaskDone } from './hooks/useQueryTaskDone'
 import { useQueryTasks } from './hooks/useQueryTasks'
 import { useQueryTasksTop } from './hooks/useQueryTasksTop'
+import { newSafeDate } from './shared-logic/helpers'
 
 const Tasks = () => {
   const [selectedTask, setSelectedTask] = useState(0)

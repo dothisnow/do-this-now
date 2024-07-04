@@ -6,11 +6,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { format } from 'date-fns'
-
-import { newSafeDate } from '../helpers/dates'
 import { minutesToHours } from '../helpers/time'
-
-import { DateString, RepeatOption, RepeatWeekdays } from '../types/task'
+import { newSafeDate } from '../shared-logic/helpers'
+import { DateString, RepeatOption, RepeatWeekdays } from '../shared-logic/task'
 
 export const Tag = ({
   icon,

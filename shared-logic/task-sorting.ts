@@ -1,11 +1,23 @@
 import { nextDueDate } from './helpers'
-import { Task } from './task'
+import { SubTask, Task } from './task'
+
+const subtaskIsSnoozed = (s: SubTask) =>
+  s.snooze && new Date(s.snooze) >= new Date()
+
+export const isSnoozed = (t: Task) =>
+  (t.snooze && new Date(t.snooze) >= new Date()) ||
+  (t.subtasks &&
+    t.subtasks.length > 0 &&
+    !t.subtasks.some(s => !s.done && !subtaskIsSnoozed(s)))
 
 export const sortTasks = (tasks: Task[], today: Date) => {
   const in2Days = new Date(today)
   in2Days.setDate(in2Days.getDate() + 2)
 
   const sortFlags = [
+    // snoozed
+    (t: Task) => !isSnoozed(t),
+
     // due today or past due
     (t: Task) => 'due' in t && new Date(t.due) <= today,
 

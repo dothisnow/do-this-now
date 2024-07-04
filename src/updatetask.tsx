@@ -5,9 +5,9 @@ import { Button } from './components/button'
 import { Loading } from './components/loading'
 import RequireAuth from './components/requireauth'
 import TaskForm from './components/taskform'
-import { newSafeDate } from './helpers/dates'
 import { useQueryGetTask } from './hooks/useQueryGetTask'
 import { useQueryUpdateTask } from './hooks/useQueryUpdateTask'
+import { newSafeDate } from './shared-logic/helpers'
 import { SubTask, Task, TaskInput } from './types/task'
 
 const UpdateTask = () => {

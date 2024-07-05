@@ -9,6 +9,7 @@ export const dateString = (date: Date) =>
   `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
 
 export const nextDueDate = (task: Task) => {
+  if (task.repeat === 'No Repeat') return undefined
   const date = new Date(task.due)
   if (task.repeat === 'Daily') date.setDate(date.getDate() + 1)
   if (task.repeat === 'Custom' && task.repeatUnit === 'day')

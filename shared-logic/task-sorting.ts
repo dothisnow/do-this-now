@@ -11,6 +11,8 @@ export const isSnoozed = (t: Task) =>
     !t.subtasks.some(s => !s.done && !subtaskIsSnoozed(s)))
 
 export const sortTasks = (tasks: Task[], today: Date) => {
+  const tmrw = new Date(today)
+  tmrw.setDate(tmrw.getDate() + 1)
   const in2Days = new Date(today)
   in2Days.setDate(in2Days.getDate() + 2)
 
@@ -43,7 +45,7 @@ export const sortTasks = (tasks: Task[], today: Date) => {
     (t: Task) =>
       'due' in t &&
       new Date(t.due) <= today &&
-      (nextDueDate(t) ?? Infinity) > today,
+      (nextDueDate(t) ?? Infinity) >= tmrw,
   ]
 
   tasks.sort((a, b) => {
@@ -54,8 +56,10 @@ export const sortTasks = (tasks: Task[], today: Date) => {
     if ('due' in a && 'due' in b && a.due.localeCompare(b.due) !== 0)
       return a.due.localeCompare(b.due)
     if ('timeFrame' in a && 'timeFrame' in b) {
-      if (a.timeFrame === 0) return -1
-      if (b.timeFrame === 0) return 1
+      // tasks that take no time should go last
+      if (a.timeFrame === b.timeFrame) return 0
+      if (a.timeFrame === 0) return 1
+      if (b.timeFrame === 0) return -1
       return a.timeFrame - b.timeFrame
     }
     return 0

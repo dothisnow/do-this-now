@@ -1,7 +1,5 @@
-import { nextDueDate } from './helpers'
+import { newSafeDate, nextDueDate } from './helpers'
 import { SubTask, Task } from './task'
-
-export const testVar = 1
 
 const subtaskIsSnoozed = (s: SubTask) =>
   s.snooze && new Date(s.snooze) >= new Date()
@@ -23,13 +21,13 @@ export const sortTasks = (tasks: Task[], today: Date) => {
     (t: Task) => !isSnoozed(t),
 
     // due today or past due
-    (t: Task) => 'due' in t && new Date(t.due) <= today,
+    (t: Task) => 'due' in t && newSafeDate(t.due) <= today,
 
     // strict deadline and due today or past due
     (t: Task) =>
       'due' in t &&
       'strictDeadline' in t &&
-      new Date(t.due) <= today &&
+      newSafeDate(t.due) <= today &&
       t.strictDeadline,
 
     // has not been done today
@@ -40,13 +38,13 @@ export const sortTasks = (tasks: Task[], today: Date) => {
     // if I do this task, I won't have to do again it tomorrow
     (t: Task) =>
       'due' in t &&
-      new Date(t.due) <= today &&
+      newSafeDate(t.due) <= today &&
       (nextDueDate(t) ?? Infinity) >= in2Days,
 
     // if I do this task, I won't have to do again today
     (t: Task) =>
       'due' in t &&
-      new Date(t.due) <= today &&
+      newSafeDate(t.due) <= today &&
       (nextDueDate(t) ?? Infinity) >= tmrw,
   ]
 

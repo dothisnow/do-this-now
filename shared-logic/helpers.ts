@@ -10,7 +10,7 @@ export const dateString = (date: Date) =>
 
 export const nextDueDate = (task: Task) => {
   if (task.repeat === 'No Repeat') return undefined
-  const date = new Date(task.due)
+  const date = newSafeDate(task.due)
   if (task.repeat === 'Daily') date.setDate(date.getDate() + 1)
   if (task.repeat === 'Custom' && task.repeatUnit === 'day')
     date.setDate(date.getDate() + task.repeatInterval)
@@ -29,7 +29,7 @@ export const nextDueDate = (task: Task) => {
     }
   } else if (task.repeat === 'Weekdays') {
     const daysToAdd = date.getDay() === 5 ? 3 : 1
-    date.setDate(date.getDate() + daysToAdd * task.repeatInterval)
+    date.setDate(date.getDate() + daysToAdd)
   } else if (task.repeat === 'Monthly') date.setMonth(date.getMonth() + 1)
   else if (task.repeat === 'Custom' && task.repeatUnit === 'month')
     date.setMonth(date.getMonth() + task.repeatInterval)

@@ -14,9 +14,8 @@ frontend:
         - yarn install
     build:
       commands:
-        - VITE_COMMIT_ID=$AWS_COMMIT_ID
-        - echo $VITE_COMMIT_ID
-        - yarn build
+        - echo $AWS_COMMIT_ID
+        - VITE_COMMIT_ID=$AWS_COMMIT_ID yarn build
   artifacts:
     baseDirectory: dist
     files:

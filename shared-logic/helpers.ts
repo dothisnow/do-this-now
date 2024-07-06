@@ -39,5 +39,5 @@ export const nextDueDate = (task: Task) => {
   date.setHours(date.getHours() + 2)
   // if (task.until && new Date(task.until) < new Date(dateString(date)))
   //   return undefined
-  return new Date(dateString(date))
+  return newSafeDate(dateString(date))
 }

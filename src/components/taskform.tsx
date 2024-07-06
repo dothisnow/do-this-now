@@ -11,6 +11,7 @@ import { format } from 'date-fns'
 import { ComponentProps, RefObject, useRef, useState } from 'react'
 import { ZodError } from 'zod'
 import useKeyAction, { KeyAction } from '../hooks/useKeyAction'
+import { dateString, newSafeDate } from '../shared-logic/helpers'
 import {
   RepeatOption,
   RepeatUnit,
@@ -53,7 +54,7 @@ const TaskForm = ({
   const [dueDate, setDueDate] = useState(
     initialDueYear && initialDueMonth && initialDueDay
       ? new Date(initialDueYear, initialDueMonth - 1, initialDueDay)
-      : new Date()
+      : newSafeDate(dateString(new Date()))
   )
   const [strictDeadline, setStrictDeadline] = useState(
     initialStrictDeadline ?? false
@@ -83,14 +84,9 @@ const TaskForm = ({
     setRepeatWeekdays([false, false, false, false, false, false, false])
   }
 
-  const todayAtMidnight = () => {
-    const date = new Date()
-    date.setHours(0, 0, 0, 0)
-    return date
-  }
-
   const dayDiff = Math.round(
-    (dueDate.getTime() - todayAtMidnight().getTime()) / (1000 * 60 * 60 * 24)
+    (dueDate.getTime() - newSafeDate(dateString(new Date())).getTime()) /
+      (1000 * 60 * 60 * 24)
   )
 
   const dayDiffPhrase = () => {

@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { z } from 'zod'
 import { dateString, newSafeDate } from '../shared-logic/helpers'
-import { sortTasks } from '../shared-logic/task-sorting'
+import { sortTasks, testVar } from '../shared-logic/task-sorting'
 import { Task } from '../types/task'
 import { handlePost } from './api'
 
@@ -42,6 +42,7 @@ export const useQuerySnoozeTask = () => {
       task: Task
       allSubtasks?: boolean
     }) => {
+      alert(testVar)
       console.log({ title, allSubtasks })
 
       // Cancel any outgoing refetches

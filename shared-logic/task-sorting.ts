@@ -1,6 +1,8 @@
 import { nextDueDate } from './helpers'
 import { SubTask, Task } from './task'
 
+export const testVar = 1
+
 const subtaskIsSnoozed = (s: SubTask) =>
   s.snooze && new Date(s.snooze) >= new Date()
 

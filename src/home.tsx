@@ -34,6 +34,14 @@ const Home = () => {
 
   const { data, dataUpdatedAt, isLoading, isFetching } = useQueryTasksTop()
 
+  for (const d of data ?? [])
+    console.log(
+      d.title,
+      isSnoozed(d),
+      d.snooze ? new Date(d.snooze) : 'undefined',
+      new Date()
+    )
+
   const tasks = (data ?? []).filter(t => !isSnoozed(t))
 
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<0 | 1 | 2>(0)

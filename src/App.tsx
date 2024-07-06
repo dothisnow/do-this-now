@@ -35,6 +35,9 @@ const App = () => {
           <Redirect to='/' />
         </Route>
       </Switch>
+      <div className='fixed left-5 bottom-5 w-24 overflow-hidden overflow-ellipsis text-xs text-gray-700'>
+        {import.meta.env.REACT_APP_COMMIT_ID}
+      </div>
       <div className='fixed right-5 bottom-5'>
         <Button
           icon={faRightFromBracket}

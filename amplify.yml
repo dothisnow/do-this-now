@@ -14,7 +14,7 @@ frontend:
         - yarn install
     build:
       commands:
-        - yarn build
+        - REACT_APP_COMMIT_ID=$AWS_COMMIT_ID yarn build
   artifacts:
     baseDirectory: dist
     files:

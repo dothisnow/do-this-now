@@ -32,9 +32,9 @@ const Home = () => {
   const ding = useDing()
   const queryClient = useQueryClient()
 
-  const { data, dataUpdatedAt, isLoading, isFetching } = useQueryTasksTop()
+  const topTasksQuery = useQueryTasksTop()
 
-  const tasks = (data ?? []).filter(t => !isSnoozed(t))
+  const tasks = (topTasksQuery.data ?? []).filter(t => !isSnoozed(t))
 
   const [selectedTaskIndex, setSelectedTaskIndex] = useState<0 | 1 | 2>(0)
   const selectedTask = !tasks
@@ -215,7 +215,7 @@ const Home = () => {
   return (
     <RequireAuth>
       <div className='flex h-screen flex-col items-center justify-center gap-2'>
-        {isLoading || deleteMutation.isLoading ? (
+        {topTasksQuery.isLoading || deleteMutation.isLoading ? (
           <Loading />
         ) : (
           <>
@@ -261,7 +261,7 @@ const Home = () => {
             ) : (
               'No tasks'
             )}
-            <LastUpdated at={dataUpdatedAt} isFetching={isFetching} />
+            <LastUpdated query={topTasksQuery} />
           </>
         )}
         <Hints keyActions={keyActions} />

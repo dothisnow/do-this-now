@@ -1,7 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import ago from 's-ago'
-
-type Timestamp = number
 
 const useNow = () => {
   const [now, setNow] = useState(new Date())
@@ -13,16 +12,18 @@ const useNow = () => {
 }
 
 export const LastUpdated = ({
-  at,
-  isFetching,
+  query,
 }: {
-  at: Timestamp
-  isFetching: boolean
+  query: ReturnType<typeof useQuery>
 }) => {
   useNow()
   return (
-    <div className='flex items-center gap-2 text-xs text-gray-700'>
-      {isFetching ? 'Checking for updates...' : `Updated ${ago(new Date(at))}`}
-    </div>
+    <button
+      onClick={() => query.refetch()}
+      className='flex items-center gap-2 text-xs text-gray-700'>
+      {query.isFetching
+        ? 'Checking for updates...'
+        : `Updated ${ago(new Date(query.dataUpdatedAt))}`}
+    </button>
   )
 }

@@ -1,4 +1,5 @@
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons'
+import { useState } from 'react'
 import { Redirect, Route, Switch } from 'wouter'
 import { Button } from './components/button'
 import { handleSignOut } from './helpers/auth'
@@ -10,6 +11,7 @@ import Tasks from './tasks'
 import UpdateTask from './updatetask'
 
 const App = () => {
+  const [showCommitId, setShowCommitId] = useState(false)
   return (
     <div className='w-100vw h-100vh bg-black'>
       <Switch>
@@ -35,9 +37,13 @@ const App = () => {
           <Redirect to='/' />
         </Route>
       </Switch>
-      <div className='fixed left-5 bottom-5 w-24 overflow-hidden overflow-ellipsis text-xs text-gray-700'>
+      <button
+        onClick={() => setShowCommitId(x => !x)}
+        className={`fixed left-0 bottom-0 max-w-full overflow-hidden overflow-ellipsis text-xs ${
+          showCommitId ? 'text-gray-700' : 'text-transparent'
+        }`}>
         {import.meta.env.VITE_COMMIT_ID}
-      </div>
+      </button>
       <div className='fixed right-5 bottom-5'>
         <Button
           icon={faRightFromBracket}

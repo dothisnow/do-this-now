@@ -44,12 +44,15 @@ export const sortTasks = (tasks: Task[], today: Date) => {
       if (flag(b) && !flag(a)) return 1
     }
     // sort by due date
-    if ('due' in a && 'due' in b && newSafeDate(a.due) !== newSafeDate(b.due))
+    if (
+      'due' in a &&
+      'due' in b &&
+      newSafeDate(a.due).getTime() !== newSafeDate(b.due).getTime()
+    )
       return newSafeDate(a.due).getTime() - newSafeDate(b.due).getTime()
     // sort by timeframe
-    if ('timeFrame' in a && 'timeFrame' in b) {
+    if ('timeFrame' in a && 'timeFrame' in b && a.timeFrame !== b.timeFrame) {
       // tasks that take no time should go last
-      if (a.timeFrame === b.timeFrame) return 0
       if (a.timeFrame === 0) return 1
       if (b.timeFrame === 0) return -1
       return a.timeFrame - b.timeFrame

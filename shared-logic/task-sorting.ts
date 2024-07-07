@@ -10,6 +10,9 @@ export const isSnoozed = (t: Task) =>
     t.subtasks.length > 0 &&
     !t.subtasks.some(s => !s.done && !subtaskIsSnoozed(s)))
 
+const dueOrPastDue = (t: Task, today: Date) =>
+  'due' in t && newSafeDate(t.due) <= today
+
 export const sortTasks = (tasks: Task[], today: Date) => {
   const tmrw = new Date(today)
   tmrw.setDate(tmrw.getDate() + 1)
@@ -21,31 +24,18 @@ export const sortTasks = (tasks: Task[], today: Date) => {
     (t: Task) => !isSnoozed(t),
 
     // due today or past due
-    (t: Task) => 'due' in t && newSafeDate(t.due) <= today,
+    (t: Task) => dueOrPastDue(t, today),
 
     // strict deadline and due today or past due
     (t: Task) =>
-      'due' in t &&
-      'strictDeadline' in t &&
-      newSafeDate(t.due) <= today &&
-      t.strictDeadline,
-
-    // has not been done today
-    // t =>
-    //   !t.hasOwnProperty('history') ||
-    //   t.history.filter(d => d === dateString(today)).length === 0,
+      dueOrPastDue(t, today) && 'strictDeadline' in t && t.strictDeadline,
 
     // if I do this task, I won't have to do again it tomorrow
     (t: Task) =>
-      'due' in t &&
-      newSafeDate(t.due) <= today &&
-      (nextDueDate(t) ?? Infinity) >= in2Days,
+      dueOrPastDue(t, today) && (nextDueDate(t) ?? Infinity) >= in2Days,
 
     // if I do this task, I won't have to do again today
-    (t: Task) =>
-      'due' in t &&
-      newSafeDate(t.due) <= today &&
-      (nextDueDate(t) ?? Infinity) >= tmrw,
+    (t: Task) => dueOrPastDue(t, today) && (nextDueDate(t) ?? Infinity) >= tmrw,
   ]
 
   tasks.sort((a, b) => {
@@ -53,8 +43,10 @@ export const sortTasks = (tasks: Task[], today: Date) => {
       if (flag(a) && !flag(b)) return -1
       if (flag(b) && !flag(a)) return 1
     }
-    if ('due' in a && 'due' in b && a.due.localeCompare(b.due) !== 0)
-      return a.due.localeCompare(b.due)
+    // sort by due date
+    if ('due' in a && 'due' in b && newSafeDate(a.due) !== newSafeDate(b.due))
+      return newSafeDate(a.due).getTime() - newSafeDate(b.due).getTime()
+    // sort by timeframe
     if ('timeFrame' in a && 'timeFrame' in b) {
       // tasks that take no time should go last
       if (a.timeFrame === b.timeFrame) return 0

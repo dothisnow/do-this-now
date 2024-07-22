@@ -1,7 +1,5 @@
 import {
-  faArrowDown,
   faArrowRight,
-  faArrowUp,
   faMinus,
   faPlus,
   faPlusCircle,
@@ -110,6 +108,32 @@ const TaskForm = ({
     Object.fromEntries(
       formError?.errors.map(error => [error.path[0], error.message]) ?? []
     ) ?? {}
+
+  const [draggedSubtask, setDraggedSubtask] =
+    useState<(typeof subtasks)[number]>()
+  const handleDragStart = (e: DragEvent, item: (typeof subtasks)[number]) => {
+    setDraggedSubtask(item)
+    e.dataTransfer?.setData('text/plain', '')
+  }
+  const handleDragEnd = () => {
+    setDraggedSubtask(undefined)
+  }
+  const handleDragOver = (e: DragEvent) => {
+    e.preventDefault()
+  }
+  const handleDrop = (e: DragEvent, targetItem: (typeof subtasks)[number]) => {
+    if (!draggedSubtask) return
+
+    const currentIndex = subtasks.indexOf(draggedSubtask)
+    const targetIndex = subtasks.indexOf(targetItem)
+
+    const newSubtasks = [...subtasks]
+    if (currentIndex !== -1 && targetIndex !== -1) {
+      newSubtasks.splice(currentIndex, 1)
+      newSubtasks.splice(targetIndex, 0, draggedSubtask)
+      setSubtasks(newSubtasks)
+    }
+  }
 
   const submit = () => {
     const input = taskInputSchema.safeParse({
@@ -394,20 +418,17 @@ const TaskForm = ({
           {hasSubtasks && (
             <>
               {subtasks.map((subtask, i) => (
-                <div className='mt-3 flex max-w-lg items-center gap-2'>
-                  {i > 0 && (
-                    <FormButton
-                      icon={faArrowUp}
-                      onClick={() =>
-                        setSubtasks(s => {
-                          const newSubtasks = [...s]
-                          newSubtasks[i - 1] = s[i]
-                          newSubtasks[i] = s[i - 1]
-                          return newSubtasks
-                        })
-                      }
-                    />
-                  )}
+                <div
+                  draggable='true'
+                  // @ts-expect-error - drag events
+                  onDragStart={e => handleDragStart(e, subtask)}
+                  onDragEnd={handleDragEnd}
+                  // @ts-expect-error - drag events
+                  onDragOver={handleDragOver}
+                  // @ts-expect-error - drag events
+                  onDrop={e => handleDrop(e, subtask)}
+                  className='mt-3 flex max-w-lg items-center gap-2'>
+                  <button>⠿</button>
                   <Input
                     type='text'
                     value={subtask.title}
@@ -423,19 +444,6 @@ const TaskForm = ({
                     }}
                     placeholder={`Subtask ${i + 1}`}
                   />
-                  {i < subtasks.length - 1 && (
-                    <FormButton
-                      icon={faArrowDown}
-                      onClick={() =>
-                        setSubtasks(s => {
-                          const newSubtasks = [...s]
-                          newSubtasks[i + 1] = s[i]
-                          newSubtasks[i] = s[i + 1]
-                          return newSubtasks
-                        })
-                      }
-                    />
-                  )}
                   <FormButton
                     icon={faTrash}
                     onClick={() =>

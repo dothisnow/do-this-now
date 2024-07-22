@@ -159,16 +159,16 @@ const TaskForm = ({
       description: 'Home',
       action: () => window.history.back(),
     },
-    {
-      key: 'enter',
-      description: 'Submit',
-      action: submit,
-    },
   ]
   useKeyAction(keyActions)
 
   return (
-    <div className='mt-6 space-y-6 sm:mt-5 sm:space-y-5'>
+    <form
+      onSubmit={e => {
+        e.preventDefault()
+        submit()
+      }}
+      className='mt-6 block space-y-6 sm:mt-5 sm:space-y-5'>
       {errorMessage && <div className='mt-4 text-red-500'>{errorMessage}</div>}
 
       <div className='sm:grid sm:grid-cols-3 sm:items-start sm:gap-4 sm:border-t sm:border-gray-700 sm:pt-5'>
@@ -487,7 +487,7 @@ const TaskForm = ({
           onClick={submit}
         />
       </div>
-    </div>
+    </form>
   )
 }
 

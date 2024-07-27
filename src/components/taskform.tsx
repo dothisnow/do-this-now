@@ -165,6 +165,7 @@ const TaskForm = ({
   return (
     <form
       onSubmit={e => {
+        console.log('submitting')
         e.preventDefault()
         submit()
       }}
@@ -484,7 +485,7 @@ const TaskForm = ({
           loading={isSaving}
           icon={faArrowRight}
           text='Submit'
-          onClick={submit}
+          type='submit'
         />
       </div>
     </form>

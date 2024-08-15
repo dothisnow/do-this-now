@@ -317,7 +317,7 @@ const TaskForm = ({
                 </FormSelect>
               </div>
               {repeatUnit === 'week' && repeatWeekdays && (
-                <div className='pointer-events-auto mt-3 flex flex max-w-lg justify-evenly'>
+                <div className='pointer-events-auto mt-3 flex max-w-lg justify-evenly'>
                   {repeatWeekdays.map((_, i) => (
                     <SwitchWithLabel
                       key={days[i]}
@@ -349,7 +349,7 @@ const TaskForm = ({
           Expected Time Frame
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
-          <div className='flex max-w-lg items-center gap-2'>
+          <div className='flex max-w-lg flex-col items-center justify-evenly gap-2 md:flex-row'>
             {timeFrame >= 60 && (
               <NumberInput
                 innerRef={timeFrameHoursRef}
@@ -504,24 +504,27 @@ const NumberInput = (
     min: number
   }
 ) => (
-  <>
+  <div className='flex w-full items-center gap-2'>
     {!props.minusDisabled && (
       <FormButton icon={faMinus} onClick={props.minusFn} />
     )}
-    <Input
-      id={props.id}
-      innerRef={props.innerRef}
-      type='number'
-      step={props.step}
-      min={props.min}
-      value={props.value}
-      onChange={props.onChange}
-    />
+    <div className='flex-1 flex-grow'>
+      <Input
+        id={props.id}
+        innerRef={props.innerRef}
+        type='number'
+        step={props.step}
+        min={props.min}
+        value={props.value}
+        onChange={props.onChange}
+        className='w-full'
+      />
+    </div>
     <FormButton icon={faPlus} onClick={props.plusFn} />
     <label htmlFor={props.id} className='text-sm'>
       {props.label}
     </label>
-  </>
+  </div>
 )
 
 const FormButton = (

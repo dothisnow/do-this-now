@@ -317,7 +317,7 @@ const TaskForm = ({
                 </FormSelect>
               </div>
               {repeatUnit === 'week' && repeatWeekdays && (
-                <div className='pointer-events-auto mt-3 flex flex max-w-lg justify-evenly'>
+                <div className='pointer-events-auto mt-3 flex max-w-lg justify-evenly'>
                   {repeatWeekdays.map((_, i) => (
                     <SwitchWithLabel
                       key={days[i]}
@@ -349,53 +349,45 @@ const TaskForm = ({
           Expected Time Frame
         </label>
         <div className='mt-1 sm:col-span-2 sm:mt-0'>
-          <div className='flex max-w-lg flex-col gap-2 md:flex-row'>
-            <div>
-              <div className='flex-shrink-1 flex items-center gap-2'>
-                {timeFrame >= 60 && (
-                  <NumberInput
-                    innerRef={timeFrameHoursRef}
-                    label='hrs'
-                    minusDisabled={false}
-                    minusFn={() => setTimeFrame(Math.max(0, timeFrame - 60))}
-                    onChange={e =>
-                      setTimeFrame(
-                        parseInt(e.target.value) * 60 +
-                          parseInt(timeFrameMinutesRef.current?.value ?? '0')
-                      )
-                    }
-                    plusFn={() => setTimeFrame(timeFrame + 60)}
-                    value={Math.floor(timeFrame / 60)}
-                    step={1}
-                    min={0}
-                  />
-                )}
-              </div>
-            </div>
-            <div>
-              <div className='flex items-center gap-2'>
-                <NumberInput
-                  innerRef={timeFrameMinutesRef}
-                  label='mins'
-                  minusDisabled={timeFrame === 0}
-                  minusFn={() => setTimeFrame(Math.max(0, timeFrame - 15))}
-                  onChange={e => {
-                    console.log(e)
-                    setTimeFrame(
-                      Math.max(
-                        0,
-                        parseInt(timeFrameHoursRef.current?.value ?? '0') * 60 +
-                          parseInt(e.target.value)
-                      )
-                    )
-                  }}
-                  plusFn={() => setTimeFrame(timeFrame + 15)}
-                  value={timeFrame % 60}
-                  step={15}
-                  min={-15}
-                />
-              </div>
-            </div>
+          <div className='flex max-w-lg flex-col items-center justify-evenly gap-2 md:flex-row'>
+            {timeFrame >= 60 && (
+              <NumberInput
+                innerRef={timeFrameHoursRef}
+                label='hrs'
+                minusDisabled={false}
+                minusFn={() => setTimeFrame(Math.max(0, timeFrame - 60))}
+                onChange={e =>
+                  setTimeFrame(
+                    parseInt(e.target.value) * 60 +
+                      parseInt(timeFrameMinutesRef.current?.value ?? '0')
+                  )
+                }
+                plusFn={() => setTimeFrame(timeFrame + 60)}
+                value={Math.floor(timeFrame / 60)}
+                step={1}
+                min={0}
+              />
+            )}
+            <NumberInput
+              innerRef={timeFrameMinutesRef}
+              label='mins'
+              minusDisabled={timeFrame === 0}
+              minusFn={() => setTimeFrame(Math.max(0, timeFrame - 15))}
+              onChange={e => {
+                console.log(e)
+                setTimeFrame(
+                  Math.max(
+                    0,
+                    parseInt(timeFrameHoursRef.current?.value ?? '0') * 60 +
+                      parseInt(e.target.value)
+                  )
+                )
+              }}
+              plusFn={() => setTimeFrame(timeFrame + 15)}
+              value={timeFrame % 60}
+              step={15}
+              min={-15}
+            />
           </div>
         </div>
       </div>
@@ -512,30 +504,38 @@ const NumberInput = (
     min: number
   }
 ) => (
-  <>
-    {!props.minusDisabled && (
-      <FormButton icon={faMinus} onClick={props.minusFn} />
-    )}
-    <Input
-      id={props.id}
-      innerRef={props.innerRef}
-      type='number'
-      step={props.step}
-      min={props.min}
-      value={props.value}
-      onChange={props.onChange}
-      className='flex-shrink flex-grow'
-    />
-    <FormButton icon={faPlus} onClick={props.plusFn} />
-    <label htmlFor={props.id} className='text-sm'>
-      {props.label}
-    </label>
-  </>
+  <div className='flex w-full items-center gap-2'>
+    <div className='flex-shrink'>
+      {!props.minusDisabled && (
+        <FormButton icon={faMinus} onClick={props.minusFn} />
+      )}
+    </div>
+    <div className='flex-1 flex-grow'>
+      <Input
+        id={props.id}
+        innerRef={props.innerRef}
+        type='number'
+        step={props.step}
+        min={props.min}
+        value={props.value}
+        onChange={props.onChange}
+        className='w-full'
+      />
+    </div>
+    <div className='flex-shrink'>
+      <FormButton icon={faPlus} onClick={props.plusFn} />
+    </div>
+    <div className='flex-shrink'>
+      <label htmlFor={props.id} className='text-sm'>
+        {props.label}
+      </label>
+    </div>
+  </div>
 )
 
 const FormButton = (
   props: Omit<ComponentProps<typeof Button>, 'className'>
-) => <Button {...props} className='border-gray-800' />
+) => <Button {...props} className='block border-gray-800' />
 
 const FormSelect = (props: ComponentProps<'select'>) => (
   <select

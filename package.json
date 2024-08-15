@@ -22,6 +22,7 @@
     "react-redux": "^8.0.2",
     "redux": "^4.2.0",
     "s-ago": "^2.2.0",
+    "tailwind-merge": "^2.5.2",
     "tailwind-override": "^0.6.1",
     "typescript": "^5.3.3",
     "use-sound": "^4.0.1",

@@ -505,11 +505,9 @@ const NumberInput = (
   }
 ) => (
   <div className='flex w-full items-center gap-2'>
-    <div className='flex-shrink'>
-      {!props.minusDisabled && (
-        <FormButton icon={faMinus} onClick={props.minusFn} />
-      )}
-    </div>
+    {!props.minusDisabled && (
+      <FormButton icon={faMinus} onClick={props.minusFn} />
+    )}
     <div className='flex-1 flex-grow'>
       <Input
         id={props.id}
@@ -522,20 +520,16 @@ const NumberInput = (
         className='w-full'
       />
     </div>
-    <div className='flex-shrink'>
-      <FormButton icon={faPlus} onClick={props.plusFn} />
-    </div>
-    <div className='flex-shrink'>
-      <label htmlFor={props.id} className='text-sm'>
-        {props.label}
-      </label>
-    </div>
+    <FormButton icon={faPlus} onClick={props.plusFn} />
+    <label htmlFor={props.id} className='text-sm'>
+      {props.label}
+    </label>
   </div>
 )
 
 const FormButton = (
   props: Omit<ComponentProps<typeof Button>, 'className'>
-) => <Button {...props} className='block border-gray-800' />
+) => <Button {...props} className='border-gray-800' />
 
 const FormSelect = (props: ComponentProps<'select'>) => (
   <select

@@ -4,7 +4,7 @@ import { useDate } from '../hooks/useDate'
 import { useQueryProgressToday } from '../hooks/useQueryProgressToday'
 import { Tag } from './tags'
 
-const START_OF_DAY = 8 * 60 + 30
+const START_OF_DAY = 8 * 60 + 30 // 8:30
 const MINUTES_IN_DAY = 24 * 60
 
 const Progress = () => {
@@ -14,8 +14,6 @@ const Progress = () => {
   if (progress.data === undefined) return <></>
 
   const { done, lives, streak, streakIsActive, todo } = progress.data
-
-  console.log(done, lives, streak, streakIsActive, todo)
 
   const totalToDoToday = todo - lives
   const timeOfDay = now.getHours() * 60 + now.getMinutes()

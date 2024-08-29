@@ -15,11 +15,10 @@ const Progress = () => {
 
   const { done, lives, streak, streakIsActive, todo } = progress.data
 
-  const totalToDoToday = todo - lives
   const timeOfDay = now.getHours() * 60 + now.getMinutes()
   const percentageOfDay =
     (timeOfDay - START_OF_DAY) / (MINUTES_IN_DAY - START_OF_DAY)
-  const shouldBeDone = totalToDoToday * percentageOfDay
+  const shouldBeDone = todo * percentageOfDay
   const diff = done - shouldBeDone
 
   const livesUsed = Math.min(lives, todo - done)

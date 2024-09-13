@@ -19,7 +19,7 @@ const Progress = () => {
   const percentageOfDay =
     (timeOfDay - START_OF_DAY) / (MINUTES_IN_DAY - START_OF_DAY)
   const shouldBeDone = todo * percentageOfDay
-  const diff = done - shouldBeDone
+  const diff = done + lives - shouldBeDone
 
   const livesUsed = Math.min(lives, todo - done)
   const livesLeft = lives - livesUsed

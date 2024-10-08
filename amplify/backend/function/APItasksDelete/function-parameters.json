@@ -1,13 +1,8 @@
 {
   "permissions": {
     "storage": {
-      "tasks": [
-        "delete"
-      ],
-      "tasksv2": [
-        "read",
-        "delete"
-      ]
+      "tasks": ["delete"],
+      "tasksv2": ["read", "delete"]
     }
   },
   "lambdaLayers": []

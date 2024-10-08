@@ -1,9 +1,7 @@
 {
   "permissions": {
     "storage": {
-      "tasks": [
-        "read"
-      ]
+      "tasks": ["read"]
     }
   },
   "lambdaLayers": [

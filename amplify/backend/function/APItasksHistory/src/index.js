@@ -22,8 +22,7 @@ exports.handler = async event => {
   console.log(`EVENT: ${JSON.stringify(event)}`)
 
   const today =
-                'pathParameters' in event &&
-                'date' in event.pathParameters
+    'pathParameters' in event && 'date' in event.pathParameters
       ? new Date(event.pathParameters.date)
       : new Date(
           new Date().getFullYear(),

@@ -6,9 +6,9 @@
 	STORAGE_TASKS_STREAMARN
 Amplify Params - DO NOT EDIT */
 
-// eslint-disable-next-line 
+// eslint-disable-next-line
 const ENV = require('process').env
-// eslint-disable-next-line 
+// eslint-disable-next-line
 const AWS = require('aws-sdk')
 const docClient = new AWS.DynamoDB.DocumentClient()
 
@@ -33,8 +33,7 @@ exports.handler = async event => {
 
   const { Item: oldItem } = await docClient.get(getParams).promise()
 
-  if (oldItem && 'oldTitle' in body)
-    await docClient.delete(getParams).promise()
+  if (oldItem && 'oldTitle' in body) await docClient.delete(getParams).promise()
 
   console.log(`OLD ITEM: ${JSON.stringify(oldItem)}`)
 

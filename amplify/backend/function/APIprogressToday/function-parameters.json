@@ -1,14 +1,8 @@
 {
   "permissions": {
     "storage": {
-      "tasks": [
-        "read"
-      ],
-      "history": [
-        "create",
-        "read",
-        "update"
-      ]
+      "tasks": ["read"],
+      "history": ["create", "read", "update"]
     }
   },
   "lambdaLayers": [

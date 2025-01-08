@@ -37,7 +37,8 @@
     "preview": "vite preview",
     "knip": "knip",
     "prettier": "prettier src/**/*.{js,ts,tsx} --check",
-    "ts-coverage": "typescript-coverage-report"
+    "ts-coverage": "typescript-coverage-report",
+    "amplify:APItasksTop": "echo \"COMPILING TYPESCRIPT\" && cd amplify/backend/function/APItasksTop && tsc -p ./tsconfig.json && cd - && echo \"DONE COMPILING TYPESCRIPT\""
   },
   "browserslist": {
     "production": [">0.2%", "not dead", "not op_mini all"],

@@ -41,7 +41,11 @@
     "amplify:APItasksTop": "echo \"COMPILING TYPESCRIPT\" && cd amplify/backend/function/APItasksTop && tsc -p ./tsconfig.json && cd - && echo \"DONE COMPILING TYPESCRIPT\""
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
